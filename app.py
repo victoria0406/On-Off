@@ -2,29 +2,32 @@ import dash
 from dash import dcc
 from dash import html
 from dash.dependencies import Input, Output
+import dash_bootstrap_components as dbc
 import plotly.express as px
 import pandas as pd
 
-app = dash.Dash(__name__, use_pages=True)
+from component.sidebar import sidebar
+
+app = dash.Dash(__name__, use_pages=True, external_stylesheets=[dbc.themes.BOOTSTRAP])
+
+CONTENT_STYLE = {
+    "margin-left": "18rem",
+    "margin-right": "2rem",
+    "padding": "2rem 1rem",
+}
 
 
 app.layout = html.Div([
-    html.H2('OnOff'),
-    html.Div(
-        [
-            html.Div(
-                dcc.Link(
-                    f"{page['name']} - {page['path']}", href=page["relative_path"]
-                )
-            )
-            for page in dash.page_registry.values()
-        ]
+    sidebar,
+    html.Div([
+        html.Header(
+            'Hello Domin Kim!',
+        ),
+        dash.page_container
+    ],
+    style=CONTENT_STYLE,
     ),
-
-	dash.page_container
 ],
-style={
-}
 )
 
 if __name__ == '__main__':
