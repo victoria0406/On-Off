@@ -1,6 +1,8 @@
 ## Commands
 1. pip install -r requirements.txt <br/>
-사용된 패키지 설치
+    사용된 패키지 설치
+2. git checkout -b dev/이름 <br/>
+   브랜치 생성 및 체크아웃
 
 ## 파일 구조 설명
 1. pages: router 적용될 페이지가 각각 존재
