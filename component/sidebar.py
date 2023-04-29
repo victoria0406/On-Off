@@ -74,7 +74,7 @@ sidebar = html.Div(
             className='side-nav'
             )
         ]),
-        html.A('LOGOUT', className='sub button'),
+        html.A('LOGOUT', className='sub link-button'),
     ],
     style=SIDEBAR_STYLE,
 )
