@@ -1,0 +1,4 @@
+- total_user_usage.csv 파일에서 column 제목 바꿈
+- total_user_usage.csv 파일 맨 아래에 있는 mean 제거
+- weekly_average.csv 추가(user와 group의 요일 별 평균 사용량)
+- group page로 넘어가면 사이드바 ui 오류 발생
