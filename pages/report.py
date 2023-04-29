@@ -11,13 +11,41 @@ CONTENT_STYLE = {
     "margin-bottom": '1rem',
 }
 
-SUBCONTENT_STYLE = {
+FCONTENT_STYLE = {
     "background-color": "white",
-    'width': "20rem",
     "border-radius": "5px",
     "height": "18.5rem",
-    'display': 'inline-block'    
+    'display': 'inline-block',
+    "width" : "26rem",
+    "margin-right" : "20px"    
 }
+
+SCONTENT_STYLE ={
+    "background-color": "white",
+    "border-radius": "5px",
+    "height": "18.5rem",
+    'display': 'inline-block',
+    "width" : "45rem",
+}
+
+TCONTENT_STYLE = {
+    "background-color": "white",
+    "border-radius": "5px",
+    "height": "18.5rem",
+    'display': 'inline-block',
+    "width" : "45rem",
+    "margin-right" : "20px"    
+}
+
+FHCONTENT_STYLE ={
+    "background-color": "white",
+    "border-radius": "5px",
+    "height": "18.5rem",
+    'display': 'inline-block',
+    "width" : "26rem",
+}
+
+
 
 BUTTON_STYLE = {
   'margin' : '-4.5rem 27rem 1.5rem 0',
@@ -48,13 +76,13 @@ layout = html.Div(children=[
         ],style={'display': 'inline-block','float':"right"}
     ),    
     html.Div([
-        html.Div("div1", style=SUBCONTENT_STYLE),
-        html.Div("div2", style=SUBCONTENT_STYLE.update({"float":"right"})),
+        html.Div("div1", style=FCONTENT_STYLE),
+        html.Div("div2", style=SCONTENT_STYLE),
     ], style = CONTENT_STYLE
     ),
      html.Div([
-        html.Div(),
-        html.Div(),
+        html.Div("div1", style=TCONTENT_STYLE),
+        html.Div("div2", style=FHCONTENT_STYLE),
     ], style = CONTENT_STYLE
     ),
 ])
