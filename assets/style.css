@@ -47,9 +47,7 @@
   border-radius: 25px;
   margin-right: 10px;
 }
-
-/*side bar*/
-
+/*report header radio*/
 .report-nav .nav-link.active, 
 .report-nav .nav-link:active, 
 .report-nav .nav-link:focus {
