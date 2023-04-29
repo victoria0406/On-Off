@@ -26,7 +26,7 @@ CONTENT_STYLE = {
 }
 
 HEAD_STYLE = {
-    "height": "7rem",
+    "height": "6.5rem",
 }
 
 
