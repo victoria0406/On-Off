@@ -1,24 +1,29 @@
 import dash
 from dash import html, dcc, callback, Input, Output
 
-def customcheckbox(checked):
-    plus_layout = html.Div([
-        '+'
-    ], className="custom-checkbox plus")
-    minus_layout = html.Div([
-        '-'
-    ], className="custom-checkbox minus")
-    if (checked) :return plus_layout
-    else : return minus_layout
+def customcheckbox(type, checked):
+    return html.Div([
+        dcc.Checklist(
+            id=f'goal-switch-input-{type}',
+            options=[{'label': 
+                html.Div(id=f'goal-switch-output-{type}'),
+            'value': 'on'}],
+            value=[f"{'on' if checked else None}"],
+            className='custom-checkbox-container'
+        ),
+    ])
 
 
-def goalsettingcomponent (goal, desc, value_component, checked):
+def goalsettingcomponent (goal, desc, value_component, checked, type):
     layout = html.Div([
-        customcheckbox(checked),
+        customcheckbox(type, checked),
         html.Div([
             html.P(goal, className='goal'),
             html.P(desc, className='desc'),
-        ])
+        ]),
+        html.Div(value_component, className='value-component')
         
-    ], className=f"goal-setting-list-container { 'active' if (checked) else ''}")
+    ],
+    id=f"goal-setting-list-container-{type}",
+    className=f"goal-setting-list-container { 'active' if (checked) else ''}")
     return layout

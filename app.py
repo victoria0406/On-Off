@@ -6,6 +6,8 @@ import dash_bootstrap_components as dbc
 import plotly.express as px
 import pandas as pd
 
+from callback import get_callbacks
+
 from component.sidebar import sidebar
 from themes.colors import main_color, sub_text_color, main_bg_color, sub_color
 
@@ -55,12 +57,8 @@ app.layout = html.Div([
 style=MAIN_STYLE,
 )
 
-@app.callback(
-    dash.dependencies.Output('selected-app', 'children'),
-    [dash.dependencies.Input('app-dropdown', 'value')]
-)
-def update_output(value):
-    return value
+for output, input, callback in get_callbacks():
+    app.callback(output, input)(callback)
 
 if __name__ == '__main__':
     app.run_server(debug=True)

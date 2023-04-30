@@ -18,14 +18,17 @@
     border-radius: 10px;
     margin-bottom: 1rem;
     padding: 1rem;
-    display: flex;
-    align-items: center;
     gap: 1rem;
     width: calc(100vw - 22rem);
+    display: grid;
+    grid-template:
+    "checkbox goal value" 1fr 
+    / 80px 3fr 1fr;
+    ;
+
 }
 .goal-setting-list-container:not(.active) {
-    opacity: 80%;
-    color: #B8B8B8;
+    opacity: 60%;
 }
 
 .goal-setting-list-container .goal {
@@ -39,6 +42,10 @@
 .goal-setting-list-container .desc {
     color: #727272;
 }
+
+.custom-checkbox-container input[type="checkbox"] {
+    display: none;
+  }
 
 .custom-checkbox {
     border-radius: 10px;
@@ -108,6 +115,7 @@
 .link-button.goal-setting {
     width: 180px;
     border: none;
+    text-align: center;
 }
 
 .link-button.goal-setting.main {
@@ -120,4 +128,9 @@
 }
 .link-button.goal-setting:first-child {
     margin-right: 2rem;
+}
+.value-component {
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
