@@ -211,7 +211,7 @@ layout = html.Div(children=[
     html.Div([html.Div(html.A(html.Button("Compare with Others!",style=BUTTON_STYLE), href="/group")),
             html.Div(dbc.Nav([
                 dbc.NavLink('DAILY', href="/report", active="exact"),
-                dbc.NavLink('WEEKLY', href="/report_weekly", active="exact"),
+                dbc.NavLink('WEEKLY', href="/weekly", active="exact"),
             ],
             className='report-nav'
         ), style=TOGGLE_STYLE)
