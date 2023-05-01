@@ -1,4 +1,4 @@
-User,usage time,session duration time 
+User,usage_time,session_duration_time
 1,384,28
 2,618,9
 3,373,71
@@ -99,4 +99,3 @@ User,usage time,session duration time
 98,163,5
 99,420,18
 100,653,106
-median,331.5,28
