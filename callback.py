@@ -2,6 +2,7 @@ import dash
 from dash.dependencies import Input, Output, State
 from dash import html
 from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_info, is_goal_setted
+from component.todaygoal import today_goal_setting
 
 def selected_app_callback_factory():
     output = Output('selected-app', 'children'),
@@ -96,24 +97,7 @@ def goal_update_callback_factory():
     def update_output(pathname, search):
         print(search);
         if not search == '?setting=True': return dash.no_update
-        usage_time_component = html.Div(
-        f"usage_time_info: {usage_time_info['hour']}h {usage_time_info['minite']}m",
-        )
-        unlock_component = html.Div(
-            f"unlock_info: {unlock_info['time']}times",
-        )
-        app_usage_component = html.Div(
-            f"app_time_info for {app_usage_info['app']}: {app_usage_info['hour']}h {app_usage_info['minite']}m",
-        )
-        return_children = []
-        if usage_time_info['checked']:
-            return_children.append(usage_time_component)
-        if unlock_info['checked']:
-            return_children.append(unlock_component)
-        if app_usage_info['checked']:
-            return_children.append(app_usage_component)
-        print(return_children);
-        return return_children
+        return today_goal_setting()
     return [
         update_output,
         output,

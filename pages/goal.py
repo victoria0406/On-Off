@@ -1,6 +1,7 @@
 import dash
 from dash import html, dcc, callback, Input, Output
 from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_info
+from component.todaygoal import today_goal_not_setting
 
 
 dash.register_page(__name__)
@@ -26,7 +27,4 @@ def component():
 
 
 
-layout = html.Div(children=[
-    html.A('Set Goal', className='link-button goal-setting main',href='/goalsetting'),
-    html.Div(children='hihi', id='today-goal')
-])
+layout = html.Div(children=today_goal_not_setting, id='today-goal')
