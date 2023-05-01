@@ -1,9 +1,0 @@
-- total_user_usage.csv 파일에서 column 제목 바꿈
-- total_user_usage.csv 파일 맨 아래에 있는 mean 제거
-- group page로 넘어가면 사이드바 ui 오류 발생
-4/30에 해야하는거
-1. hover 했을 때 값 뜨게
-2. 축에 단위
-3. 2d histogram median 선 추가 및 영역 표시
-4. legend 추가
-5. 이외의 css
