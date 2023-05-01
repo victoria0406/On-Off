@@ -1,0 +1,155 @@
+.goal-setting-container {
+    position: relative;
+    width: calc(100vw - 20rem);
+    height: calc(100vh - 10rem);
+    background: #FFFFFF;
+    box-shadow: 4px 4px 4px rgba(46, 46, 46, 0.25);
+    border-radius: 10px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.goal-setting-list-container {
+    height: 7rem;
+    background: #F7F8FA;
+    box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    gap: 1rem;
+    width: calc(100vw - 22rem);
+    display: grid;
+    grid-template:
+    "checkbox goal value" 1fr 
+    / 80px 3fr 1fr;
+    ;
+
+}
+.goal-setting-list-container:not(.active) {
+    opacity: 60%;
+}
+
+.goal-setting-list-container .goal {
+    align-items: center;
+    font-weight: 600;
+    font-size: 18px;
+    display: flex;
+    height: 36px;
+}
+
+.goal-setting-list-container .desc {
+    color: #727272;
+}
+
+.custom-checkbox-container input[type="checkbox"] {
+    display: none;
+  }
+
+.custom-checkbox {
+    border-radius: 10px;
+    width: 5rem;
+    height: 5rem;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 80px;
+    line-height: 64px;
+    align-items: center;
+    text-align: center;
+    color: #FFFFFF;
+    user-select: none;
+  }
+  .custom-checkbox.plus {
+    background: rgba(174, 191, 158, 0.6);
+  }
+  .custom-checkbox.minus {
+    background: linear-gradient(151.22deg, rgba(155, 155, 155, 0.426) 17.73%, rgba(155, 155, 155, 0.228) 48.48%, rgba(155, 155, 155, 0) 86.38%, rgba(155, 155, 155, 0) 86.39%);
+  }
+
+.app-dropdown {
+    display: inline;
+}
+  /* 내부에 들어가는 리스트 아이템의 스타일 */
+.app-dropdown .Select-menu-outer {
+    background-color: #fff;
+    border: none;
+    border-radius: 0;
+    margin-top: 0;
+}
+
+/* 드롭다운 버튼의 스타일 */
+
+.app-dropdown .Select-control {
+    background: #FFF;
+    border: 1px solid #AEBF9E;
+    border-radius: 5px;
+    color: #000;
+    font-size: 16px;
+    height: 36px;
+    margin-left: 8px;
+    width: 160px;
+}
+/* 드롭다운 메뉴 아이템의 스타일 */
+.app-dropdown .Select-option {
+    color: #333;
+    font-size: 16px;
+    padding: 8px 12px;
+    font-weight: 500;
+}
+
+.app-dropdown .Select-option:hover {
+    background-color: #fff;
+    color: #778863;
+}
+
+/* 선택된 드롭다운 메뉴 아이템의 스타일 */
+.app-dropdown .Select-option.active,
+.app-dropdown .Select-option:active {
+    background-color: #fff;
+    color: #778863;
+    font-weight: 600;
+}
+
+.link-button.goal-setting {
+    width: 180px;
+    border: none;
+    text-align: center;
+}
+
+.link-button.goal-setting.main {
+    background-color: #AEBF9E;
+    color: #fff;
+}
+
+.link-button.goal-setting.sub {
+    width: #D9D9D9;
+}
+.link-button.goal-setting:first-child {
+    margin-right: 2rem;
+}
+.value-component {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.goal-list {
+    height: 4rem;
+    width: 16rem;
+    border: 1px solid #000;
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    justify-content: space-between;
+    padding: 0 2rem;
+}
+.goal-list .goal-state-check {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #000;
+    border-radius: 50%;
+    background-color: #fff;
+}
