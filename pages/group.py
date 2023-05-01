@@ -14,7 +14,9 @@ group_df = pd.read_csv('datas/total_user_usage.csv')
 your_ust = group_df.loc[your_id, 'usage_time']
 your_sdt = group_df.loc[your_id, 'session_duration_time']
 group_ust_mean = group_df["usage_time"].mean()
+group_ust_median = group_df['usage_time'].median()
 group_sdt_mean = group_df["session_duration_time"].mean()
+group_sdt_median = group_df['session_duration_time'].median()
 
 fig1 = go.Figure(go.Histogram2dContour(
                     x = group_df["usage_time"],
@@ -22,14 +24,24 @@ fig1 = go.Figure(go.Histogram2dContour(
                     colorscale=color_2d,
                     showscale=False))
 fig1.update_traces(contours_showlines=False, legendwidth=400)
-fig1.add_trace(go.Scatter(x=[your_ust], y=[your_sdt], mode = 'markers', 
+fig1.add_trace(go.Scatter(x=[your_ust], y=[your_sdt], mode = 'markers+text', 
+                          text=["You"], textposition="bottom center",
+                          textfont=dict(
+                              family="Arial",
+                              size=12,
+                              color="#0F4997"
+                              ),
                           marker=dict(
                               color='#0F4997', 
                               size=10
                               )
                           ))
+fig1.add_vline(x=group_ust_median)
+fig1.add_hline(y=group_sdt_median)
+fig1.add_trace(go.Scatter(x=[group_ust_median, group_ust_median, max(group_df['usage_time']), max(group_df['usage_time']), group_ust_median], y=[group_sdt_median, max(group_df['session_duration_time']), max(group_df['session_duration_time']), group_sdt_median, group_sdt_median], fill="toself"))
 fig1.update_layout(
-    title="your group: RISK Group"
+    title="your group: RISK Group",
+    width=500, height=375
     )
 
 fig2 = go.Figure(go.Bar(
@@ -47,12 +59,11 @@ fig2.add_trace(go.Bar(
                     opacity=0.8
                 ))
 fig2.update_layout(plot_bgcolor = 'white', title="Weekly Average Session Time", 
-                   bargap=0, showlegend=False)
+                   bargap=0, showlegend=False, width=448, height=237)
 fig2.update_yaxes(showline=True, linewidth=2, linecolor='black',)
 fig2.update_xaxes(showgrid=True, gridwidth=1, gridcolor='#e5e5e5')
 
 app_df = pd.read_csv('datas/weekly_average.csv')
-# fig3 = px.bar(app_df, x="day", y="usage_time", barmode='group', color='type')
 fig3 = go.Figure(go.Bar(
                     x=app_df.day,
                     y=app_df.user_usage_time,
@@ -66,12 +77,9 @@ fig3.add_trace(go.Bar(
                     opacity=0.8
                 ))
 fig3.update_layout(plot_bgcolor = 'white', title="Weekly Usage Time",
-                   showlegend=False, barmode='group')
+                   showlegend=False, barmode='group', width=1051, height=410)
 fig3.update_xaxes(showline=True, linewidth=2, linecolor='black',)
 fig3.update_yaxes(showgrid=True, gridwidth=1, gridcolor='#e5e5e5')
-
-
-
 
 
 dash.register_page(__name__)
@@ -83,7 +91,16 @@ layout = html.Div(children=[
                 html.H1('Compare your usage with others :)')
             ),
             dbc.Col(
-                dcc.Link(html.Button("Check Your Usage Pattern!"), href="/report")
+                dbc.Row([
+                    dbc.Col(
+                        dcc.Link(html.Button("Check Your Usage Pattern!"), href="/report"),
+                    ),
+                    dbc.Col(
+                        html.Div(
+                            'heello'
+                        )
+                    )
+                ])
             )
         ]),
     ),
