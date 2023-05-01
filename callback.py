@@ -1,6 +1,7 @@
-from dash.dependencies import Input, Output
+import dash
+from dash.dependencies import Input, Output, State
 from dash import html
-from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_info
+from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_info, is_goal_setted
 
 def selected_app_callback_factory():
     output = Output('selected-app', 'children'),
@@ -9,9 +10,9 @@ def selected_app_callback_factory():
         return [value]
     
     return [
+        update_output,
         output,
         input,
-        update_output
     ]
     
 plus_layout = html.Div([
@@ -30,6 +31,7 @@ def usage_time_switch_callback_factory():
     ]
     input=Input('goal-switch-input-usage-time', 'value')
     def update_output(value):
+        print('usage: ', usage_time_info, unlock_info)
         if 'on' in value:
             usage_time_info['checked'] = True;
             return [[plus_layout], False, False, 'goal-setting-list-container active']
@@ -38,9 +40,9 @@ def usage_time_switch_callback_factory():
             return [[minus_layout], True, True, 'goal-setting-list-container']
         
     return [
+        update_output,
         output,
         input,
-        update_output
     ]
 def unlock_switch_callback_factory():
     output=[
@@ -50,6 +52,7 @@ def unlock_switch_callback_factory():
     ]
     input=Input('goal-switch-input-unlock', 'value')
     def update_output(value):
+        print('unlock ',usage_time_info, unlock_info)
         if 'on' in value:
             unlock_info['checked'] = True;
             return [[plus_layout], False, 'goal-setting-list-container active']
@@ -58,9 +61,9 @@ def unlock_switch_callback_factory():
             return [[minus_layout], True, 'goal-setting-list-container']
         
     return [
+        update_output,
         output,
         input,
-        update_output
     ]
 def app_usage_switch_callback_factory():
     output=[
@@ -80,10 +83,60 @@ def app_usage_switch_callback_factory():
             return [[minus_layout], True, True, True, 'goal-setting-list-container']
         
     return [
+        update_output,
         output,
         input,
-        update_output
     ]
+    
+
+def goal_update_callback_factory():
+    output=Output('today-goal', 'children')
+    input=Input('url', 'pathname')
+    state=State('url', 'search')
+    def update_output(pathname, search):
+        print(search);
+        if not search == '?setting=True': return dash.no_update
+        usage_time_component = html.Div(
+        f"usage_time_info: {usage_time_info['hour']}h {usage_time_info['minite']}m",
+        )
+        unlock_component = html.Div(
+            f"unlock_info: {unlock_info['time']}times",
+        )
+        app_usage_component = html.Div(
+            f"app_time_info for {app_usage_info['app']}: {app_usage_info['hour']}h {app_usage_info['minite']}m",
+        )
+        return_children = []
+        if usage_time_info['checked']:
+            return_children.append(usage_time_component)
+        if unlock_info['checked']:
+            return_children.append(unlock_component)
+        if app_usage_info['checked']:
+            return_children.append(app_usage_component)
+        print(return_children);
+        return return_children
+    return [
+        update_output,
+        output,
+        input,
+        state,
+    ]
+def goal_update_sidebar_callback_factory():
+    output=Output('goal-link', 'href')
+    input=Input('url', 'pathname')
+    state=State('url', 'search')
+    def update_output(pathname, search):
+        print(pathname)
+        if pathname == '/goal':
+            return pathname+search
+        else: '/goal'
+    return [
+        update_output,
+        output,
+        input,
+        state,
+    ]    
+    
+
     
 def get_callbacks():
     return [
@@ -91,4 +144,5 @@ def get_callbacks():
         usage_time_switch_callback_factory(),
         unlock_switch_callback_factory(),
         app_usage_switch_callback_factory(),
+        goal_update_callback_factory(),
     ]

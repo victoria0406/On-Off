@@ -57,8 +57,7 @@ app.layout = html.Div([
 style=MAIN_STYLE,
 )
 
-for output, input, callback in get_callbacks():
-    app.callback(output, input)(callback)
-
+for callback, *arcs  in get_callbacks():
+    app.callback(*arcs)(callback)
 if __name__ == '__main__':
     app.run_server(debug=True)

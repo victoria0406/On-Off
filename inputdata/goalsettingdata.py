@@ -1,3 +1,5 @@
+is_goal_setted = False;
+
 usage_time_info = {
     'checked': True,
     'hour': 3,

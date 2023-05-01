@@ -66,7 +66,7 @@ sidebar = html.Div(
                 style=MENU_HEADER_STYLE,
             ),
             dbc.Nav([
-                dbc.NavLink('GOALS', href="/goal", active="exact"),
+                dbc.NavLink('GOALS', href='/goal', active="exact", id='goal-link'),
                 dbc.NavLink('REPORTS', href="/report", active="exact"),
             ],
             vertical=True,
