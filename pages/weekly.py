@@ -44,7 +44,7 @@ TCONTENT_STYLE = {
     "border-radius": "5px",
     "height": "16.5rem",
     'display': 'inline-block',
-    "width" : "45rem",
+    "width" : "43rem",
     "margin-right" : "10px", "float":"left",
 }
 
@@ -53,7 +53,7 @@ FHCONTENT_STYLE ={
     "border-radius": "5px",
     "height": "16.5rem",
     'display': 'inline-block',
-    "width" : "25rem","float":"right",
+    "width" : "27rem","float":"right",
 }
 
 
@@ -104,7 +104,7 @@ fig.update_layout(showlegend=False, plot_bgcolor='white',paper_bgcolor="rgb(0,0,
 hour = today['Total']//60
 min = today['Total']%60
 
-######## usage #############
+############## usage ###################
 app_usage_time = pd.read_csv('./datas/app_usage_time.csv')
 
 today_index = int(str(today['Total']).split()[0])
@@ -122,11 +122,17 @@ fig1.update_layout(
         
     ),
     yaxis = dict(
-        title = "Usage Time (hour)",
+        # title = "Usage Time (hour)",
+        title=dict(
+            text="Usage Time (hour)",
+            font=dict(
+                size=12,
+        )),
         tickmode = 'array',
         tickvals = [0,120,240,360,480,600,720],
         ticktext = ['0', '2', '4', '6', '8', '10','12'],
-        showgrid=True, linewidth=1,gridcolor='#F4F4F4'
+        showgrid=True, linewidth=1,gridcolor='#F4F4F4',
+        tickfont = dict(size=9)
     )
 )
 
@@ -160,11 +166,36 @@ fig2.update_layout(
 fig2.update_layout(showlegend=False, plot_bgcolor='white',paper_bgcolor="rgb(0,0,0,0)",bargap=0.3)
 
 # fig2.show()
-###################screen on#####################
+################ screen on ####################
 screen_on = 150
+unlock = pd.read_csv('./datas/unlock.csv')
+
+weekly_unlock = unlock[today_index-6:today_index+1]
+weekly_unlock['date']=weekly_usage['date']
+
+fig3 = go.Figure()
+fig3.add_trace(go.Scatter(x=weekly_unlock['date'], y=weekly_unlock['unlock'], mode='lines+markers', line_color='#686CAD',
+                          marker=dict(
+                                color='white',
+                                size=14,
+                                line=dict(color='#686CAD',width=2)
+                            )))
+
+fig3.update_layout(
+    xaxis = dict(
+        title = None,
+        tickmode = 'array',
+        showline=True, linewidth=1, linecolor='#BEBEBE',
+    ),
+    yaxis = dict(
+        title = None,
+        showticklabels=False,
+    )
+)
+
+fig3.update_layout(showlegend=False, plot_bgcolor='white',paper_bgcolor="rgb(0,0,0,0)",width=510, height=320)
+# fig3.show()
 ###############################################
-
-
 
 layout = html.Div(children=[
     html.Div([html.Div(html.A(html.Button("Compare with Others!",style=BUTTON_STYLE), href="/group")),
@@ -195,16 +226,17 @@ layout = html.Div(children=[
     ], style = CONTENT_STYLE
     ),
      html.Div([
-        html.Div([html.P("Number of Access",style={"margin":"5px 0 -10px 15px"}),
+        html.Div([html.P("Number of Access",style={"margin":"10px 0 -10px 15px"}),
                 html.Div(dcc.Graph(figure = fig2, config={'displayModeBar': False}),
-                    style={'margin-top': '-75px','padding-top':'20px','margin-bottom':'-140px'}
+                    style={'margin-top': '-75px','padding-top':'20px','margin-left':'-20px'}
                 )        
         
         ], style=TCONTENT_STYLE),
-        html.Div([html.P("Number of Screen On",style={"margin":"5px 0 -5px 15px"}),
+        html.Div([html.P("Number of Screen On",style={"margin":"10px 0 -5px 15px"}),
                   html.Div([html.P("average",style={'color':'#686CAD','padding-top':"5px",'margin-left':'15px','float':'left'}),
                             html.P(screen_on,style={"font-size":"18px","font-weight":"bold","float":"right","margin-right":'15px',"padding-top":'5px'})],style=AVERAGE_STYLE),
-                  html.Div()
+                  html.Div(dcc.Graph(figure = fig3,config={'displayModeBar': False}),
+                    style={'margin':'-85px 0 0 -50px'})
                 ], style=FHCONTENT_STYLE),
     ], style = CONTENT_STYLE
     ),
