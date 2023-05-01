@@ -2,7 +2,7 @@ import dash
 import dash_bootstrap_components as dbc
 from dash import Input, Output, dcc, html
 
-from themes.colors import sub_color,sub_bg_color, sub_text_color, main_color
+# from themes.colors import sub_color,sub_bg_color, sub_text_color, main_color
 
 SIDEBAR_STYLE = {
     "position": "fixed",
@@ -11,7 +11,7 @@ SIDEBAR_STYLE = {
     "bottom": 0,
     "width": "16rem",
     "padding": "1rem",
-    "background-color": sub_bg_color,
+    "background-color": "#FFFFFF",
     "display": "flex",
     "flex-direction": "column",
     "justify-content": "space-between",
@@ -23,14 +23,14 @@ PROFILE_STYLE = {
 }
 
 LOGO_STYLE = {
-    "color": main_color,
+    "color": "#99A68D",
     "font-weight": '600',
     "text-decoration": "none",
     "font-size": "28px",
 }
 
 MENU_HEADER_STYLE = {
-    "color": sub_text_color,
+    "color": "#636363",
     "margin-top": "2rem",
     "font-size": "12px"
 }
