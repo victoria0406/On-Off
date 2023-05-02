@@ -1,5 +1,8 @@
 /*side bar*/
 /*logout link-button*/
+body {
+  overflow: hidden;
+}
 .link-button {
     width: 100%;
     height: 40px;
