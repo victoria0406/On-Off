@@ -47,5 +47,38 @@
   border-radius: 25px;
   margin-right: 10px;
 }
+/*report header radio*/
+.report-nav .nav-link.active, 
+.report-nav .nav-link:active, 
+.report-nav .nav-link:focus {
+    color: #000;
+    background-color: #EBEBF0;
+    text-align: center;
+    width: 200px;
+    height: 40px;
+}
+.report-nav .nav-link:hover:not(.active) {
+  color: #000;
+  background-color: white;
+  text-align: center;
+  width: 200px;
+  height: 40px;
+}
 
-/*side bar*/
+.report-nav .nav-link {
+  color: #000;
+  background-color: white;
+  text-align: center;
+  margin-bottom: 8px;
+  width: 200px;
+  height: 40px;
+}
+
+.report-nav .nav-pills .nav-link.active, 
+.report-nav .nav-pills .show > .nav-link {
+  color: #000;
+  text-align: center;
+  background-color: #EBEBF0;
+  height: 40px;
+  width: 200px;
+}
