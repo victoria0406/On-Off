@@ -28,7 +28,7 @@ def usage_time_component():
     return component;
 
 def app_usage_component():
-    data = 3;
+    data = 1;
     usage_time = app_usage_info['hour'] + app_usage_info['minite'] / 60
     component = html.Div([
         html.P(f"App Usage Time for {app_usage_info['app']}",className='goal-title'),
@@ -43,7 +43,7 @@ def get_goal_info():
     return [
         [0, 4, unlock_info['time']-4] if unlock_info['checked'] else None,
         [0, 2, usage_time_info['hour'] + usage_time_info['minite'] / 60 - 2] if usage_time_info['checked'] else None,
-        [0, 3, app_usage_info['hour'] + app_usage_info['minite'] / 60 - 3] if app_usage_info['checked'] else None,
+        [0, 1, app_usage_info['hour'] + app_usage_info['minite'] / 60 - 1] if app_usage_info['checked'] else None,
     ]
 
 def today_goal_setting():
@@ -57,7 +57,6 @@ def today_goal_setting():
         return_children.append(usage_time_component())
     if app_usage_info['checked']:
         return_children.append(app_usage_component())
-    print(return_children);
     component = html.Div(return_children, className='today-goal-list')
     return component
     

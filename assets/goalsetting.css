@@ -19,7 +19,7 @@
     border-radius: 10px;
     margin-bottom: 1rem;
     padding: 1rem;
-    gap: 1rem;
+    gap: 2rem;
     width: calc(100vw - 22rem);
     display: grid;
     grid-template:
@@ -62,12 +62,25 @@
     color: #FFFFFF;
     user-select: none;
   }
+
   .custom-checkbox.plus {
-    background: rgba(174, 191, 158, 0.6);
+    background: #aebf9e;
+    box-shadow:  5px 5px 10px #94a286,
+                 -5px -5px 10px #ebebeb;
   }
+  .custom-checkbox.plus:hover {
+    background: linear-gradient(145deg, #9dac8e, #bacca9);
+  }
+
   .custom-checkbox.minus {
-    background: linear-gradient(151.22deg, rgba(155, 155, 155, 0.426) 17.73%, rgba(155, 155, 155, 0.228) 48.48%, rgba(155, 155, 155, 0) 86.38%, rgba(155, 155, 155, 0) 86.39%);
+    background: #d9d9d9;
+    box-shadow: inset 5px 5px 10px #b8b8b8,
+                inset -5px -5px 10px #fafafa;
   }
+  .custom-checkbox.minus:hover {
+    background: linear-gradient(145deg, #a3a3a3, #e8e8e8);
+  }
+
 
 .app-dropdown {
     display: inline;

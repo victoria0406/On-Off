@@ -31,7 +31,8 @@ fig.add_trace(go.Pie(
 
 def goal_donut_plot(unlock_data, usage_data, app_usage_data):
     fig = go.Figure()
-    if (app_usage_data):
+    if (app_usage_data != None):
+        print(app_usage_data)
         fig.add_trace(go.Pie(
         values=app_usage_data,
         marker=dict(colors=['#B40000','#686986', '#68698650']),
@@ -40,7 +41,7 @@ def goal_donut_plot(unlock_data, usage_data, app_usage_data):
         domain=dict(x=[0, 1], y=[0, 1]),
         direction='clockwise'
         ))
-    if (usage_data):
+    if (usage_data != None):
         fig.add_trace(go.Pie(
         values=usage_data,
         marker=dict(colors=['#B40000','#A4BD85', '#A4BD8550']),
@@ -49,7 +50,7 @@ def goal_donut_plot(unlock_data, usage_data, app_usage_data):
         domain=dict(x=[0.15, 0.85], y=[0.15, 0.85]),
         direction='clockwise'
         ))
-    if (unlock_data):
+    if (unlock_data != None):
         fig.add_trace(go.Pie(
         values=unlock_data,
         marker=dict(colors=['#B40000','#E4AE44', 'E4AE4450']),

@@ -74,8 +74,8 @@ layout = html.Div([
         for context in goalsettingcontext
     ]),
     dbc.Nav([
-        html.A(html.Button('Cormfirm', className='link-button goal-setting main', id='goal-confirm', n_clicks=0),href='/goal?setting=True'),
-        html.A(html.Button('Cancel', className='link-button goal-setting sub'), href='/goal?setting=False'),
+        html.A('Cormfirm', className='link-button goal-setting main', id='goal-confirm', n_clicks=0, href='/goal?setting=True'),
+        html.A('Cancel', className='link-button goal-setting sub', href='/goal?setting=False'),
     ]),
     ],
     className='goal-setting-container'

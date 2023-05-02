@@ -88,6 +88,34 @@ def app_usage_switch_callback_factory():
         output,
         input,
     ]
+def goal_confirm_callback_factory():
+    output=Output('url', 'search')
+    input = Input('goal-confirm', 'n_clicks')
+    state = [
+        State('goal-switch-disable-unlock-1', 'value'),
+        State('goal-switch-disable-usage-time-1', 'value'),
+        State('goal-switch-disable-usage-time-2', 'value'),
+        State('app-dropdown', 'value'),
+        State('goal-switch-disable-app-usage-2', 'value'),
+        State('goal-switch-disable-app-usage-3', 'value'),
+    ]
+    def update_output(n_clicks, unlock_time, usage_hour, usage_minite, app_usage_app, app_usage_hour, app_usage_minite):
+        if (n_clicks):
+            print('confirm');
+            unlock_info['time'] = unlock_time
+            usage_time_info['hour'] = usage_hour
+            usage_time_info['minite'] = usage_minite
+            app_usage_info['app'] = app_usage_app
+            app_usage_info['hour'] = app_usage_hour
+            app_usage_info['minite'] = app_usage_minite
+            return '?setting=True'
+    return [
+        update_output,
+        output,
+        input,
+        state,
+    ]
+        
     
 
 def goal_update_callback_factory():
@@ -96,7 +124,7 @@ def goal_update_callback_factory():
     state=State('url', 'search')
     def update_output(pathname, search):
         print(search);
-        if not search == '?setting=True': return dash.no_update
+        if pathname != '/goal' or not search == '?setting=True': return dash.no_update
         return today_goal_setting()
     return [
         update_output,
@@ -109,18 +137,27 @@ def goal_update_sidebar_callback_factory():
     input=Input('url', 'pathname')
     state=State('url', 'search')
     def update_output(pathname, search):
-        print(pathname)
-        if pathname == '/goal':
-            return pathname+search
-        else: '/goal'
+        print('url:',pathname, search)
+        if pathname == '/goal' and search == '?setting=True':
+            return '/goal?setting=True'
+        else:  return dash.no_update
     return [
         update_output,
         output,
         input,
         state,
-    ]    
-    
-
+    ]
+def test_callback_factory():
+    output=Output('url', 'search')
+    input=Input('goal-link', 'n_clicks')
+    state=Input('goal-link', 'href')
+    def update_output(href):
+        print('href: ', href)
+    return [
+        update_output,
+        output,
+        input,
+    ]
     
 def get_callbacks():
     return [
@@ -129,4 +166,6 @@ def get_callbacks():
         unlock_switch_callback_factory(),
         app_usage_switch_callback_factory(),
         goal_update_callback_factory(),
+        goal_confirm_callback_factory(),
+        goal_update_sidebar_callback_factory(),
     ]
