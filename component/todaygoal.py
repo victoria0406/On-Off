@@ -49,7 +49,6 @@ def get_goal_info():
 def today_goal_setting():
     return_children = [html.P('Today Goal', style={'font-weight': 'bold'})]
     fig = goal_donut_plot(*get_goal_info())
-    fig.update_layout(showlegend=False, plot_bgcolor='rgb(0,0,0,0)',paper_bgcolor="rgb(0,0,0,0)",width=400, height=400)
     return_children.append(dcc.Graph(figure = fig, config={'displayModeBar': False}, className='today-goal-fig'))
     if unlock_info['checked']:
         return_children.append(unlock_component())
