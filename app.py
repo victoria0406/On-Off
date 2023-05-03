@@ -5,6 +5,7 @@ from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
 import plotly.express as px
 import pandas as pd
+from flask import redirect
 
 from callback import get_callbacks
 
@@ -56,7 +57,6 @@ app.layout = html.Div([
 ],
 style=MAIN_STYLE,
 )
-
 for callback, *arcs  in get_callbacks():
     app.callback(*arcs)(callback)
 if __name__ == '__main__':

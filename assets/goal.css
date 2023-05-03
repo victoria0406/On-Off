@@ -1,0 +1,98 @@
+.set-goal-button {
+    display: block;
+    background: #F7F8FA;
+    box-shadow: 2px 2px 4px rgba(113, 113, 113, 0.25);
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 200px;
+    text-decoration: none;
+    font-size: 120px;
+    color: #DAD4CE;
+}
+.set-goal-button:hover{
+    color: #AAA48E;
+}
+
+#today-goal {
+    background-color: #fff;
+    width: 18rem;
+    padding: 1rem;
+    height: calc(100vh - 10rem);
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+}
+.today-goal-list > *:not(.today-goal-fig){
+    position: relative;
+    left: 72px;
+}
+
+.today-goal-list > *:not(.today-goal-fig):not(:first-child){
+    top: -160px;
+}
+.today-goal-list > *:first-child {
+    width: 16rem;
+    text-align: center;
+}
+.today-goal-list .unlock {
+    --goal-color: #E4AE44;
+    --goal-color_op1: #E4AE4430;
+    --goal-color_op2: #E4AE4460;
+}
+.today-goal-list .usage {
+    --goal-color: #A4BD85;
+    --goal-color_op1: #A4BD8530;
+    --goal-color_op2: #A4BD8560;
+}
+.today-goal-list .app {
+    --goal-color: #686986;
+    --goal-color_op1: #68698630;
+    --goal-color_op2: #68698660;
+}
+
+.today-goal-list .today-goal-fig {
+    left: -70px;
+    position: relative;
+    top: -100px;
+    left: 0px;
+}
+.today-goal-list .goal-title {
+    margin: 4px 0;
+    color: var(--goal-color);
+}
+
+
+
+.today-goal-list .goal-list {
+    height: 3.6rem;
+    width: 16rem;
+    border: 1px solid var(--goal-color);
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    justify-content: space-between;
+    padding: 0 2rem;
+    cursor: pointer;
+    background-color: var(--goal-color_op1);
+}
+.today-goal-list .goal-list .goal-state-check {
+    width: 20px;
+    height: 20px;
+    border: 1px solid var(--goal-color);
+    border-radius: 50%;
+    background-color: #fff;
+}
+  
+.goal-list:hover {
+    background-color: var(--goal-color_op2);
+  }
+
+.calander {
+    width: calc(100vw - 39rem);
+    padding: 1rem;
+    height: calc(100vh - 10rem);
+    background-color: #fff;
+}
