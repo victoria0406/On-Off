@@ -138,6 +138,7 @@ x0 = [group_ust_median, xlb, xlb, group_ust_mean]
 y0 = [group_sdt_median, group_sdt_median, ybb, ybb]
 x1 = [xrb, group_ust_median, group_ust_median, xrb]
 y1 = [ytb, ytb, group_sdt_median, group_sdt_median]
+
 # Add rectangular shape
 fig1.add_shape(type='rect', xref='x', yref='y',
                x0=x0[user_group_index], y0=y0[user_group_index],
@@ -164,7 +165,10 @@ fig1.update_layout(
             'font': {'family': 'Arial', 'size': 14, 'color': '#10135B'},
         },
         # 'showticklabels': False,
-        'range': [xlim[0],xlim[1]]
+        'range': [xlim[0],xlim[1]],
+        'tickfont': {
+            'color': '#ffffff'
+        }
     },
     yaxis={
         'title': {
