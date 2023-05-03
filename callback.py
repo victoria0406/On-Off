@@ -120,7 +120,13 @@ def goal_update_callback_factory():
     input=Input('url', 'pathname')
     state=State('url', 'search')
     def update_output(pathname, search):
-        if pathname != '/goal' or not search == '?setting=True': return dash.no_update
+        if pathname != '/goal' or search == ('?setting=False' or ''): return dash.no_update
+        elif (search == '?setting=True?unlock'):
+            return today_goal_setting('unlock')
+        elif (search == '?setting=True?usage'):
+            return today_goal_setting('usage')
+        elif (search == '?setting=True?app'):
+            return today_goal_setting('app')
         return today_goal_setting()
     return [
         update_output,

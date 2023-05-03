@@ -3,7 +3,7 @@ import calendar
 import dash
 from dash import html, dcc
 from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_info
-from component.todaygoal import today_goal_not_setting
+from component.todaygoal import today_goal_not_setting, get_goal_info
 from component.goaldonutplot import goal_donut_plot
 import pandas as pd
 
@@ -15,6 +15,7 @@ goal_states_df['day'] = pd.to_datetime(goal_states_df['date']).dt.day
 year = 2023
 month = 5
 cal = calendar.monthcalendar(year, month)
+today_day = 10
 
 
 def get_goal_state(day):
@@ -47,7 +48,7 @@ def get_calender_donut_plot(day):
     return donut
 
 # HTML 요소로 변환합니다.
-table = html.Table(className='goal-calender', children=[
+table = html.Table(className=f'goal-calender', children=[
     html.Thead(children=[
         html.Tr(children=[
             html.Th('Sun'), html.Th('Mon'), html.Th('Tue'),
@@ -60,7 +61,7 @@ table = html.Table(className='goal-calender', children=[
             html.Td(children=[
                 str(day),
                 get_calender_donut_plot(day)
-            ]) if day != 0 else html.Td('')
+            ], className='today' if (day == today_day) else '' ) if day != 0 else html.Td('')
             for day in week
         ])
         for week in cal
@@ -72,5 +73,5 @@ dash.register_page(__name__)
 
 layout = html.Div(children=[
     html.Div(today_goal_not_setting, id='today-goal'),
-    html.Div(['May 2023', table], className='calander'),
+    html.Div(['May 2023', table], className='calander-container'),
 ], style={'display': 'flex', 'justify-content': 'space-between'})

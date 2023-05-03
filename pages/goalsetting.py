@@ -68,7 +68,7 @@ goalsettingcontext = [
 ]
 
 layout = html.Div([
-    html.P('Set Your Goals!', style={'width': 'calc(100vw - 24rem)', 'font-weight': 'bold'}),
+    html.P('Set Your Goals!', style={'width': '100%', 'font-weight': 'bold'}),
     html.Div([
         goalsettingcomponent(context['goal'], context['desc'], context['value_component'], context['checked'], context['type'])
         for context in goalsettingcontext

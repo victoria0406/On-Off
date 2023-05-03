@@ -4,18 +4,6 @@ from dash import Input, Output, dcc, html
 
 # from themes.colors import sub_color,sub_bg_color, sub_text_color, main_color
 
-SIDEBAR_STYLE = {
-    "position": "fixed",
-    "top": 0,
-    "left": '1rem',
-    "bottom": 0,
-    "width": "16rem",
-    "padding": "1rem",
-    "background-color": "#FFFFFF",
-    "display": "flex",
-    "flex-direction": "column",
-    "justify-content": "space-between",
-}
 PROFILE_STYLE = {
     "background-color": "#F7F8FA",
     "height": "18rem",
@@ -76,5 +64,5 @@ sidebar = html.Div(
         ]),
         html.A('LOGOUT', className='sub link-button'),
     ],
-    style=SIDEBAR_STYLE,
+    className='side-bar',
 )
