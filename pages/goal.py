@@ -23,25 +23,32 @@ def get_goal_state(day):
     return_data = [None, None, None];
     if day_goal_state.size == 0 : return None
     day_goal_state = day_goal_state.fillna(-1, axis=1)
-    if (day_goal_state['unlock_real'].values[0] > 0):
-        exceed = max(day_goal_state['unlock_real'].values[0]-day_goal_state['unlock_goal'].values[0], 0)
-        real = min(day_goal_state['unlock_real'].values[0], day_goal_state['unlock_goal'].values[0])
-        goal = max(0, day_goal_state['unlock_goal'].values[0] - day_goal_state['unlock_real'].values[0])
+    unlock_real = day_goal_state['unlock_real'].values[0]
+    unlock_goal = day_goal_state['unlock_goal'].values[0]
+    usage_real = day_goal_state['total_usage_real'].values[0]
+    usage_goal = day_goal_state['total_usage_goal'].values[0]
+    app_real = day_goal_state['app_usage_real'].values[0]
+    app_goal = day_goal_state['app_usage_goal'].values[0]
+    if (unlock_real> 0):
+        exceed = max(unlock_real-unlock_goal, 0)
+        real = max(0, min(unlock_real, 2 * unlock_goal - unlock_real))
+        goal = max(0, unlock_goal - unlock_real)
         return_data[0] = [exceed, real, goal]
-    if (day_goal_state['total_usage_real'].values[0] > 0):
-        exceed = max(day_goal_state['total_usage_real'].values[0]-day_goal_state['total_usage_goal'].values[0], 0)
-        real = min(day_goal_state['total_usage_real'].values[0], day_goal_state['total_usage_goal'].values[0])
-        goal = max(0, day_goal_state['total_usage_goal'].values[0] - day_goal_state['total_usage_real'].values[0])
+    if (usage_real > 0):
+        exceed = max(usage_real-usage_goal, 0)
+        real = max(0, min(usage_real, 2 * usage_goal - usage_real))
+        goal = max(0, usage_goal - usage_real)
         return_data[1] = [exceed, real, goal]
-    if (day_goal_state['app_usage_real'].values[0] > 0):
-        exceed = max(day_goal_state['app_usage_real'].values[0]-day_goal_state['app_usage_goal'].values[0], 0)
-        real = min(day_goal_state['app_usage_real'].values[0], day_goal_state['app_usage_goal'].values[0])
-        goal = max(0, day_goal_state['app_usage_goal'].values[0] - day_goal_state['app_usage_real'].values[0])
+    if (app_real > 0):
+        exceed = max(app_real-app_goal, 0)
+        real = max(0, min(app_real, 2 * app_goal - app_real))
+        goal = max(0, app_goal - app_real)
         return_data[2] = [exceed, real, goal]
     return return_data
 
 def get_calender_donut_plot(day):
-    goal_state = get_goal_state(day)
+    if (day == today_day) : goal_state = get_goal_info()
+    else: goal_state = get_goal_state(day)
     if goal_state == None : return None
     fig = goal_donut_plot(*goal_state)
     donut = dcc.Graph(figure = fig, config={'displayModeBar': False}, className='calender-donut')
@@ -72,6 +79,8 @@ dash.register_page(__name__)
 
 
 layout = html.Div(children=[
-    html.Div(today_goal_not_setting, id='today-goal'),
-    html.Div(['May 2023', table], className='calander-container'),
+    html.Div(today_goal_not_setting, id='today-goal',),
+    html.Div([
+        html.P('May 2023', style={'font-weight': 'bold'})
+    , table], className='calander-container'),
 ], style={'display': 'flex', 'justify-content': 'space-between'})

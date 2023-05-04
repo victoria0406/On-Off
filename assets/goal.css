@@ -100,6 +100,10 @@
     padding: 1rem;
     height: calc(100vh - 10rem);
     background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
 }
 .goal-calender {
     width: 100%;
@@ -126,6 +130,7 @@
     vertical-align : top;
     text-align: right;
     position: relative;
+    padding: 4px 6px;
 }
 
 .goal-calender td:first-child {
@@ -135,7 +140,8 @@
     color: #FDB03D;
 }
 .goal-calender td.today {
-    border-color: #b40000;
+    box-shadow: inset 2px 2px 0px #b40000,
+                inset -2px -2px 0px #b40000;
 }
 
 .calender-donut {
