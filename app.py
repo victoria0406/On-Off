@@ -15,19 +15,6 @@ from component.sidebar import sidebar
 
 app = dash.Dash(__name__, use_pages=True, external_stylesheets=[dbc.themes.BOOTSTRAP, "assets/style.css"])
 
-MAIN_STYLE = {
-    "margin": "0, 1rem",
-    "background-color": "#99A68D",
-}
-
-CONTENT_STYLE = {
-    "margin-left": "17rem",
-    "margin-right": "1rem",
-    "background-color": "#F7F8FA",
-    "height": "100vh",
-    "padding": "1rem",
-}
-
 HEAD_STYLE = {
     "height": "6.5rem",
 }
@@ -52,10 +39,10 @@ app.layout = html.Div([
         ),
         dash.page_container
     ],
-    style=CONTENT_STYLE,
+    className='content',
     ),
 ],
-style=MAIN_STYLE,
+className='main',
 )
 for callback, *arcs  in get_callbacks():
     app.callback(*arcs)(callback)

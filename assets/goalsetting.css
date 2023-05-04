@@ -1,6 +1,6 @@
 .goal-setting-container {
     position: relative;
-    width: calc(100vw - 20rem);
+    width: 100%;
     height: calc(100vh - 10rem);
     background: #FFFFFF;
     box-shadow: 4px 4px 4px rgba(46, 46, 46, 0.25);
@@ -20,7 +20,7 @@
     margin-bottom: 1rem;
     padding: 1rem;
     gap: 2rem;
-    width: calc(100vw - 22rem);
+    width: 100%;
     display: grid;
     grid-template:
     "checkbox goal value" 1fr 

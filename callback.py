@@ -32,7 +32,6 @@ def usage_time_switch_callback_factory():
     ]
     input=Input('goal-switch-input-usage-time', 'value')
     def update_output(value):
-        print('usage: ', usage_time_info, unlock_info)
         if 'on' in value:
             usage_time_info['checked'] = True;
             return [[plus_layout], False, False, 'goal-setting-list-container active']
@@ -53,7 +52,6 @@ def unlock_switch_callback_factory():
     ]
     input=Input('goal-switch-input-unlock', 'value')
     def update_output(value):
-        print('unlock ',usage_time_info, unlock_info)
         if 'on' in value:
             unlock_info['checked'] = True;
             return [[plus_layout], False, 'goal-setting-list-container active']
@@ -101,7 +99,6 @@ def goal_confirm_callback_factory():
     ]
     def update_output(n_clicks, unlock_time, usage_hour, usage_minite, app_usage_app, app_usage_hour, app_usage_minite):
         if (n_clicks):
-            print('confirm');
             unlock_info['time'] = unlock_time
             usage_time_info['hour'] = usage_hour
             usage_time_info['minite'] = usage_minite
@@ -123,7 +120,6 @@ def goal_update_callback_factory():
     input=Input('url', 'pathname')
     state=State('url', 'search')
     def update_output(pathname, search):
-        print(search);
         if pathname != '/goal' or not search == '?setting=True': return dash.no_update
         return today_goal_setting()
     return [
@@ -137,8 +133,8 @@ def goal_update_sidebar_callback_factory():
     input=Input('url', 'pathname')
     state=State('url', 'search')
     def update_output(pathname, search):
-        print('url:',pathname, search)
         if pathname == '/goal' and search == '?setting=True':
+            print(pathname, search)
             return '/goal?setting=True'
         else:  return dash.no_update
     return [
@@ -146,17 +142,6 @@ def goal_update_sidebar_callback_factory():
         output,
         input,
         state,
-    ]
-def test_callback_factory():
-    output=Output('url', 'search')
-    input=Input('goal-link', 'n_clicks')
-    state=Input('goal-link', 'href')
-    def update_output(href):
-        print('href: ', href)
-    return [
-        update_output,
-        output,
-        input,
     ]
     
 def get_callbacks():

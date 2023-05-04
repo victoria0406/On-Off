@@ -58,6 +58,8 @@
     position: relative;
     top: -100px;
     left: 0px;
+    width: 400px;
+    height: 400px;
 }
 .today-goal-list .goal-title {
     margin: 4px 0;
@@ -77,6 +79,8 @@
     padding: 0 2rem;
     cursor: pointer;
     background-color: var(--goal-color_op1);
+    color: black;
+    text-decoration: none;
 }
 .today-goal-list .goal-list .goal-state-check {
     width: 20px;
@@ -90,9 +94,54 @@
     background-color: var(--goal-color_op2);
   }
 
-.calander {
-    width: calc(100vw - 39rem);
+.calander-container {
+    position: relative;
+    width: calc(100% - 19rem);
     padding: 1rem;
     height: calc(100vh - 10rem);
     background-color: #fff;
+}
+.goal-calender {
+    width: 100%;
+    height: calc(100% - 60px);
+}
+.goal-calender  thead {
+    background-color: #DAD4CE;
+}
+.goal-calender th {
+    width: calc(100% / 7);
+    text-align: center;
+    color: #515151;
+}
+
+.goal-calender th:first-child {
+    color: #FF6F66;
+}
+.goal-calender th:last-child {
+    color: #FDB03D;
+}
+
+.goal-calender td {
+    border: 3px solid #F4F4F4;
+    vertical-align : top;
+    text-align: right;
+    position: relative;
+}
+
+.goal-calender td:first-child {
+    color: #FF6F66;
+}
+.goal-calender td:last-child {
+    color: #FDB03D;
+}
+.goal-calender td.today {
+    border-color: #b40000;
+}
+
+.calender-donut {
+    width: 260px;
+    height: 260px;
+    position: absolute;
+    top: calc((100% - 280px) / 2);
+    left: calc((100% - 260px) / 2);
 }
