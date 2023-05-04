@@ -75,14 +75,7 @@ TOGGLE_STYLE ={
     "float":"right",
 }
 
-APP_BUTTON_STYLE={
-    "width": "85%",
-    'margin':'0px 10px 12px 30px',
-    'border':'none',
-    'border-radius':'7px',
-    'box-shadow': '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
-    "height":"27px"
-}
+
 AVERAGE_STYLE={
     'width':'90%',
     'height':'40px',
@@ -90,14 +83,6 @@ AVERAGE_STYLE={
     'margin':'15px 0 0 20px',
     'background-color':'#F7F8FA'
 }
-
-
-BUTTON1=APP_BUTTON_STYLE
-BUTTON2=APP_BUTTON_STYLE
-BUTTON3=APP_BUTTON_STYLE
-BUTTON4=APP_BUTTON_STYLE
-BUTTON5=APP_BUTTON_STYLE
-BUTTON6=APP_BUTTON_STYLE
 
 
 ############# top 5 app ################
@@ -188,15 +173,15 @@ def layout():
         html.Div([
             html.Div([html.P("Apps Top",style={"margin":"10px 0 -5px 10px"}), html.P("{}{}{}{}".format(total_time//60,"h ", total_time%60,"m Used"),style={'font-weight':'bold','font-size':"20px","margin":"0px 20px -60px 15px",'text-align':'right'}),
                 html.Div(dcc.Graph(id='top5', config={'displayModeBar': False}),
-                style={'margin-left': '-60px', 'margin-bottom':'-70px'}),
+                style={'margin-left': '-60px', 'margin-bottom':'10px'}),
                 html.Div([
-                html.Button(html.Div([html.Div([html.Div("1",style={"text-align":"center","line-height":"20px","background-color":COLORS[0],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div(top[1],style={"float":"right","margin-left":"10px","font-weight":"bold"})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(top1[7]//60,"h ", top1[7]%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold"})]), id='btn-nclicks-1', n_clicks=0, style=BUTTON1),
-                html.Button(html.Div([html.Div([html.Div("2",style={"text-align":"center","line-height":"20px","background-color":COLORS[1],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div(top[2],style={"float":"right","margin-left":"10px","font-weight":"bold"})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(top2[7]//60,"h ", top2[7]%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold"})]), id='btn-nclicks-2', n_clicks=0, style=BUTTON2),
-                html.Button(html.Div([html.Div([html.Div("3",style={"text-align":"center","line-height":"20px","background-color":COLORS[2],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div(top[3],style={"float":"right","margin-left":"10px","font-weight":"bold"})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(top3[7]//60,"h ", top3[7]%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold"})]), id='btn-nclicks-3', n_clicks=0, style=BUTTON3),
-                html.Button(html.Div([html.Div([html.Div("4",style={"text-align":"center","line-height":"20px","background-color":COLORS[3],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div(top[4],style={"float":"right","margin-left":"10px","font-weight":"bold"})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(top4[7]//60,"h ", top4[7]%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold"})]), id='btn-nclicks-4', n_clicks=0, style=BUTTON4),
-                html.Button(html.Div([html.Div([html.Div("5",style={"text-align":"center","line-height":"20px","background-color":COLORS[4],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div(top[5],style={"float":"right","margin-left":"10px","font-weight":"bold"})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(top5[7]//60,"h ", top5[7]%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold"})]), id='btn-nclicks-5', n_clicks=0, style=BUTTON5),
-                html.Button(html.Div([html.Div([html.Div("6",style={"text-align":"center","line-height":"20px","background-color":COLORS[5],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div(top[6],style={"float":"right","margin-left":"10px","font-weight":"bold"})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(others[7]//60,"h ", others[7]%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold"})]), id='btn-nclicks-6', n_clicks=0, style=BUTTON6),
-                ], style={'z-index':'1'})], style=FCONTENT_STYLE),
+                html.Button(id="btn-1", n_clicks=0, className='APP_BUTTON_STYLE'),
+                html.Button(id="btn-2", n_clicks=0, className='APP_BUTTON_STYLE'),
+                html.Button(id="btn-3", n_clicks=0, className='APP_BUTTON_STYLE'),
+                html.Button(id="btn-4", n_clicks=0, className='APP_BUTTON_STYLE'),
+                html.Button(id="btn-5", n_clicks=0, className='APP_BUTTON_STYLE'),
+                html.Button(id="btn-6", n_clicks=0, className='APP_BUTTON_STYLE'),
+                ])], style=FCONTENT_STYLE),
             html.Div([html.P("Usage Time",style={"margin":"10px 0 -10px 15px"}),
                     html.Div(dcc.Graph(id="usage_time", config={'displayModeBar': False}),
                         style={'margin-top': '-50px'})
@@ -206,7 +191,7 @@ def layout():
         html.Div([
             html.Div([html.P("Number of Access",style={"margin":"10px 0 -10px 15px"}),
                     html.Div(dcc.Graph(id="graph", config={'displayModeBar': False}),
-                        style={'margin-top': '-75px','padding-top':'20px','margin-left':'-20px'}
+                        style={'margin-top': '-10px','padding-top':'20px','margin-left':'-20px'}
                     )        
             
             ], style=TCONTENT_STYLE),
@@ -223,15 +208,28 @@ def layout():
 
 @callback(
     Output('top5','figure'),
+    Output('btn-1', 'children'),
+    Output('btn-1', 'style'),
+    Output('btn-2', 'children'),
+    Output('btn-2', 'style'),
+    Output('btn-3', 'children'),
+    Output('btn-3', 'style'),
+    Output('btn-4', 'children'),
+    Output('btn-4', 'style'),
+    Output('btn-5', 'children'),
+    Output('btn-5', 'style'),
+    Output('btn-6', 'children'),
+    Output('btn-6', 'style'),
+    
     Output('usage_time','figure'),
     Output('graph','figure'),
     
-    Input('btn-nclicks-1', 'n_clicks'),
-    Input('btn-nclicks-2', 'n_clicks'),
-    Input('btn-nclicks-3', 'n_clicks'),
-    Input('btn-nclicks-4', 'n_clicks'),
-    Input('btn-nclicks-5', 'n_clicks'),
-    Input('btn-nclicks-6', 'n_clicks')
+    Input('btn-1', 'n_clicks'),
+    Input('btn-2', 'n_clicks'),
+    Input('btn-3', 'n_clicks'),
+    Input('btn-4', 'n_clicks'),
+    Input('btn-5', 'n_clicks'),
+    Input('btn-6', 'n_clicks')
 )
 
 def update_graph(btn1, btn2, btn3, btn4, btn5, btn6):
@@ -240,54 +238,70 @@ def update_graph(btn1, btn2, btn3, btn4, btn5, btn6):
     APP_COLOR = COLORS
     GRAPH_COLOR =COLORS
     global click
+    TEXT_COLOR = ['black','black','black','black','black','black']
+    color = ['#F7F8FA', '#F7F8FA', '#F7F8FA', '#F7F8FA', '#F7F8FA', '#F7F8FA']
     
-    if "btn-nclicks-1" == ctx.triggered_id:
+    
+    if "btn-1" == ctx.triggered_id:
         if(click[0] %2 == 0):  
             APP_COLOR = [COLORS[0],'#F8F7E2','#EDF4E2','#EBEBF1','#F1ECE6','#F0F0F0']
             GRAPH_COLOR = [COLORS[0]]*6
             apps = top[1]
+            TEXT_COLOR = ['black','#7C7C7C','#7C7C7C','#7C7C7C','#7C7C7C','#7C7C7C']
+            color = ['#FFF4DF', '#F7F8FA', '#F7F8FA', '#F7F8FA', '#F7F8FA', '#F7F8FA']
         click0 = click[0]+1
         click = [click0,0,0,0,0,0] 
-    elif "btn-nclicks-2" == ctx.triggered_id:
+    elif "btn-2" == ctx.triggered_id:
         if(click[1] %2 == 0):  
             APP_COLOR = ['#F5EFE3',COLORS[1],'#EDF4E2','#EBEBF1','#F1ECE6','#F0F0F0']
             GRAPH_COLOR = [COLORS[1]]*6
             apps = top[2]
+            TEXT_COLOR = ['#7C7C7C','black','#7C7C7C','#7C7C7C','#7C7C7C','#7C7C7C']
+            color = ['#F7F8FA', '#F5F3D4', '#F7F8FA', '#F7F8FA', '#F7F8FA', '#F7F8FA']
         click1 = click[1]+1
         click = [0,click1,0,0,0,0] 
-    elif "btn-nclicks-3" == ctx.triggered_id:
+    elif "btn-3" == ctx.triggered_id:
         if(click[2] %2 == 0):  
             APP_COLOR = ['#F5EFE3','#F8F7E2',COLORS[2],'#EBEBF1','#F1ECE6','#F0F0F0']
             GRAPH_COLOR = [COLORS[2]]*6
             apps = top[3]
+            TEXT_COLOR = ['#7C7C7C','#7C7C7C','black','#7C7C7C','#7C7C7C','#7C7C7C']
+            color = ['#F7F8FA', '#F7F8FA', '#E5EED5', '#F7F8FA', '#F7F8FA', '#F7F8FA']
         click2 = click[2]+1
         click = [0,0,click2,0,0,0]  
-    elif "btn-nclicks-4" == ctx.triggered_id:
+    elif "btn-4" == ctx.triggered_id:
         if(click[3] %2 == 0):  
             APP_COLOR = ['#F5EFE3','#F8F7E2','#EDF4E2',COLORS[3],'#F1ECE6','#F0F0F0']
             GRAPH_COLOR = [COLORS[3]]*6
             apps = top[4]
+            TEXT_COLOR = ['#7C7C7C','#7C7C7C','#7C7C7C','black','#7C7C7C','#7C7C7C']
+            color = ['#F7F8FA', '#F7F8FA', '#F7F8FA', '#E1E1EA', '#F7F8FA', '#F7F8FA']
         click3 = click[3]+1
         click = [0,0,0,click3,0,0]  
-    elif "btn-nclicks-5" == ctx.triggered_id: 
+    elif "btn-5" == ctx.triggered_id: 
         if(click[4]%2==0):     
             APP_COLOR = ['#F5EFE3','#F8F7E2','#EDF4E2','#EBEBF1',COLORS[4],'#F0F0F0']
             GRAPH_COLOR = [COLORS[4]]*6
             apps = top[5]
+            TEXT_COLOR = ['#7C7C7C','#7C7C7C','#7C7C7C','#7C7C7C','black','#7C7C7C']
+            color = ['#F7F8FA', '#F7F8FA', '#F7F8FA', '#F7F8FA', '#EBE3DA', '#F7F8FA']
         click4 = click[4]+1
         click = [0,0,0,0,click4,0]  
-    elif "btn-nclicks-6" == ctx.triggered_id:
+    elif "btn-6" == ctx.triggered_id:
         if(click[5]%2==0):   
             APP_COLOR = ['#F5EFE3','#F8F7E2','#EDF4E2','#EBEBF1','#F1ECE6',COLORS[5]]
             GRAPH_COLOR = [COLORS[5]]*6
-            apps = top[6]  
+            apps = top[6] 
+            TEXT_COLOR = ['#7C7C7C','#7C7C7C','#7C7C7C','#7C7C7C','#7C7C7C','black']
+            color = ['#F7F8FA', '#F7F8FA', '#F7F8FA', '#F7F8FA', '#F7F8FA', '#E9E9E9']
         click5 = click[5]+1
         click = [0,0,0,0,0,click5]  
         
-    fig = px.bar(today, y="date", x=[top[1],top[2],top[3],top[4],top[5],top[6]],orientation='h', color_discrete_sequence=APP_COLOR, width=540, height=170)
+    fig = px.bar(today, y="date", x=[top[1],top[2],top[3],top[4],top[5],top[6]],orientation='h', color_discrete_sequence=APP_COLOR, width=540, height=90)
     fig.update_xaxes(title=None, showticklabels=False)
     fig.update_yaxes(title=None, showticklabels=False,)
-    fig.update_layout(showlegend=False, plot_bgcolor='white',paper_bgcolor="rgb(0,0,0,0)")
+    fig.update_layout(showlegend=False, plot_bgcolor='white',paper_bgcolor="rgb(0,0,0,0)", margin=dict(b=0),)
+    
     
     fig1 = px.bar(weekly_usage, x="date", y=apps,color_discrete_sequence=GRAPH_COLOR,width=750, height=400)
     fig1.update_layout(
@@ -315,7 +329,7 @@ def update_graph(btn1, btn2, btn3, btn4, btn5, btn6):
     
     
     # fig2 = px.bar(weekly_access, x=['1','2','3','4','5','6','7','8','9'], y=apps)
-    fig2 = px.bar(weekly_access, x=weekly_access['date'], y=apps, color_discrete_sequence=GRAPH_COLOR, width=740, height=340)
+    fig2 = px.bar(weekly_access, x=weekly_access['date'], y=apps, color_discrete_sequence=GRAPH_COLOR, width=740, height=280)
     fig2.update_layout(
         xaxis = dict(
             title = None,
@@ -332,7 +346,14 @@ def update_graph(btn1, btn2, btn3, btn4, btn5, btn6):
         )
     )
 
-    fig2.update_layout(showlegend=False, plot_bgcolor='white',paper_bgcolor="rgb(0,0,0,0)",bargap=0.3)
+    fig2.update_layout(showlegend=False, plot_bgcolor='white',paper_bgcolor="rgb(0,0,0,0)",bargap=0.3,margin=dict(t=0))
 
+    children1 = html.Div([html.Div([html.Div("1",style={"text-align":"center","line-height":"20px","background-color":COLORS[0],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div(top[1],style={"float":"right","margin-left":"10px","font-weight":"bold", "color":TEXT_COLOR[0]})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(top1[7]//60,"h ", top1[7]%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold", "color":TEXT_COLOR[0]})])
+    children2 = html.Div([html.Div([html.Div("2",style={"text-align":"center","line-height":"20px","background-color":COLORS[1],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div(top[2],style={"float":"right","margin-left":"10px","font-weight":"bold", "color":TEXT_COLOR[1]})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(top2[7]//60,"h ", top2[7]%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold", "color":TEXT_COLOR[1]})])
+    children3 = html.Div([html.Div([html.Div("3",style={"text-align":"center","line-height":"20px","background-color":COLORS[2],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div(top[3],style={"float":"right","margin-left":"10px","font-weight":"bold", "color":TEXT_COLOR[2]})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(top3[7]//60,"h ", top3[7]%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold", "color":TEXT_COLOR[2]})])
+    children4 = html.Div([html.Div([html.Div("4",style={"text-align":"center","line-height":"20px","background-color":COLORS[3],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div(top[4],style={"float":"right","margin-left":"10px","font-weight":"bold", "color":TEXT_COLOR[3]})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(top4[7]//60,"h ", top4[7]%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold", "color":TEXT_COLOR[3]})])
+    children5 = html.Div([html.Div([html.Div("5",style={"text-align":"center","line-height":"20px","background-color":COLORS[4],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div(top[5],style={"float":"right","margin-left":"10px","font-weight":"bold", "color":TEXT_COLOR[4]})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(top5[7]//60,"h ", top5[7]%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold", "color":TEXT_COLOR[4]})])
+    children6 = html.Div([html.Div([html.Div("6",style={"text-align":"center","line-height":"20px","background-color":COLORS[5],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div(top[6],style={"float":"right","margin-left":"10px","font-weight":"bold", "color":TEXT_COLOR[5]})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(others[7]//60,"h ", others[7]%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold", "color":TEXT_COLOR[5]})])
     
-    return fig, fig1, fig2
+    
+    return fig, children1, {'background-color': color[0]},children2, {'background-color': color[1]}, children3,{'background-color': color[2]}, children4, {'background-color': color[3]}, children5, {'background-color': color[4]}, children6, {'background-color': color[5]}, fig1, fig2
