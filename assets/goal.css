@@ -145,3 +145,11 @@
     top: calc((100% - 280px) / 2);
     left: calc((100% - 260px) / 2);
 }
+
+.weekly-calander-container {
+    position: relative;
+    width: calc(100% - 19rem);
+    padding: 1rem;
+    height: 300px;
+    background-color: #fff;
+}

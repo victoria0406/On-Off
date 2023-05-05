@@ -30,7 +30,7 @@ fig.add_trace(go.Pie(
 ))
 
 def goal_donut_plot(unlock_data, usage_data, app_usage_data, highlighted = None):
-    print(highlighted)
+    # print(highlighted)
     fig = go.Figure()
     if (app_usage_data != None):
         fig.add_trace(go.Pie(
