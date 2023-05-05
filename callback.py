@@ -1,14 +1,20 @@
 import dash
 from dash.dependencies import Input, Output, State
 from dash import html
-from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_info, is_goal_setted
-from component.todaygoal import today_goal_setting
+from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_info
+from component.todaygoal import today_goal_not_setting, today_goal_setting
+import pandas as pd 
+
+app_usage_df = pd.read_csv('./datas/app_usage_time.csv')
+def avg_app_usage(app):
+    return app_usage_df[app].mean()
 
 def selected_app_callback_factory():
-    output = Output('selected-app', 'children'),
+    output = [Output('selected-app', 'children'), Output('avg-app-usage', 'children')],
     input = Input('app-dropdown', 'value'),
     def update_output(value):
-        return [value]
+        usage = avg_app_usage(value)
+        return [[value, f'{usage // 60:.0f}h {usage % 60:.0f}m']]
     
     return [
         update_output,

@@ -9,13 +9,19 @@ from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_in
 dash.register_page(__name__, path='/goalsetting')
 
 app_usage_df = pd.read_csv('./datas/app_usage_time.csv')
-app_list = app_usage_df.columns[1:6].tolist()
+unlock_df = pd.read_csv('./datas/unlock.csv')
+print(app_usage_df.iloc[:, 1:6].mean().sort_values(ascending=False))
+app_list = app_usage_df.iloc[:, 1:6].mean().sort_values(ascending=False).index.tolist()
+avg_unlock = unlock_df['unlock'].mean()
+avg_total_usage = app_usage_df['Total'].mean()
+def avg_app_usage(app):
+    return app_usage_df[app].mean()
 goalsettingcontext = [
     {
         'goal': 'Number of Unlocks',
         'desc': [
             'The average of number of unlocks last week was ',
-            html.Span('43 times', style={'color': '#B40000'}),
+            html.Span(f'{avg_unlock: .0f} times', style={'color': '#B40000'}),
             '.'
         ],
         'value_component': [
@@ -29,7 +35,7 @@ goalsettingcontext = [
         'goal': 'Total Usage Time',
         'desc': [
             'The average of total usage time last week was ',
-            html.Span('6h 49m', style={'color': '#B40000'}),
+            html.Span(f'{avg_total_usage // 60: .0f}h {avg_total_usage % 60: .0f}m', style={'color': '#B40000'}),
             '.'
         ],
         'value_component': [
@@ -55,7 +61,7 @@ goalsettingcontext = [
             'The average of the app usage time for ',
             html.Span(id='selected-app'),
             ' last week was ',
-            html.Span('1h 14m', style={'color': '#B40000'}),
+            html.Span('', style={'color': '#B40000'}, id='avg-app-usage'),
             '.'
         ],
         'value_component': [

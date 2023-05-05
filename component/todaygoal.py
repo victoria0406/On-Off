@@ -1,7 +1,7 @@
 import dash
 from dash.dependencies import Input, Output, State
 from dash import html, dcc
-from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_info, is_goal_setted
+from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_info
 from component.goaldonutplot import goal_donut_plot
 import pandas as pd
 
