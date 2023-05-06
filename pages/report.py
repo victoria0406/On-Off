@@ -6,11 +6,12 @@ import pandas as pd
 import math
 import plotly.graph_objects as go
 
+from inputdata.data import COLORS, click, app_usage_time, today, yesterday, top, hour, min, app_usage_hour, access, unlock
+
 
 dash.register_page(__name__)
 
-COLORS = ['#F2CB80','#DCD76E','#A7C670','#999BB8','#BBA083','#B5B5B5']
-click = [0,0,0,0,0,0]
+
 
 CONTENT_STYLE = {
     "background-color": "#F7F8FA",
@@ -85,21 +86,10 @@ STATISTICS_STYLE={
 }
 
 
-############# top 5 app ################
-app_usage_time = pd.read_csv('./datas/app_usage_time.csv')
-today = app_usage_time.loc[app_usage_time['date']=='2023-05-10']
-yesterday = app_usage_time.loc[app_usage_time['date']=='2023-05-09']
-top=list(app_usage_time)
-
-hour = today['Total']//60
-min = today['Total']%60
-
 today_value=today.values.tolist()[0]
-print(today_value)
-
 
 ######## usage time #############
-app_usage_hour = pd.read_csv('./datas/app_usage_hour.csv')
+
 
 pd.to_datetime(app_usage_hour['time'], format = "%H:%M")
 total = pd.DataFrame(data=None, index=None, columns=["time","top1","top2","top3","top4","top5"], dtype=None, copy=False)
@@ -129,7 +119,7 @@ for idx, row in app_usage_hour.iterrows():
 
 # fig1.show() 
 ############ number of access ################
-access = pd.read_csv('./datas/number_of_access.csv')
+
 access_today=access.loc[today.index]
 access_yesterday=access.loc[today.index-1]
 
@@ -151,7 +141,6 @@ if(access_differ>0):
 else:
     access_color="#AEBF9E"
     
-unlock = pd.read_csv('./datas/unlock.csv')
 unlock_today=unlock.loc[today.index]
 unlock_yesterday=unlock.loc[today.index-1]
 
@@ -326,7 +315,7 @@ def update_graph(btn1, btn2, btn3, btn4, btn5, btn6):
             tickvals = [0,120,240,360,480,600,720],
             ticktext = ['0', '2', '4', '6', '8', '10','12'],
             linecolor="#BEBEBE",
-            showgrid=True, linewidth=1,gridcolor='#F4F4F4'
+            showgrid=True, linewidth=1,gridcolor='#E0E0E0'
         )
     )
 
@@ -337,7 +326,7 @@ def update_graph(btn1, btn2, btn3, btn4, btn5, btn6):
     fig2.update_layout(showlegend=False, plot_bgcolor='white',paper_bgcolor="rgb(0,0,0,0)",width=720, height=270, margin=dict(t=0))
     fig2.update_layout(
         yaxis = dict(
-            showgrid=True, gridcolor='#F4F4F4',
+            showgrid=True, gridcolor='#E0E0E0',
             zeroline=True, zerolinecolor='#A2A2A2'
         ),
         xaxis = dict(

@@ -6,10 +6,12 @@ import dash_bootstrap_components as dbc
 import math
 import plotly.graph_objects as go
 
+from inputdata.data import COLORS, click, app_usage_time, today, yesterday, top, hour, min, app_usage_hour, access, today_index, unlock
+
+
 dash.register_page(__name__)
 
-click = [0,0,0,0,0,0]
-COLORS = ['#F2CB80','#DCD76E','#A7C670','#999BB8','#BBA083','#B5B5B5']
+
 
 
 CONTENT_STYLE = {
@@ -85,34 +87,20 @@ AVERAGE_STYLE={
 }
 
 
-############# top 5 app ################
-app_usage_time = pd.read_csv('./datas/app_usage_time.csv')
-today = app_usage_time.loc[app_usage_time['date']=='2023-05-10']
-yesterday = app_usage_time.loc[app_usage_time['date']=='2023-05-09']
-top=list(app_usage_time)
-
-hour = today['Total']//60
-min = today['Total']%60
 
 
 
-############## usage ###################
-app_usage_time = pd.read_csv('./datas/app_usage_time.csv')
-
-today_index = int(str(today['Total']).split()[0])
 weekly_usage = app_usage_time[today_index-6:today_index+1]
 weekly_usage['date']=pd.to_datetime(weekly_usage['date'], format = "%Y %m %d")
 weekly_usage['date']=weekly_usage['date'].dt.strftime('%b %d')
 
 ############ number of access ################
-access = pd.read_csv('./datas/number_of_access.csv')
 
 weekly_access = access[today_index-6:today_index+1]
 weekly_access['date']=weekly_usage['date']
 
 ################ screen on ####################
 screen_on = 150
-unlock = pd.read_csv('./datas/unlock.csv')
 
 weekly_unlock = unlock[today_index-6:today_index+1]
 weekly_unlock['date']=weekly_usage['date']
@@ -155,7 +143,6 @@ top5.insert(7,sum(top5))
 others.insert(7,sum(others))
 
 total_time = top1[7]+top2[7]+top3[7]+top4[7]+top5[7]+others[7]
-
 
 ###############################################
 
@@ -321,7 +308,7 @@ def update_graph(btn1, btn2, btn3, btn4, btn5, btn6):
             tickmode = 'array',
             tickvals = [0,120,240,360,480,600,720],
             ticktext = ['0', '2', '4', '6', '8', '10','12'],
-            showgrid=True, linewidth=1,gridcolor='#F4F4F4',
+            showgrid=True, linewidth=1,gridcolor='#E0E0E0',
             tickfont = dict(size=9)
         )
     )
@@ -342,7 +329,7 @@ def update_graph(btn1, btn2, btn3, btn4, btn5, btn6):
             tickmode = 'array',
             tickvals = [0,10,20,30,40,50,60,70],
             ticktext = ['0', '10', '20', '30', '40', '50','60','70'],
-            showgrid=True, linewidth=1,gridcolor='#F4F4F4'
+            showgrid=True, linewidth=1,gridcolor='#E0E0E0'
         )
     )
 
