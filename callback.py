@@ -2,7 +2,7 @@ import dash
 from dash.dependencies import Input, Output, State
 from dash import html
 from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_info, is_goal_setted
-from component.todaygoal import today_goal_setting, unlock_weekly_calender
+from component.todaygoal import today_goal_setting, unlock_weekly_calender, usage_weekly_calender, app_weekly_calender
 
 def selected_app_callback_factory():
     output = Output('selected-app', 'children'),
@@ -120,8 +120,9 @@ def goal_update_callback_factory():
     output=Output('today-goal', 'children')
     input=Input('url', 'pathname')
     state=State('url', 'search')
+    url_list=['?setting=True', '?setting=True?unlock', '?setting=True?usage', '?setting=True?app']
     def update_output(pathname, search):
-        if pathname != '/goal' or not search == '?setting=True': return dash.no_update
+        if pathname != '/goal' or not search in url_list: return dash.no_update
         return today_goal_setting()
     return [
         update_output,
@@ -130,29 +131,16 @@ def goal_update_callback_factory():
         state,
     ]
 
-def unlock_highlight_callback_factory():
+def goal_highlight_callback_factory():
     output=Output('calander-container', 'children')
     input=Input('url', 'pathname')
     state=State('url', 'search')
     def update_output(pathname, search):
-        # print(pathname, search)
-        if pathname != '/goal' or not search == '?setting=True?unlock': return dash.no_update
-        return unlock_weekly_calender()
-    return [
-        update_output,
-        output,
-        input,
-        state,
-    ]
-    
-def unlock_highlight_callback_factory():
-    output=Output('calander-container', 'children')
-    input=Input('url', 'pathname')
-    state=State('url', 'search')
-    def update_output(pathname, search):
-        # print(pathname, search)
-        if pathname != '/goal' or not search == '?setting=True?unlock': return dash.no_update
-        return unlock_weekly_calender()
+        if pathname != '/goal': return dash.no_update
+        elif search == '?setting=True?unlock': return unlock_weekly_calender()
+        elif search == '?setting=True?usage': return usage_weekly_calender()
+        elif search == '?setting=True?app': return app_weekly_calender()
+        else: return dash.no_update
     return [
         update_output,
         output,
@@ -185,5 +173,5 @@ def get_callbacks():
         goal_update_callback_factory(),
         goal_confirm_callback_factory(),
         goal_update_sidebar_callback_factory(),
-        unlock_highlight_callback_factory(),
+        goal_highlight_callback_factory(),
     ]

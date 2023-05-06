@@ -65,3 +65,24 @@ def goal_donut_plot(unlock_data, usage_data, app_usage_data, highlighted = None)
     fig.update_traces(textinfo='none')
     fig.update_layout(showlegend=False, plot_bgcolor='rgb(0,0,0,0)',paper_bgcolor="rgb(0,0,0,0)",)
     return fig
+
+def week_donut_plot(data, index):
+    # print(highlighted)
+    fig = go.Figure()
+    if index == 2: colors = ['#B40000','#686986', '#68698650']
+    elif index == 1: colors = ['#B40000','#A4BD85', '#A4BD8550']
+    elif index == 0: colors = ['#B40000','#E4AE44', 'E4AE4450']
+
+    fig.add_trace(go.Pie(
+    values=data,
+    marker=dict(colors=colors),
+    hole=0.7,
+    sort=False,
+    domain=dict(x=[0, 1], y=[0, 1]),
+    direction='clockwise',
+    opacity=1
+    ))
+    
+    fig.update_traces(textinfo='none')
+    fig.update_layout(showlegend=False, plot_bgcolor='rgb(0,0,0,0)',paper_bgcolor="rgb(0,0,0,0)",)
+    return fig
