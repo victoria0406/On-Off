@@ -1,4 +1,3 @@
-import datetime
 import calendar
 import dash
 from dash import html, dcc
@@ -6,7 +5,6 @@ from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_in
 from component.todaygoal import today_goal_not_setting, get_goal_info
 from component.goaldonutplot import goal_donut_plot
 import pandas as pd
-
 
 goal_states_df= pd.read_csv('./datas/goal_states.csv')
 goal_states_df['day'] = pd.to_datetime(goal_states_df['date']).dt.day
@@ -20,7 +18,7 @@ today_day = 10
 
 def get_goal_state(day):
     day_goal_state = goal_states_df[goal_states_df['day'] == day]
-    return_data = [None, None, None];
+    return_data = [None, None, None]
     if day_goal_state.size == 0 : return None
     day_goal_state = day_goal_state.fillna(-1, axis=1)
     if (day_goal_state['unlock_real'].values[0] > 0):
@@ -70,8 +68,7 @@ table = html.Table(className=f'goal-calender', children=[
 
 dash.register_page(__name__)
 
-
 layout = html.Div(children=[
     html.Div(today_goal_not_setting, id='today-goal'),
-    html.Div(['May 2023', table], className='calander-container'),
+    html.Div(['May 2023', table], className='calander-container', id='calander-container'),
 ], style={'display': 'flex', 'justify-content': 'space-between'})

@@ -7,3 +7,6 @@ deflicts:
 - 2d histogram 영역이 제대로 표시되지 않음
 - hover시 text만 보이게 못함
 - 세세한 css
+
+
+callback에서 goal_highlight_callback_factory로 table 형태 및 왼쪽 보여주는 모양 바꾸기
