@@ -92,16 +92,41 @@
     background-color: var(--goal-color_op2);
   }
 
-.calendar-container {
+#calendar-container {
     position: relative;
     width: calc(100% - 19rem);
-    padding: 1rem;
     height: calc(100vh - 10rem);
-    background-color: #fff;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    gap: 1rem;
+}
+
+.weekly-calendar-container {
+    height:40%;
+}
+.weekly-graph-container{
+    height:60%;
+}
+.weekly-graph-container,
+.weekly-calendar-container,
+.calendar-container {
+    position: relative;
+    width: 100%;
+    /* padding: 1rem; */
+    background-color: #fff;
     align-items: center;
+    display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+    padding: 1rem;
+    border-radius: 6px;
+}
+
+.calendar-container {
+    height: 100%;
+
 }
 .goal-calendar {
     width: 100%;
@@ -147,19 +172,6 @@
     position: absolute;
     top: calc((100% - 280px) / 2);
     left: calc((100% - 260px) / 2);
-}
-
-.weekly-calendar-container {
-    position: relative;
-    width: 100%;
-    /* padding: 1rem; */
-    height: 210px;
-    background-color: #fff;
-    align-items: center;
-    display: flex;
-	flex-direction: column;
-	justify-content: flex-start;
-	align-items: center;
 }
 
 .weekly-calendar-title {

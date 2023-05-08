@@ -44,7 +44,9 @@ dash.register_page(__name__)
 
 layout = html.Div(children=[
     html.Div(today_goal_not_setting, id='today-goal',),
-    html.Div([
-        html.P('May 2023', style={'font-weight': 'bold'})
-    , table], className='calendar-container', id='calendar-container'),
+    html.Div(
+        html.Div([
+            html.P('May 2023', style={'font-weight': 'bold'})
+        , table], className='calendar-container')
+    , id='calendar-container'),
 ], style={'display': 'flex', 'justify-content': 'space-between'})

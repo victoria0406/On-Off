@@ -193,17 +193,14 @@ def unlock_weekly_calendar(highlighted=None):
     ])
     
     return_children = [
+        html.Div([html.P('Your Weekly - Unlock', className='weekly-calendar-title'), table],
+                    className='weekly-calendar-container',),
         html.Div(children=[
-            html.Div([html.P('Your Weekly - Unlock', className='weekly-calendar-title'), table],
-                     className='weekly-calendar-container',),
-            html.Div(children=[
-                html.P('Unlock', style={'font-size': '20px'}),
-                html.Div(dcc.Graph(figure = unlock_graph(), config={'displayModeBar': False}),style={'margin-top':'-50px'})
-            ])
-        ])
+            html.P('Unlock', style={'font-size': '20px'}),
+            html.Div(dcc.Graph(figure = unlock_graph(), config={'displayModeBar': False}),style={'margin-top':'-50px'})
+        ], className='weekly-graph-container')
     ]
-    component = html.Div(return_children, className='week-calendar')
-    return component
+    return return_children
 
 def usage_weekly_calendar(highlighted=None):
     today_day = dt.datetime(2023, 5, 10)
@@ -229,17 +226,14 @@ def usage_weekly_calendar(highlighted=None):
     ])
     
     return_children = [
+        html.Div([html.P('Your Weekly - Usage Time', className='weekly-calendar-title'), table],
+                    className='weekly-calendar-container',),
         html.Div(children=[
-            html.Div([html.P('Your Weekly - Usage Time', className='weekly-calendar-title'), table],
-                     className='weekly-calendar-container',),
-            html.Div(children=[
-                html.P('Usage Time', style={'font-size': '20px'}),
-                html.Div(dcc.Graph(figure = usage_graph(), config={'displayModeBar': False})),
-            ])
-        ])
+            html.P('Usage Time', style={'font-size': '20px'}),
+            html.Div(dcc.Graph(figure = usage_graph(), config={'displayModeBar': False})),
+        ], className='weekly-graph-container')
     ]
-    component = html.Div(return_children, className='week-calendar')
-    return component
+    return return_children
 
 def app_weekly_calendar(highlighted=None):
     today_day = dt.datetime(2023, 5, 10)
@@ -265,17 +259,14 @@ def app_weekly_calendar(highlighted=None):
     ])
     
     return_children = [
+        html.Div([html.P('Your Weekly - App Usage Time', className='weekly-calendar-title'), table],
+                    className='weekly-calendar-container',),
         html.Div(children=[
-            html.Div([html.P('Your Weekly - App Usage Time', className='weekly-calendar-title'), table],
-                     className='weekly-calendar-container',),
-            html.Div(children=[
-                html.P('App Usage', style={'font-size': '20px'}),
-                html.Div(dcc.Graph(figure = app_usage_graph(), config={'displayModeBar': False})),
-            ])
-        ])
+            html.P('App Usage', style={'font-size': '20px'}),
+            html.Div(dcc.Graph(figure = app_usage_graph(), config={'displayModeBar': False})),
+        ], className='weekly-graph-container')
     ]
-    component = html.Div(return_children, className='week-calendar')
-    return component
+    return return_children
 
 today_goal_not_setting = [
     html.P('Today Goal', style={'font-weight': 'bold'}),
