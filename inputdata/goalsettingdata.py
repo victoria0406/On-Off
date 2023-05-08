@@ -1,4 +1,4 @@
-is_goal_setted = False;
+is_goal_setted = False
 
 usage_time_info = {
     'checked': True,

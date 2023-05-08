@@ -1,7 +1,6 @@
 import dash
 import dash_bootstrap_components as dbc
 from dash import html, dcc, callback, Input, Output
-
 from component.goalsettingcomponent import goalsettingcomponent
 from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_info
 
