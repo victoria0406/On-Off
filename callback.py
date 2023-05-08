@@ -2,7 +2,7 @@ import dash
 from dash.dependencies import Input, Output, State
 from dash import html
 from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_info, is_goal_setted
-from component.todaygoal import today_goal_setting, unlock_weekly_calender, usage_weekly_calender, app_weekly_calender
+from component.todaygoal import today_goal_setting, unlock_weekly_calendar, usage_weekly_calendar, app_weekly_calendar
 
 def selected_app_callback_factory():
     output = Output('selected-app', 'children'),
@@ -123,7 +123,10 @@ def goal_update_callback_factory():
     url_list=['?setting=True', '?setting=True?unlock', '?setting=True?usage', '?setting=True?app']
     def update_output(pathname, search):
         if pathname != '/goal' or not search in url_list: return dash.no_update
-        return today_goal_setting()
+        if search == url_list[1]: return today_goal_setting('unlock')
+        elif search == url_list[2]: return today_goal_setting('usage')
+        elif search == url_list[3]: return today_goal_setting('app')
+        else: return today_goal_setting()
     return [
         update_output,
         output,
@@ -132,14 +135,14 @@ def goal_update_callback_factory():
     ]
 
 def goal_highlight_callback_factory():
-    output=Output('calander-container', 'children')
+    output=Output('calendar-container', 'children')
     input=Input('url', 'pathname')
     state=State('url', 'search')
     def update_output(pathname, search):
         if pathname != '/goal': return dash.no_update
-        elif search == '?setting=True?unlock': return unlock_weekly_calender()
-        elif search == '?setting=True?usage': return usage_weekly_calender()
-        elif search == '?setting=True?app': return app_weekly_calender()
+        elif search == '?setting=True?unlock': return unlock_weekly_calendar()
+        elif search == '?setting=True?usage': return usage_weekly_calendar()
+        elif search == '?setting=True?app': return app_weekly_calendar()
         else: return dash.no_update
     return [
         update_output,
