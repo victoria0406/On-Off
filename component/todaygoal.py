@@ -88,126 +88,132 @@ def get_goal_state(day):
         return_data[2] = [exceed, real, goal]
     return return_data
 
-def get_calender_donut_plot(day, index):
+def get_calendar_donut_plot(day, index):
     goal_state = get_goal_state(day)
     if goal_state == None : return None
     fig = week_donut_plot(goal_state[index], index)
-    donut = dcc.Graph(figure = fig, config={'displayModeBar': False}, className='calender-donut')
+    donut = dcc.Graph(figure = fig, config={'displayModeBar': False}, className='calendar-donut')
     return donut
 
-def unlock_weekly_calender(highlighted=None):
+# .goal-calendar {
+#     width: 100%;
+#     height: calc(100% - 60px);
+# }
+# .goal-calendar thead {
+#     background-color: #DAD4CE;
+# }
+# .goal-calendar th {
+#     width: calc(100% / 7);
+#     text-align: center;
+#     color: #515151;
+# }
+
+def unlock_weekly_calendar(highlighted=None):
     today_day = dt.datetime(2023, 5, 10)
-    week_ago = today_day - dt.timedelta(days=7)
-    today_day = today_day.day
-    week_ago = week_ago.day
+    date_list = [today_day - dt.timedelta(days=x) for x in range(7)]
+    date_list.reverse()
     
-    table = html.Table(className=f'goal-calender', children=[
+    table = html.Table(className=f'weekly-calendar', children=[
         html.Thead(children=[
             html.Tr(children=[
-                html.Th('Sun'), html.Th('Mon'), html.Th('Tue'),
-                html.Th('Wed'), html.Th('Thr'), html.Th('Fri'),
-                html.Th('Sat')
+                html.Th(str(day.month)+"/"+str(day.day), 
+                        style={'color': '#FF6F66'} if (day.weekday() == 6) else ({'color': '#FDB03D'} if (day.weekday() == 5) else {}))
+                for day in date_list
             ])
         ]),
         html.Tbody(children=[
             html.Tr(children=[
                 html.Td(children=[
-                    str(day),
-                    get_calender_donut_plot(day, 0)
+                    get_calendar_donut_plot(day.day, 0)
                 ], className='today' if (day == today_day) else '' ) if day != 0 else html.Td('')
-                for day in range(week_ago+1, today_day+1)
+                for day in date_list
             ])
         ])
     ])
     
     return_children = [
         html.Div(children=[
-            html.Div(['Your Weekly - Unlock', table],
-                     className='weekly-calander-container',),
+            html.Div([html.P('Your Weekly - Unlock', className='weekly-calendar-title'), table],
+                     className='weekly-calendar-container',),
             html.Div(children=[
-                html.P('Unlock'),
+                html.P('Unlock', style={'font-size': '20px'})
                 html.Div(dcc.Graph(figure = unlock_graph(), config={'displayModeBar': False}),style={'margin-top':'-50px'})
             ])
         ])
     ]
-    component = html.Div(return_children, className='week-calender')
+    component = html.Div(return_children, className='week-calendar')
     return component
 
-def usage_weekly_calender(highlighted=None):
+def usage_weekly_calendar(highlighted=None):
     today_day = dt.datetime(2023, 5, 10)
-    week_ago = today_day - dt.timedelta(days=7)
-    today_day = today_day.day
-    week_ago = week_ago.day
+    date_list = [today_day - dt.timedelta(days=x) for x in range(7)]
+    date_list.reverse()
     
-    table = html.Table(className=f'goal-calender', children=[
+    table = html.Table(className=f'weekly-calendar', children=[
         html.Thead(children=[
             html.Tr(children=[
-                html.Th('Sun'), html.Th('Mon'), html.Th('Tue'),
-                html.Th('Wed'), html.Th('Thr'), html.Th('Fri'),
-                html.Th('Sat')
+                html.Th(str(day.month)+"/"+str(day.day), 
+                        style={'color': '#FF6F66'} if (day.weekday() == 6) else ({'color': '#FDB03D'} if (day.weekday() == 5) else {}))
+                for day in date_list
             ])
         ]),
         html.Tbody(children=[
             html.Tr(children=[
                 html.Td(children=[
-                    str(day),
-                    get_calender_donut_plot(day, 1)
+                    get_calendar_donut_plot(day.day, 1)
                 ], className='today' if (day == today_day) else '' ) if day != 0 else html.Td('')
-                for day in range(week_ago+1, today_day+1)
+                for day in date_list
             ])
         ])
     ])
     
     return_children = [
         html.Div(children=[
-            html.Div(['Your Weekly - Usage Time', table],
-                     className='weekly-calander-container',),
+            html.Div([html.P('Your Weekly - Usage Time', className='weekly-calendar-title'), table],
+                     className='weekly-calendar-container',),
             html.Div(children=[
-                html.P('Usage Time'),
+                html.P('Usage Time', style={'font-size': '20px'})
                 html.Div(dcc.Graph(figure = usage_graph(), config={'displayModeBar': False})),
             ])
         ])
     ]
-    component = html.Div(return_children, className='week-calender')
+    component = html.Div(return_children, className='week-calendar')
     return component
 
-def app_weekly_calender(highlighted=None):
+def app_weekly_calendar(highlighted=None):
     today_day = dt.datetime(2023, 5, 10)
-    week_ago = today_day - dt.timedelta(days=7)
-    today_day = today_day.day
-    week_ago = week_ago.day
+    date_list = [today_day - dt.timedelta(days=x) for x in range(7)]
+    date_list.reverse()
     
-    table = html.Table(className=f'goal-calender', children=[
+    table = html.Table(className=f'weekly-calendar', children=[
         html.Thead(children=[
             html.Tr(children=[
-                html.Th('Sun'), html.Th('Mon'), html.Th('Tue'),
-                html.Th('Wed'), html.Th('Thr'), html.Th('Fri'),
-                html.Th('Sat')
+                html.Th(str(day.month)+"/"+str(day.day), 
+                        style={'color': '#FF6F66'} if (day.weekday() == 6) else ({'color': '#FDB03D'} if (day.weekday() == 5) else {}))
+                for day in date_list
             ])
         ]),
         html.Tbody(children=[
             html.Tr(children=[
                 html.Td(children=[
-                    str(day),
-                    get_calender_donut_plot(day, 2)
+                    get_calendar_donut_plot(day.day, 2)
                 ], className='today' if (day == today_day) else '' ) if day != 0 else html.Td('')
-                for day in range(week_ago+1, today_day+1)
+                for day in date_list
             ])
         ])
     ])
     
     return_children = [
         html.Div(children=[
-            html.Div(['Your Weekly - App Usage', table],
-                     className='weekly-calander-container',),
+            html.Div([html.P('Your Weekly - App Usage Time', className='weekly-calendar-title'), table],
+                     className='weekly-calendar-container',),
             html.Div(children=[
-                html.P('App Usage'),
+                html.P('App Usage', style={'font-size': '20px'})
                 html.Div(dcc.Graph(figure = app_usage_graph(), config={'displayModeBar': False})),
-
             ])
         ])
     ]
-    component = html.Div(return_children, className='week-calender')
+    component = html.Div(return_children, className='week-calendar')
     return component
 
 today_goal_not_setting = [

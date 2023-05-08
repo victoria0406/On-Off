@@ -67,22 +67,44 @@ def goal_donut_plot(unlock_data, usage_data, app_usage_data, highlighted = None)
     return fig
 
 def week_donut_plot(data, index):
-    # print(highlighted)
     fig = go.Figure()
     if index == 2: colors = ['#B40000','#686986', '#68698650']
     elif index == 1: colors = ['#B40000','#A4BD85', '#A4BD8550']
-    elif index == 0: colors = ['#B40000','#E4AE44', 'E4AE4450']
+    elif index == 0: colors = ['#B40000','#E4AE44', '#E4AE4450']
 
-    fig.add_trace(go.Pie(
-    values=data,
-    marker=dict(colors=colors),
-    hole=0.7,
-    sort=False,
-    domain=dict(x=[0, 1], y=[0, 1]),
-    direction='clockwise',
-    opacity=1
-    ))
-    
-    fig.update_traces(textinfo='none')
-    fig.update_layout(showlegend=False, plot_bgcolor='rgb(0,0,0,0)',paper_bgcolor="rgb(0,0,0,0)",)
+    if data == None:
+        fig.add_shape(
+            type="circle",
+            xref="x", yref="y",
+            x0=-0.3, y0=-1, x1=5.3, y1=4,
+            line=dict(
+                color=colors[1],
+                dash="dot"
+            ))
+        fig.update_layout(plot_bgcolor='rgb(0,0,0,0)',
+                        paper_bgcolor="rgb(0,0,0,0)",
+                        width=260,
+                        height=260,
+                        xaxis={
+                            'visible': False
+                        },
+                        yaxis={
+                            'visible': False
+                        }
+                        )
+    else:
+        fig.add_trace(go.Pie(
+            values=data,
+            marker=dict(colors=colors),
+            hole=0.7,
+            sort=False,
+            domain=dict(x=[0, 1], y=[0, 1]),
+            direction='clockwise',
+            opacity=1
+            ))
+        fig.update_traces(textinfo='none')
+        fig.update_layout(showlegend=False, 
+                        plot_bgcolor='rgb(0,0,0,0)',
+                        paper_bgcolor="rgb(0,0,0,0)",
+                        annotations=[dict(text=str(int(data[1]))+"/"+str(int(data[2])), showarrow=False)])
     return fig

@@ -66,8 +66,6 @@
     color: var(--goal-color);
 }
 
-
-
 .today-goal-list .goal-list {
     height: 3.6rem;
     width: 16rem;
@@ -94,51 +92,50 @@
     background-color: var(--goal-color_op2);
   }
 
-.calander-container {
+.calendar-container {
     position: relative;
     width: calc(100% - 19rem);
     padding: 1rem;
     height: calc(100vh - 10rem);
-    background-color: #fff;
+    background-color: #FFFFFF;
 }
-.goal-calender {
+.goal-calendar {
     width: 100%;
     height: calc(100% - 60px);
 }
-.goal-calender  thead {
+.goal-calendar thead {
     background-color: #DAD4CE;
 }
-.goal-calender th {
+.goal-calendar th {
     width: calc(100% / 7);
     text-align: center;
     color: #515151;
 }
 
-.goal-calender th:first-child {
+.goal-calendar th:first-child {
     color: #FF6F66;
 }
-.goal-calender th:last-child {
+.goal-calendar th:last-child {
     color: #FDB03D;
 }
 
-.goal-calender td {
+.goal-calendar td {
     border: 3px solid #F4F4F4;
     vertical-align : top;
     text-align: right;
     position: relative;
 }
-
-.goal-calender td:first-child {
+.goal-calendar td:first-child {
     color: #FF6F66;
 }
-.goal-calender td:last-child {
+.goal-calendar td:last-child {
     color: #FDB03D;
 }
-.goal-calender td.today {
+.goal-calendar td.today {
     border-color: #b40000;
 }
 
-.calender-donut {
+.calendar-donut {
     width: 260px;
     height: 260px;
     position: absolute;
@@ -146,10 +143,50 @@
     left: calc((100% - 260px) / 2);
 }
 
-.weekly-calander-container {
+.weekly-calendar-container {
     position: relative;
     width: 100%;
-    padding: 1rem;
-    height: 300px;
+    /* padding: 1rem; */
+    height: 210px;
     background-color: #fff;
+    align-items: center;
+    display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.weekly-calendar-title {
+    font-size: 20px;
+    font-family: Arial;
+    font-weight: bold;
+}
+
+.weekly-calendar {
+    width: 100%;
+    height: calc(100% - 60px);
+}
+.weekly-calendar thead {
+    background-color: #DAD4CE;
+}
+.weekly-calendar th {
+    width: calc(100% / 7);
+    text-align: center;
+    color: #515151;
+}
+
+.weekly-calendar td {
+    border: 3px solid #F4F4F4;
+    vertical-align : top;
+    text-align: right;
+    position: relative;
+}
+.weekly-calendar td.today {
+    border-color: #b40000;
+}
+.weekly-calendar-sunday {
+    color: #FF6F66;
+}
+.weekly-calendar-saturday {
+    color: #FDB03D;
 }
