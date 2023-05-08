@@ -1,9 +1,9 @@
 import dash
 from dash.dependencies import Input, Output, State
-from dash import html
+from dash import html, dcc
 from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_info
-from component.todaygoal import today_goal_not_setting, today_goal_setting
-import pandas as pd 
+from component.todaygoal import today_goal_not_setting, today_goal_setting, today_goal_donut_plot
+import pandas as pd
 
 app_usage_df = pd.read_csv('./datas/app_usage_time.csv')
 def avg_app_usage(app):
@@ -122,12 +122,14 @@ def goal_confirm_callback_factory():
     
 
 def goal_update_callback_factory():
-    output=Output('today-goal', 'children')
+    output=[Output('today-goal', 'children'), Output('today-goal-status', 'children')]
     input=Input('url', 'pathname')
     state=State('url', 'search')
     def update_output(pathname, search):
         if pathname != '/goal' or not search == '?setting=True': return dash.no_update
-        return today_goal_setting()
+        fig = today_goal_donut_plot()
+        goal_graph = dcc.Graph(figure = fig, config={'displayModeBar': False}, className='calendar-donut' )
+        return [today_goal_setting(), goal_graph]
     return [
         update_output,
         output,

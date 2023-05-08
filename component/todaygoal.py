@@ -74,11 +74,13 @@ def get_goal_info():
         return_data[2] = [exceed, real, goal]
         
     return return_data
+def today_goal_donut_plot(highlighted = None):
+    fig = goal_donut_plot(*get_goal_info(), highlighted)
+    return fig
 
 def today_goal_setting(highlighted=None):
     return_children = [html.P('Today Goal', style={'font-weight': 'bold'})]
-    print(get_goal_info())
-    fig = goal_donut_plot(*get_goal_info(), highlighted)
+    fig = today_goal_donut_plot(highlighted)
     return_children.append(dcc.Graph(figure = fig, config={'displayModeBar': False}, className='today-goal-fig'))
     if unlock_info['checked']:
         return_children.append(unlock_component(highlighted))

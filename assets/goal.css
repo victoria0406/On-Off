@@ -76,7 +76,7 @@
     align-items: center;
     border-radius: 10px;
     justify-content: space-between;
-    padding: 0 2rem;
+    padding: 0 1rem;
     cursor: pointer;
     background-color: var(--goal-color_op1);
     color: black;
@@ -105,27 +105,27 @@
     justify-content: space-between;
     align-items: center;
 }
-.goal-calender {
+.goal-calendar {
     width: 100%;
     height: calc(100% - 60px);
 }
-.goal-calender  thead {
+.goal-calendar  thead {
     background-color: #DAD4CE;
 }
-.goal-calender th {
+.goal-calendar th {
     width: calc(100% / 7);
     text-align: center;
     color: #515151;
 }
 
-.goal-calender th:first-child {
+.goal-calendar th:first-child {
     color: #FF6F66;
 }
-.goal-calender th:last-child {
+.goal-calendar th:last-child {
     color: #FDB03D;
 }
 
-.goal-calender td {
+.goal-calendar td {
     border: 3px solid #F4F4F4;
     vertical-align : top;
     text-align: right;
@@ -133,18 +133,18 @@
     padding: 4px 6px;
 }
 
-.goal-calender td:first-child {
+.goal-calendar td:first-child {
     color: #FF6F66;
 }
-.goal-calender td:last-child {
+.goal-calendar td:last-child {
     color: #FDB03D;
 }
-.goal-calender td.today {
+.goal-calendar td.today {
     box-shadow: inset 2px 2px 0px #b40000,
                 inset -2px -2px 0px #b40000;
 }
 
-.calender-donut {
+.calendar-donut {
     width: 260px;
     height: 260px;
     position: absolute;

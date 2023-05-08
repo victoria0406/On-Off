@@ -55,6 +55,7 @@ goalsettingcontext = [
                 className='app-dropdown',
                 options=app_list,
                 value=app_usage_info['app'],
+                clearable=False,
             )
         ],
         'desc': [

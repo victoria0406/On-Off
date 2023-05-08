@@ -1,7 +1,7 @@
 /*side bar*/
 /*logout link-button*/
 body {
-  overflow: hidden;
+  overflow-y: hidden;
 }
 .main {
   --side-margin: max(1rem, calc((100vw - 89rem) / 2));

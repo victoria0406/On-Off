@@ -43,16 +43,16 @@ def get_goal_state(day): # 코드 고치기
             day_goal_array[i] = None
     return day_goal_array.tolist()
 
-def get_calender_donut_plot(day):
-    if (day == today_day) : goal_state = get_goal_info()
-    else: goal_state = get_goal_state(day)
+def get_calendar_donut_plot(day):
+    if (day >= today_day): return None
+    goal_state = get_goal_state(day)
     if goal_state == None : return None
     fig = goal_donut_plot(*goal_state)
-    donut = dcc.Graph(figure = fig, config={'displayModeBar': False}, className='calender-donut')
+    donut = dcc.Graph(figure = fig, config={'displayModeBar': False}, className='calendar-donut')
     return donut
 
 # HTML 요소로 변환합니다.
-table = html.Table(className=f'goal-calender', children=[
+table = html.Table(className=f'goal-calendar', children=[
     html.Thead(children=[
         html.Tr(children=[
             html.Th('Sun'), html.Th('Mon'), html.Th('Tue'),
@@ -64,8 +64,9 @@ table = html.Table(className=f'goal-calender', children=[
         html.Tr(children=[
             html.Td(children=[
                 str(day),
-                get_calender_donut_plot(day)
-            ], className='today' if (day == today_day) else '' ) if day != 0 else html.Td('')
+                get_calendar_donut_plot(day)
+            ], className='today' if (day == today_day) else ''
+            , id='today-goal-status' if (day == today_day) else '') if day != 0 else html.Td('')
             for day in week
         ])
         for week in cal
