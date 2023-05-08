@@ -103,8 +103,9 @@ def week_donut_plot(data, index):
             opacity=1
             ))
         fig.update_traces(textinfo='none')
-        fig.update_layout(showlegend=False, 
-                        plot_bgcolor='rgb(0,0,0,0)',
-                        paper_bgcolor="rgb(0,0,0,0)",
-                        annotations=[dict(text=str(int(data[1]))+"/"+str(int(data[2])), showarrow=False)])
     return fig
+## 위쪽 코드 해석
+# 초과하기 않을 때: 총 사용량 = data[1] / 목표 사용량 = (목표 사용량 - 총 사용량 = data[2]) + (총 사용량 = data[1]) (이때 data[0] = 0)
+# 초과할 때: 총 사용량 = (총 사용량 - 목표 사용량 = data[0]) + (목표 사용량 = data[1])  목표 사용량 = data[1] (이때 data[2] = 0)
+# 2배 이상 초과할 때 = 
+# 일반화하면 총 사용량 = data[0] + data[1] 목표 사용량 = data[1] + data[2]
