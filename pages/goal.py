@@ -2,7 +2,7 @@ import calendar
 import dash
 from dash import html, dcc
 from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_info
-from component.todaygoal import today_goal_not_setting, get_goal_info, get_goal_state
+from component.todaygoal import today_goal_not_setting, get_goal_today, get_goal_state
 from component.goaldonutplot import goal_donut_plot
 
 year = 2023

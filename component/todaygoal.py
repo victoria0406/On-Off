@@ -56,7 +56,7 @@ def app_usage_component(highlighted=None):
     ])
     return component
 
-def get_goal_info():
+def get_goal_today():
     return_data = [None, None, None];
     if (unlock_info['checked']):
         exceed = max(unlock - unlock_info['time'], 0)
@@ -78,7 +78,7 @@ def get_goal_info():
         
     return return_data
 def today_goal_donut_plot(highlighted = None):
-    fig = goal_donut_plot(*get_goal_info(), highlighted)
+    fig = goal_donut_plot(*get_goal_today(), highlighted)
     return fig
 
 def today_goal_setting(highlighted=None):
@@ -110,6 +110,7 @@ goal_states_df = goal_states_df.fillna(-1, axis=1)
 
 
 def get_goal_state(day): # 코드 고치기
+    if (day == today_day): return get_goal_today()
     day_goal_state = goal_states_df[goal_states_df['day'] == day]
     if day_goal_state.size == 0 : return None
     day_goal_array = np.array(day_goal_state[[
@@ -121,7 +122,15 @@ def get_goal_state(day): # 코드 고치기
         if (day_goal_array[i][0] < 0):
             day_goal_array[i] = None
     return day_goal_array
+
+raw_goal_today = [
+    [unlock, unlock_info['time']],
+    [total_usage, usage_time_info['hour'] * 60 + usage_time_info['minite']],
+    [app_usage, app_usage_info['hour'] * 60 + app_usage_info['minite']],
+]
+
 def raw_goal_state(day):
+    if (day == today_day): return raw_goal_today
     day_goal_state = goal_states_df[goal_states_df['day'] == day]
     if day_goal_state.size == 0 : return None
     day_goal_array = np.array(day_goal_state[[
