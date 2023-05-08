@@ -5,6 +5,8 @@ from dash.dependencies import Input, Output, State
 from dash import html, dcc
 from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_info, is_goal_setted
 from component.goaldonutplot import goal_donut_plot, week_donut_plot
+from component.graph import usage_graph, unlock_graph, app_usage_graph
+
 
 def unlock_component(highlighted=None):
     data = 4
@@ -135,13 +137,7 @@ def unlock_weekly_calendar(highlighted=None):
                      className='weekly-calendar-container',),
             html.Div(children=[
                 html.P('Unlock', style={'font-size': '20px'})
-                # 여기다가 추가하면 됨
-                # 여기다가 추가하면 됨
-                # 여기다가 추가하면 됨
-                # 여기다가 추가하면 됨
-                # 여기다가 추가하면 됨
-                # 여기다가 추가하면 됨
-                # 여기다가 추가하면 됨
+                html.Div(dcc.Graph(figure = unlock_graph(), config={'displayModeBar': False}),style={'margin-top':'-50px'})
             ])
         ])
     ]
@@ -177,13 +173,7 @@ def usage_weekly_calendar(highlighted=None):
                      className='weekly-calendar-container',),
             html.Div(children=[
                 html.P('Usage Time', style={'font-size': '20px'})
-                # 여기다가 추가하면 됨
-                # 여기다가 추가하면 됨
-                # 여기다가 추가하면 됨
-                # 여기다가 추가하면 됨
-                # 여기다가 추가하면 됨
-                # 여기다가 추가하면 됨
-                # 여기다가 추가하면 됨
+                html.Div(dcc.Graph(figure = usage_graph(), config={'displayModeBar': False})),
             ])
         ])
     ]
@@ -219,13 +209,7 @@ def app_weekly_calendar(highlighted=None):
                      className='weekly-calendar-container',),
             html.Div(children=[
                 html.P('App Usage', style={'font-size': '20px'})
-                # 여기다가 추가하면 됨
-                # 여기다가 추가하면 됨
-                # 여기다가 추가하면 됨
-                # 여기다가 추가하면 됨
-                # 여기다가 추가하면 됨
-                # 여기다가 추가하면 됨
-                # 여기다가 추가하면 됨
+                html.Div(dcc.Graph(figure = app_usage_graph(), config={'displayModeBar': False})),
             ])
         ])
     ]
