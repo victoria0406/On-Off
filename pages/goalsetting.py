@@ -3,10 +3,12 @@ import dash_bootstrap_components as dbc
 from dash import html, dcc, callback, Input, Output
 from component.goalsettingcomponent import goalsettingcomponent
 from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_info
+from inputdata.data import top
 
 dash.register_page(__name__, path='/goalsetting')
 
-app_list = ['Instagram', 'Youtube', 'KakaoTalk', 'KLMS', 'Naver']
+
+app_list = top[1:5]
 goalsettingcontext = [
     {
         'goal': 'Number of Unlocks',
