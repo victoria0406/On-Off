@@ -1,4 +1,3 @@
-import datetime
 import calendar
 import dash
 from dash import html, dcc
@@ -7,7 +6,6 @@ from component.todaygoal import today_goal_not_setting, get_goal_info
 from component.goaldonutplot import goal_donut_plot
 import pandas as pd
 import numpy as np
-
 
 goal_states_df= pd.read_csv('./datas/goal_states.csv')
 ## goal_states_df = goal_states_df.fillna(-1, axis=1)
@@ -75,10 +73,9 @@ table = html.Table(className=f'goal-calendar', children=[
 
 dash.register_page(__name__)
 
-
 layout = html.Div(children=[
     html.Div(today_goal_not_setting, id='today-goal',),
     html.Div([
         html.P('May 2023', style={'font-weight': 'bold'})
-    , table], className='calander-container'),
+    , table], className='calendar-container', id='calendar-container'),
 ], style={'display': 'flex', 'justify-content': 'space-between'})

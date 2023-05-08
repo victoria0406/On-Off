@@ -5,6 +5,7 @@ import pandas as pd
 
 from component.goalsettingcomponent import goalsettingcomponent
 from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_info
+from inputdata.data import top
 
 dash.register_page(__name__, path='/goalsetting')
 

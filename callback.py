@@ -2,7 +2,7 @@ import dash
 from dash.dependencies import Input, Output, State
 from dash import html, dcc
 from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_info
-from component.todaygoal import today_goal_not_setting, today_goal_setting, today_goal_donut_plot
+from component.todaygoal import today_goal_setting, today_goal_donut_plot, unlock_weekly_calendar, usage_weekly_calendar, app_weekly_calendar
 import pandas as pd
 
 app_usage_df = pd.read_csv('./datas/app_usage_time.csv')
@@ -39,10 +39,10 @@ def usage_time_switch_callback_factory():
     input=Input('goal-switch-input-usage-time', 'value')
     def update_output(value):
         if 'on' in value:
-            usage_time_info['checked'] = True;
+            usage_time_info['checked'] = True
             return [[plus_layout], False, False, 'goal-setting-list-container active']
         else:
-            usage_time_info['checked'] = False;
+            usage_time_info['checked'] = False
             return [[minus_layout], True, True, 'goal-setting-list-container']
         
     return [
@@ -50,6 +50,7 @@ def usage_time_switch_callback_factory():
         output,
         input,
     ]
+    
 def unlock_switch_callback_factory():
     output=[
         Output('goal-switch-output-unlock', 'children'),
@@ -59,10 +60,10 @@ def unlock_switch_callback_factory():
     input=Input('goal-switch-input-unlock', 'value')
     def update_output(value):
         if 'on' in value:
-            unlock_info['checked'] = True;
+            unlock_info['checked'] = True
             return [[plus_layout], False, 'goal-setting-list-container active']
         else:
-            unlock_info['checked'] = False;
+            unlock_info['checked'] = False
             return [[minus_layout], True, 'goal-setting-list-container']
         
     return [
@@ -70,6 +71,7 @@ def unlock_switch_callback_factory():
         output,
         input,
     ]
+    
 def app_usage_switch_callback_factory():
     output=[
         Output('goal-switch-output-app-usage', 'children'),
@@ -81,10 +83,10 @@ def app_usage_switch_callback_factory():
     input=Input('goal-switch-input-app-usage', 'value')
     def update_output(value):
         if 'on' in value:
-            app_usage_info['checked'] = True;
+            app_usage_info['checked'] = True
             return [[plus_layout], False, False, False, 'goal-setting-list-container active']
         else:
-            app_usage_info['checked'] = False;
+            app_usage_info['checked'] = False
             return [[minus_layout], True, True, True, 'goal-setting-list-container']
         
     return [
@@ -92,6 +94,7 @@ def app_usage_switch_callback_factory():
         output,
         input,
     ]
+    
 def goal_confirm_callback_factory():
     output=Output('url', 'search')
     input = Input('goal-confirm', 'n_clicks')
@@ -118,31 +121,53 @@ def goal_confirm_callback_factory():
         input,
         state,
     ]
-        
-    
 
 def goal_update_callback_factory():
     output=[Output('today-goal', 'children'), Output('today-goal-status', 'children')]
     input=Input('url', 'pathname')
     state=State('url', 'search')
+    url_list=['?setting=True', '?setting=True?unlock', '?setting=True?usage', '?setting=True?app']
     def update_output(pathname, search):
-        if pathname != '/goal' or not search == '?setting=True': return dash.no_update
-        fig = today_goal_donut_plot()
-        goal_graph = dcc.Graph(figure = fig, config={'displayModeBar': False}, className='calendar-donut' )
-        return [today_goal_setting(), goal_graph]
+        if pathname != '/goal' or not search in url_list: return [dash.no_update, dash.no_update]
+        if search == url_list[1]: return [today_goal_setting('unlock'), dash.no_update]
+        elif search == url_list[2]: return [today_goal_setting('usage'), dash.no_update]
+        elif search == url_list[3]: return [today_goal_setting('app'), dash.no_update]
+        elif search == url_list[0]: 
+            fig = today_goal_donut_plot()
+            goal_graph = dcc.Graph(figure = fig, config={'displayModeBar': False}, className='calendar-donut' )
+            return [today_goal_setting(), goal_graph]
+        else: return [today_goal_setting(), dash.no_update]
     return [
         update_output,
         output,
         input,
         state,
     ]
+
+def goal_highlight_callback_factory():
+    output=Output('calendar-container', 'children')
+    input=Input('url', 'pathname')
+    state=State('url', 'search')
+    def update_output(pathname, search):
+        if pathname != '/goal': return dash.no_update
+        elif search == '?setting=True?unlock': return unlock_weekly_calendar()
+        elif search == '?setting=True?usage': return usage_weekly_calendar()
+        elif search == '?setting=True?app': return app_weekly_calendar()
+        else: return dash.no_update
+    return [
+        update_output,
+        output,
+        input,
+        state,
+    ]
+    
 def goal_update_sidebar_callback_factory():
     output=Output('goal-link', 'href')
     input=Input('url', 'pathname')
     state=State('url', 'search')
     def update_output(pathname, search):
         if pathname == '/goal' and search == '?setting=True':
-            print(pathname, search)
+            # print(pathname, search)
             return '/goal?setting=True'
         else:  return dash.no_update
     return [
@@ -161,4 +186,5 @@ def get_callbacks():
         goal_update_callback_factory(),
         goal_confirm_callback_factory(),
         goal_update_sidebar_callback_factory(),
+        goal_highlight_callback_factory(),
     ]
