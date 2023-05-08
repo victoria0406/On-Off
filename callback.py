@@ -1,14 +1,20 @@
 import dash
 from dash.dependencies import Input, Output, State
-from dash import html
-from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_info, is_goal_setted
-from component.todaygoal import today_goal_setting, unlock_weekly_calendar, usage_weekly_calendar, app_weekly_calendar
+from dash import html, dcc
+from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_info
+from component.todaygoal import today_goal_setting, today_goal_donut_plot, unlock_weekly_calendar, usage_weekly_calendar, app_weekly_calendar
+import pandas as pd
+
+app_usage_df = pd.read_csv('./datas/app_usage_time.csv')
+def avg_app_usage(app):
+    return app_usage_df[app].mean()
 
 def selected_app_callback_factory():
-    output = Output('selected-app', 'children'),
+    output = [Output('selected-app', 'children'), Output('avg-app-usage', 'children')],
     input = Input('app-dropdown', 'value'),
     def update_output(value):
-        return [value]
+        usage = avg_app_usage(value)
+        return [[value, f'{usage // 60:.0f}h {usage % 60:.0f}m']]
     
     return [
         update_output,
@@ -117,16 +123,20 @@ def goal_confirm_callback_factory():
     ]
 
 def goal_update_callback_factory():
-    output=Output('today-goal', 'children')
+    output=[Output('today-goal', 'children'), Output('today-goal-status', 'children')]
     input=Input('url', 'pathname')
     state=State('url', 'search')
     url_list=['?setting=True', '?setting=True?unlock', '?setting=True?usage', '?setting=True?app']
     def update_output(pathname, search):
-        if pathname != '/goal' or not search in url_list: return dash.no_update
-        if search == url_list[1]: return today_goal_setting('unlock')
-        elif search == url_list[2]: return today_goal_setting('usage')
-        elif search == url_list[3]: return today_goal_setting('app')
-        else: return today_goal_setting()
+        if pathname != '/goal' or not search in url_list: return [dash.no_update, dash.no_update]
+        if search == url_list[1]: return [today_goal_setting('unlock'), dash.no_update]
+        elif search == url_list[2]: return [today_goal_setting('usage'), dash.no_update]
+        elif search == url_list[3]: return [today_goal_setting('app'), dash.no_update]
+        elif search == url_list[0]: 
+            fig = today_goal_donut_plot()
+            goal_graph = dcc.Graph(figure = fig, config={'displayModeBar': False}, className='calendar-donut' )
+            return [today_goal_setting(), goal_graph]
+        else: return [today_goal_setting(), dash.no_update]
     return [
         update_output,
         output,
