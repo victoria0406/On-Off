@@ -267,7 +267,7 @@ fig3.update_layout(
     ),
     margin=dict(b=0, t=60)
 )
-dash.register_page(__name__)
+dash.register_page(__name__, path='/report/group')
 
 layout = html.Div(children=[
      html.Div([

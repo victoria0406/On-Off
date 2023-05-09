@@ -39,18 +39,21 @@
 }
 .today-goal-list .unlock {
     --goal-color: #E4AE44;
-    --goal-color_op1: #E4AE4430;
+    --goal-color_op1: #E4AE4420;
     --goal-color_op2: #E4AE4460;
+    --goal-color_op3: #E4AE4480;
 }
 .today-goal-list .usage {
     --goal-color: #A4BD85;
-    --goal-color_op1: #A4BD8530;
+    --goal-color_op1: #A4BD8520;
     --goal-color_op2: #A4BD8560;
+    --goal-color_op3: #A4BD8580;
 }
 .today-goal-list .app {
     --goal-color: #686986;
-    --goal-color_op1: #68698630;
+    --goal-color_op1: #68698620;
     --goal-color_op2: #68698660;
+    --goal-color_op3: #68698680;
 }
 
 .today-goal-list .today-goal-fig {
@@ -69,7 +72,7 @@
 .today-goal-list .goal-list {
     height: 3.6rem;
     width: 16rem;
-    border: 1px solid var(--goal-color);
+    border: 1px solid var(--goal-color-op2);
     display: flex;
     align-items: center;
     border-radius: 10px;
@@ -81,26 +84,63 @@
     text-decoration: none;
 }
 .today-goal-list .goal-list .goal-state-check {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     border: 1px solid var(--goal-color);
     border-radius: 50%;
     background-color: #fff;
+    padding: 4px;
+}
+.today-goal-list .goal-list .goal-state-check.exceed {
+    border: 1px solid #b40000;
 }
   
 .goal-list:hover {
     background-color: var(--goal-color_op2);
   }
+.goal-list.active {
+    background-color: var(--goal-color_op3);
+    border: 1px solid var(--goal-color);
+}
+.today-goal-list:has(.active) .goal-list:not(.active) {
+    opacity: 0.6;
+}
 
-.calendar-container {
+#calendar-container {
     position: relative;
     width: calc(100% - 19rem);
-    padding: 1rem;
     height: calc(100vh - 10rem);
-    background-color: #fff;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    gap: 1rem;
+}
+
+.weekly-calendar-container {
+    height:40%;
+}
+.weekly-graph-container{
+    height:60%;
+}
+.weekly-graph-container,
+.weekly-calendar-container,
+.calendar-container {
+    position: relative;
+    width: 100%;
+    /* padding: 1rem; */
+    background-color: #fff;
+    align-items: center;
+    display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+    padding: 1rem;
+    border-radius: 6px;
+}
+
+.calendar-container {
+    height: 100%;
+
 }
 .goal-calendar {
     width: 100%;
@@ -136,8 +176,8 @@
     color: #FDB03D;
 }
 .goal-calendar td.today {
-    box-shadow: inset 2px 2px 0px #b40000,
-                inset -2px -2px 0px #b40000;
+    box-shadow: inset 3px 3px 0px #9C938A,
+                inset -3px -3px 0px #9C938A;
 }
 
 .calendar-donut {
@@ -146,19 +186,6 @@
     position: absolute;
     top: calc((100% - 280px) / 2);
     left: calc((100% - 260px) / 2);
-}
-
-.weekly-calendar-container {
-    position: relative;
-    width: 100%;
-    /* padding: 1rem; */
-    height: 210px;
-    background-color: #fff;
-    align-items: center;
-    display: flex;
-	flex-direction: column;
-	justify-content: flex-start;
-	align-items: center;
 }
 
 .weekly-calendar-title {
@@ -187,7 +214,8 @@
     position: relative;
 }
 .weekly-calendar td.today {
-    border-color: #b40000;
+    box-shadow: inset 3px 3px 0px #9C938A,
+                inset -3px -3px 0px #9C938A;
 }
 .weekly-calendar-sunday {
     color: #FF6F66;

@@ -147,21 +147,9 @@ def week_donut_plot(data, index):
                         paper_bgcolor="rgb(0,0,0,0)",
                         # annotations=[dict(text=str(int(data[1]))+"<br>/"+str(int(data[2])), showarrow=False)]
                         )
-        
-        fig.add_annotation(
-            text="<b>"+convert_time(int(data[1]))+"<b>"+"<br> " if index == 1 or index == 2 else "<b>"+str(int(data[1]))+"<b>"+"<br> ",
-            showarrow=False,
-            font=dict(
-                size=14,
-                color=colors[1],
-            )
-        )
-        fig.add_annotation(
-            text=" "+"<br>/ "+convert_time(int(data[2])) if index == 1 or index == 2 else " "+"<br>/ "+str(int(data[2])),
-            showarrow=False, 
-            font=dict(
-                size=12,
-                color=colors[1]
-            )
-        )
     return fig
+## 위쪽 코드 해석
+# 초과하기 않을 때: 총 사용량 = data[1] / 목표 사용량 = (목표 사용량 - 총 사용량 = data[2]) + (총 사용량 = data[1]) (이때 data[0] = 0)
+# 초과할 때: 총 사용량 = (총 사용량 - 목표 사용량 = data[0]) + (목표 사용량 = data[1])  목표 사용량 = data[1] (이때 data[2] = 0)
+# 2배 이상 초과할 때 = 
+# 일반화하면 총 사용량 = data[0] + data[1] 목표 사용량 = data[1] + data[2]

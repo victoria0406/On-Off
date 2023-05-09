@@ -7,7 +7,7 @@ from component.goalsettingcomponent import goalsettingcomponent
 from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_info
 from inputdata.data import top
 
-dash.register_page(__name__, path='/goalsetting')
+dash.register_page(__name__, path='/goal/setting')
 
 app_usage_df = pd.read_csv('./datas/app_usage_time.csv')
 unlock_df = pd.read_csv('./datas/unlock.csv')

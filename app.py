@@ -42,7 +42,7 @@ app.layout = html.Div([
     className='content',
     ),
 ],
-className='main',
+className='main-container',
 )
 for callback, *arcs  in get_callbacks():
     app.callback(*arcs)(callback)
