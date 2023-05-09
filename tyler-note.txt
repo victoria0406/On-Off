@@ -1,3 +1,1 @@
-5/7에 해야할 거
-1. goal 하나씩 선택하고 다시 메인화면으로 돌아가는 기능 추가
-3. css 세세하게
+error: failed to push some refs to 'https://github.com/victoria0406/On-Off.git'

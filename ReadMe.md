@@ -22,5 +22,3 @@
       - app_usage_app: 사용 목표 어플리케이션 
       - 해당 목표가 없는 날은 관련 데이터 NA로 처리
    - weekly_average.csv: user와 group의 요일 별 평균 사용량
-
-## 편의를 위해 sidebar에 group page 목록 추가

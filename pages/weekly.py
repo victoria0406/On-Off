@@ -8,8 +8,7 @@ import plotly.graph_objects as go
 
 from inputdata.data import COLORS, click, app_usage_time, today, yesterday, top, hour, min, app_usage_hour, access, today_index, unlock
 
-
-dash.register_page(__name__)
+dash.register_page(__name__, path='/report/weekly')
 
 
 
@@ -158,10 +157,10 @@ total_time = top1[7]+top2[7]+top3[7]+top4[7]+top5[7]+others[7]
 
 def layout():
     return html.Div(children=[
-        html.Div([html.Div(html.A(html.Button("Compare with Others!",style=BUTTON_STYLE), href="/group")),
+        html.Div([html.Div(html.A(html.Button("Compare with Others!",style=BUTTON_STYLE), href="/report/group")),
                 html.Div(dbc.Nav([
                     dbc.NavLink('DAILY', href="/report", active="exact"),
-                    dbc.NavLink('WEEKLY', href="/weekly", active="exact"),
+                    dbc.NavLink('WEEKLY', href="/report/weekly", active="exact"),
                 ],
                 className='report-nav'
             ), style=TOGGLE_STYLE)

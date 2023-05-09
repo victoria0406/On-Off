@@ -30,7 +30,7 @@ profile=html.Div([
     ),
     html.Div([
         html.Img(
-            src='./assets/user.png',
+            src='../assets/user.png',
             style={'width': "14rem", "padding": "2rem 1rem 1rem"}
         ),
         html.P(
@@ -54,8 +54,8 @@ sidebar = html.Div(
                 style=MENU_HEADER_STYLE,
             ),
             dbc.Nav([
-                dbc.NavLink('GOALS', href='/goal', active="exact", id='goal-link'),
-                dbc.NavLink('REPORTS', href="/report", active="exact"),
+                dbc.NavLink('GOALS', href='/goal', active="partial", id='goal-link'),
+                dbc.NavLink('REPORTS', href="/report", active="partial"),
             ],
             vertical=True,
             pills=True,

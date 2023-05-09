@@ -3,13 +3,14 @@
 body {
   overflow-y: hidden;
 }
-.main {
+.main-container {
   --side-margin: max(1rem, calc((100vw - 89rem) / 2));
   margin: 0;
   background-color: #99A68D;
+  min-width: 91rem;
 }
 .side-bar {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: var(--side-margin);
   bottom: 0;

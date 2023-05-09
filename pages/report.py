@@ -153,10 +153,10 @@ else:
 
 def layout():
     return html.Div(children=[
-        html.Div([html.Div(html.A(html.Button("Compare with Others!",style=BUTTON_STYLE), href="/group")),
+        html.Div([html.Div(html.A(html.Button("Compare with Others!",style=BUTTON_STYLE), href="/report/group")),
                 html.Div(dbc.Nav([
                     dbc.NavLink('DAILY', href="/report", active="exact"),
-                    dbc.NavLink('WEEKLY', href="/weekly", active="exact"),
+                    dbc.NavLink('WEEKLY', href="/report/weekly", active="exact"),
                 ],
                 className='report-nav'
             ), style=TOGGLE_STYLE)
@@ -231,8 +231,6 @@ def layout():
 )
 
 def update_graph(btn1, btn2, btn3, btn4, btn5, btn6):
-    
-    # print(btn1)
     
     GRAPH_COLOR = COLORS
     mode = ['solid','solid','solid','solid','solid','solid']

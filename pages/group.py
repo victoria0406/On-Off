@@ -20,7 +20,7 @@ others_square_style = {
 col_style = {
     'background-color': '#f8f9fa',
     'border-radius': '10px',
-    'padding': '10px',
+    'padding': '16px',
     'display': 'flex',
     'flex-direction': 'row',
 }
@@ -43,8 +43,8 @@ button_style = {
 }
 
 menu_style = {
-    'margin' : '-4.5rem 0 1.5rem 0',
-    'width' : '15rem',
+    'margin' : '-4.5rem -7rem 0 0',
+    'width' : '20rem',
     'background-color': '#EBEBF0',
     'text-align': 'center',
     'border-radius': '5px',
@@ -156,28 +156,32 @@ fig1.add_hline(y=group_sdt_median, line_dash="dot", line_color="#7C6542", line_w
 # Define plot layout
 fig1.update_layout(
     title="your group: RISK Group",
-    width=536, height=370,
+    width=488, height=336,
     showlegend=False,
     hovermode=False,
     xaxis={
+        'automargin': True,
         'title': {
             'text': 'Usage Time (m)',
-            'font': {'family': 'Arial', 'size': 14, 'color': '#10135B'},
+            'font': {'family': 'Arial', 'size': 12, 'color': '#10135B'},
         },
-        # 'showticklabels': False,
         'range': [xlim[0],xlim[1]],
         'tickfont': {
             'color': '#ffffff'
         }
     },
     yaxis={
+        'automargin': True,
         'title': {
             'text': 'Session Duration Time (m)',
-            'font': {'family': 'Arial', 'size': 14, 'color': '#10135B'},
+            'font': {'family': 'Arial', 'size': 12, 'color': '#10135B'},
         },
-        'showticklabels': False,
-        'range': [ylim[0],ylim[1]]
+        'tickfont': {
+            'color': '#ffffff'
+        },
+        'range': [ylim[0],ylim[1]],
     },
+    margin=dict(b=30, t=60,)
 )
 
 fig2 = go.Figure()
@@ -212,7 +216,7 @@ fig2.update_traces(
     )
 
 fig2.update_layout(plot_bgcolor = 'white', title="Weekly Average Session Time", 
-                   bargap=0.2, showlegend=False, width=448, height=370,
+                   bargap=0.2, showlegend=False, width=616, height=336,
                   )
 fig2.update_yaxes(showline=True, showticklabels=False, linewidth=2, linecolor='black',)
 fig2.update_xaxes(showgrid=True, gridwidth=1, gridcolor='#e5e5e5')
@@ -249,8 +253,8 @@ fig3.update_layout(
     title="Weekly Usage Time",
     showlegend=False,
     barmode='group',
-    width=1024,
-    height=410,
+    width=1136,
+    height=256,
     xaxis=dict(
         showline=True,
         linewidth=2,
@@ -260,9 +264,10 @@ fig3.update_layout(
         showgrid=True,
         gridwidth=1,
         gridcolor='#e5e5e5'
-    )
+    ),
+    margin=dict(b=0, t=60)
 )
-dash.register_page(__name__)
+dash.register_page(__name__, path='/report/group')
 
 layout = html.Div(children=[
      html.Div([
@@ -285,7 +290,7 @@ layout = html.Div(children=[
                         className=child_classes
                     ),
                     html.P('Others', className=child_classes)
-                ], style={'margin-left': '1rem', 'display': 'flex', 'flex-direction': 'row'})
+                ], style={'margin-left': '3rem', 'display': 'flex', 'flex-direction': 'row'})
             ])
         ], style=menu_style),
         ], style={'display': 'flex', 'width': '1024px', 'justify-content': 'flex-end'}
@@ -293,12 +298,12 @@ layout = html.Div(children=[
     html.Div(children=[
         html.Div(children=[
             dcc.Graph(figure = fig1)
-        ], style={'width': '536px', 'margin-right': '40px'}),
+        ], style={'width': '504px', 'margin-right': '16px'}),
         html.Div(children=[
             dcc.Graph(figure = fig2)
-        ], style={'width': '448px', 'margin-right': '40px'})
+        ], style={'width': '616px'})
     ], style=graph_wrapper),
     html.Div(children=[
         dcc.Graph(figure = fig3)
-    ], style={'width': '1024px', 'height': '370px', 'margin-top': '20px'})
+    ], style={'width': '1136px', 'height': '256px', 'margin-top': '16px'})
 ])
