@@ -26,33 +26,42 @@ def unlock_component(highlighted=None):
     component = html.Div([
         html.P('Unlocks', className='goal-title'),
         html.A([
-            html.Div([], className='goal-state-check'),
-            html.Span(f"{data} / {unlock_info['time']} times ({(data / unlock_info['time'] * 100):.1f}%)")
-        ], className='goal-list unlock', href='/goal?setting=True' if (highlighted == 'unlock') else '/goal?setting=True?unlock')
+            html.Img(src="./assets/icons/check-unlock.png", className='goal-state-check')
+            if unlock_info['time'] >= data
+            else html.Img(src="./assets/icons/close.png", className='goal-state-check exceed'),
+            html.Span([html.B(data), f" / {unlock_info['time']} times ({(data / unlock_info['time'] * 100):.1f}%)"])
+        ], className=f"goal-list unlock {'active' if (highlighted == 'unlock') else ''}",
+        href='/goal?setting=True' if (highlighted == 'unlock') else '/goal?setting=True?unlock')
     ])
     return component
 
 def usage_time_component(highlighted=None):
     data = round(float(total_usage) / 60, 1);
-    usage_time = usage_time_info['hour'] + usage_time_info['minite'] / 60
+    usage_goal_minite = usage_time_info['hour'] + usage_time_info['minite'] / 60
     component = html.Div([
         html.P('Usage Time',className='goal-title'),
         html.A([
-            html.Div([], className='goal-state-check'),
-            html.Span(f"{data} / {usage_time} h ({(data / usage_time * 100):.1f}%)")
-        ], className='goal-list usage', href='/goal?setting=True' if (highlighted == 'usage') else '/goal?setting=True?usage')
+            html.Img(src="./assets/icons/check-usage.png", className='goal-state-check')
+            if usage_goal_minite >= data
+            else html.Img(src="./assets/icons/close.png", className='goal-state-check exceed'),
+            html.Span([html.B(data), f" / {usage_goal_minite} h ({(data / usage_goal_minite * 100):.1f}%)"])
+        ], className= f"goal-list usage {'active' if (highlighted == 'usage') else ''}",
+        href='/goal?setting=True' if (highlighted == 'usage') else '/goal?setting=True?usage')
     ])
     return component
 
 def app_usage_component(highlighted=None):
     data = round(float(app_usage) / 60, 1);
-    usage_time = app_usage_info['hour'] + app_usage_info['minite'] / 60
+    usage_goal_minite = app_usage_info['hour'] + app_usage_info['minite'] / 60
     component = html.Div([
         html.P(f"App Usage Time for {app_usage_info['app']}",className='goal-title'),
         html.A([
-            html.Div([], className='goal-state-check'),
-            html.Span(f"{data} / {usage_time} h ({(data / usage_time * 100):.1f}%)")
-        ], className='goal-list app', href='/goal?setting=True' if (highlighted == 'app') else '/goal?setting=True?app')
+            html.Img(src="./assets/icons/check-app.png", className='goal-state-check')
+            if usage_goal_minite > data
+            else html.Img(src="./assets/icons/close.png", className='goal-state-check exceed'),
+            html.Span([html.B(data), f" / {usage_goal_minite} h ({(data / usage_goal_minite * 100):.1f}%)"])
+        ], className=f"goal-list app {'active' if (highlighted == 'app') else ''}",
+        href='/goal?setting=True' if (highlighted == 'app') else '/goal?setting=True?app')
     ])
     return component
 
@@ -270,6 +279,6 @@ def app_weekly_calendar(highlighted=None):
 
 today_goal_not_setting = [
     html.P('Today Goal', style={'font-weight': 'bold'}),
-    html.A('+', className='set-goal-button',href='/goalsetting'),
+    html.A('+', className='set-goal-button',href='/goal/setting'),
     html.P('Set Your Goal!', style={'margin-bottom': '120px'})
 ]
