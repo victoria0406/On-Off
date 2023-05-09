@@ -262,7 +262,7 @@ fig3.update_layout(
         gridcolor='#e5e5e5'
     )
 )
-dash.register_page(__name__)
+dash.register_page(__name__, path='/report/group')
 
 layout = html.Div(children=[
      html.Div([

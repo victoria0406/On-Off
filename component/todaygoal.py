@@ -279,6 +279,6 @@ def app_weekly_calendar(highlighted=None):
 
 today_goal_not_setting = [
     html.P('Today Goal', style={'font-weight': 'bold'}),
-    html.A('+', className='set-goal-button',href='/goalsetting'),
+    html.A('+', className='set-goal-button',href='/goal/setting'),
     html.P('Set Your Goal!', style={'margin-bottom': '120px'})
 ]
