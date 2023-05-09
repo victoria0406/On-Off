@@ -152,31 +152,40 @@ def raw_goal_state(day):
             day_goal_array[i] = None
     return day_goal_array
 
+def convert_time(minute):
+    if minute >= 60:
+        if minute % 60 != 0: return str(minute // 60)+"h "+str(minute % 60)+"m"
+        else: return str(minute // 60)+"h"
+    else: return str(minute % 60)+"m"
+
 def get_calendar_donut_plot(day, index):
     goal_state = get_goal_state(day)
     if goal_state == None : return None
     fig = week_donut_plot(goal_state[index], index)
     if (goal_state[index] != None):
         [real_data, goal_data] = raw_goal_state(day)[index]
-        fig.update_layout(showlegend=False, 
-                            plot_bgcolor='rgb(0,0,0,0)',
-                            paper_bgcolor="rgb(0,0,0,0)",
-                        annotations=[dict(text=str(int(real_data))+"/"+str(int(goal_data)), showarrow=False)])
+        if index == 2: colors = ['#B40000','#686986', '#68698650']
+        elif index == 1: colors = ['#B40000','#A4BD85', '#A4BD8550']
+        elif index == 0: colors = ['#B40000','#E4AE44', '#E4AE4450']
+        fig.add_annotation(
+            text="<b>"+convert_time(int(real_data))+"<b>"+"<br> " if index == 1 or index == 2 else "<b>"+str(int(real_data))+"<b>"+"<br> ",
+            showarrow=False,
+            font=dict(
+                size=14,
+                color=colors[1],
+            )
+        )
+        fig.add_annotation(
+            text=" "+"<br>/ "+convert_time(int(goal_data)) if index == 1 or index == 2 else " "+"<br>/ "+str(int(goal_data)),
+            showarrow=False, 
+            font=dict(
+                size=12,
+                color=colors[1]
+            )
+        )
     donut = dcc.Graph(figure = fig, config={'displayModeBar': False}, className='calendar-donut')
     return donut
 
-# .goal-calendar {
-#     width: 100%;
-#     height: calc(100% - 60px);
-# }
-# .goal-calendar thead {
-#     background-color: #DAD4CE;
-# }
-# .goal-calendar th {
-#     width: calc(100% / 7);
-#     text-align: center;
-#     color: #515151;
-# }
 
 def unlock_weekly_calendar(highlighted=None):
     today_day = dt.datetime(2023, 5, 10)
