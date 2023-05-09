@@ -172,7 +172,7 @@ def layout():
                 html.Button(id="btn-nclicks-3", n_clicks=0, className='APP_BUTTON_STYLE'),
                 html.Button(id="btn-nclicks-4", n_clicks=0, className='APP_BUTTON_STYLE'),
                 html.Button(id="btn-nclicks-5", n_clicks=0, className='APP_BUTTON_STYLE'),
-                html.Button(id="btn-nclicks-6", n_clicks=0, className='APP_BUTTON_STYLE'),
+                html.Button(id="btn-nclicks-6", n_clicks=0, className='OTHER_BUTTON_STYLE'),
                 ])], style=FCONTENT_STYLE),
             html.Div([html.P("Usage Time",style={"margin":"10px 0 -10px 15px"}),
                     html.Div(dcc.Graph(id = 'usage_graph', config={'displayModeBar': False}),
@@ -280,26 +280,32 @@ def update_graph(btn1, btn2, btn3, btn4, btn5, btn6):
             color = ['#F7F8FA', '#F7F8FA', '#F7F8FA', '#F7F8FA', '#EBE3DA', '#F7F8FA']
         click4 = click[4]+1
         click = [0,0,0,0,click4,0] 
-    elif "btn-nclicks-6" == ctx.triggered_id:
-        if(click[5] %2 == 0): 
-            GRAPH_COLOR = ['#F5EFE3','#F8F7E2','#EDF4E2','#EBEBF1','#F1ECE6',COLORS[5]]
-            mode = ['dot','dot','dot','dot','dot','solid']
-            TEXT_COLOR = ['#7C7C7C','#7C7C7C','#7C7C7C','#7C7C7C','#7C7C7C','black']
-            color = ['#F7F8FA', '#F7F8FA', '#F7F8FA', '#F7F8FA', '#F7F8FA', '#E9E9E9']
-        click5 = click[5]+1
-        click = [0,0,0,0,0,click5]  
+    
         
     fig = px.bar(today, y="date", x=[top[1],top[2],top[3],top[4],top[5],top[6]],orientation='h', color_discrete_sequence=GRAPH_COLOR, width=540, height=90)
     fig.update_xaxes(title=None, showticklabels=False)
     fig.update_yaxes(title=None, showticklabels=False,)
-    fig.update_layout(showlegend=False, plot_bgcolor='white',paper_bgcolor="rgb(0,0,0,0)", margin=dict(b=0))
-        
+    fig.update_layout(showlegend=False, plot_bgcolor='white',paper_bgcolor="rgb(0,0,0,0)", margin=dict(b=0),hovermode= False)
+    
+    total['top1_datetime'] = pd.to_datetime(total['top1'], unit='m')
+    total['top1_datetime_string'] = total['top1_datetime'].dt.strftime('%Hh %Mm')
+    total['top2_datetime'] = pd.to_datetime(total['top2'], unit='m')
+    total['top2_datetime_string'] = total['top2_datetime'].dt.strftime('%Hh %Mm')
+    total['top3_datetime'] = pd.to_datetime(total['top3'], unit='m')
+    total['top3_datetime_string'] = total['top3_datetime'].dt.strftime('%Hh %Mm')
+    total['top4_datetime'] = pd.to_datetime(total['top4'], unit='m')
+    total['top4_datetime_string'] = total['top4_datetime'].dt.strftime('%Hh %Mm')
+    total['top5_datetime'] = pd.to_datetime(total['top5'], unit='m')
+    total['top5_datetime_string'] = total['top5_datetime'].dt.strftime('%Hh %Mm')
+    
+    print(total['top1_datetime_string'])
+    
     fig1 = go.Figure()
-    fig1.add_trace(go.Scatter(x=total['time'], y=total['top1'], mode='lines', name=top[1],line_color=GRAPH_COLOR[0], line=dict(dash=mode[0])))
-    fig1.add_trace(go.Scatter(x=total['time'], y=total['top2'], mode='lines', name=top[2],line_color=GRAPH_COLOR[1], line=dict(dash=mode[1])))
-    fig1.add_trace(go.Scatter(x=total['time'], y=total['top3'], mode='lines', name=top[3],line_color=GRAPH_COLOR[2], line=dict(dash=mode[2])))
-    fig1.add_trace(go.Scatter(x=total['time'], y=total['top4'], mode='lines', name=top[4],line_color=GRAPH_COLOR[3], line=dict(dash=mode[3])))
-    fig1.add_trace(go.Scatter(x=total['time'], y=total['top5'], mode='lines', name=top[5],line_color=GRAPH_COLOR[4], line=dict(dash=mode[4])))
+    fig1.add_trace(go.Scatter(x=total['time'], y=total['top1'], mode='lines', name=top[1],line_color=GRAPH_COLOR[0], line=dict(dash=mode[0]),text=total['top1_datetime_string']))
+    fig1.add_trace(go.Scatter(x=total['time'], y=total['top2'], mode='lines', name=top[2],line_color=GRAPH_COLOR[1], line=dict(dash=mode[1]),text=total['top2_datetime_string']))
+    fig1.add_trace(go.Scatter(x=total['time'], y=total['top3'], mode='lines', name=top[3],line_color=GRAPH_COLOR[2], line=dict(dash=mode[2]),text=total['top3_datetime_string']))
+    fig1.add_trace(go.Scatter(x=total['time'], y=total['top4'], mode='lines', name=top[4],line_color=GRAPH_COLOR[3], line=dict(dash=mode[3]),text=total['top4_datetime_string']))
+    fig1.add_trace(go.Scatter(x=total['time'], y=total['top5'], mode='lines', name=top[5],line_color=GRAPH_COLOR[4], line=dict(dash=mode[4]),text=total['top5_datetime_string']))
     fig1.update_layout(
         xaxis = dict(
             title = "Time of Day",
@@ -318,11 +324,22 @@ def update_graph(btn1, btn2, btn3, btn4, btn5, btn6):
             showgrid=True, linewidth=1,gridcolor='#E0E0E0'
         )
     )
+    fig1.update_layout(
+    hovermode="x unified",
+    hoverlabel=dict(
+        bordercolor="rgba(0, 0, 0, 0.6)",
+        bgcolor="rgba(255, 255, 255,0.8)",
+        font_size=14,
+        ),
+        hoverlabel_namelength=100
+        )
 
     fig1.update_layout(showlegend=False, plot_bgcolor='white',paper_bgcolor="rgb(0,0,0,0)", font=dict(size=9),width=750, height=410)
-    
+    fig1.update_traces(hoverinfo = 'name+text')
     fig2 = go.Figure()
-    fig2.add_traces(go.Bar(x=top[1:7], y=access_today.values.tolist()[0][1:7],  marker_color=GRAPH_COLOR))
+    # fig2.add_traces(go.Bar(x=top[1:7], y=access_today.values.tolist()[0][1:7],  marker_color=GRAPH_COLOR, hovertext=access_today.values.tolist()[0][1:7], hoverinfo="text",))
+    fig2.add_traces(go.Bar(x=top[1:7], y=access_today.values.tolist()[0][1:7],  marker_color=GRAPH_COLOR, hovertemplate="%{x}: "+"%{y} times"+'<extra></extra>'))
+    
     fig2.update_layout(showlegend=False, plot_bgcolor='white',paper_bgcolor="rgb(0,0,0,0)",width=720, height=270, margin=dict(t=0))
     fig2.update_layout(
         yaxis = dict(
@@ -331,8 +348,15 @@ def update_graph(btn1, btn2, btn3, btn4, btn5, btn6):
         ),
         xaxis = dict(
             title=None, showticklabels=False,
-        )
+        ),
+        hoverlabel=dict(
+            bordercolor="rgba(0, 0, 0, 0.6)",
+            bgcolor="rgba(255, 255, 255,0.8)",
+            font_size=14,
+            ),
+            hoverlabel_namelength=100
     )
+
                 
     children1 = html.Div([html.Div([html.Div("1",style={"text-align":"center","line-height":"20px","background-color":COLORS[0],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div(top[1],style={"float":"right","margin-left":"10px","font-weight":"bold", "color":TEXT_COLOR[0]})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(today_value[1]//60,"h ", today_value[1]%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold", "color":TEXT_COLOR[0]})])
     children2 = html.Div([html.Div([html.Div("2",style={"text-align":"center","line-height":"20px","background-color":COLORS[1],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div(top[2],style={"float":"right","margin-left":"10px","font-weight":"bold", "color":TEXT_COLOR[1]})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(today_value[2]//60,"h ", today_value[2]%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold", "color":TEXT_COLOR[1]})])
