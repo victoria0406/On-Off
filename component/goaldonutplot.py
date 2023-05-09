@@ -49,7 +49,7 @@ def goal_donut_plot(unlock_data, usage_data, app_usage_data, highlighted = None)
         fig.add_shape(
             type="circle",
             xref="paper", yref="paper",
-            x0=0.11, y0=0.08, x1=0.89, y1=0.92,
+            x0=0.05, y0=0.05, x1=0.95, y1=0.95,
             line=dict(
                 color='#686986',
                 dash="dot"
@@ -68,7 +68,7 @@ def goal_donut_plot(unlock_data, usage_data, app_usage_data, highlighted = None)
         fig.add_shape(
             type="circle",
             xref="paper", yref="paper",
-            x0=0.21, y0=0.19, x1=0.79, y1=0.81,
+            x0=0.2, y0=0.2, x1=0.8, y1=0.8,
             line=dict(
                 color='#A4BD85',
                 dash="dot"
@@ -87,14 +87,21 @@ def goal_donut_plot(unlock_data, usage_data, app_usage_data, highlighted = None)
         fig.add_shape(
             type="circle",
             xref="paper", yref="paper",
-            x0=0.36, y0=0.35, x1=0.64, y1=0.65,
+            x0=0.36, y0=0.36, x1=0.64, y1=0.64,
             line=dict(
                 color='#E4AE44',
                 dash="dot"
             ))
     fig.update_traces(textinfo='none')
-    fig.update_layout(showlegend=False, plot_bgcolor='rgb(0,0,0,0)',paper_bgcolor="rgb(0,0,0,0)",
-    hovermode=False,)
+    fig.update_layout(
+        margin_l=90,
+        margin_r=90,
+        margin_b=80,
+        margin_t=100,
+        showlegend=False,
+        plot_bgcolor='rgb(0,0,0,0)',
+        paper_bgcolor="rgb(0,0,0,0)",
+        hovermode=False,)
     return fig
 
 def convert_time(minute):
