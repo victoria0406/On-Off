@@ -26,8 +26,8 @@ def usage_graph():
         if (weekly_usage["Total"].values.tolist()[i]>today_usage_warning):
             COLORS[i] = 'rgba(221,151,151,0.6)'
     
-    fig = px.bar(weekly_usage, x="date", y="Total", width=500, height=300, color=COLORS, color_discrete_map="identity")
-    
+    fig = px.bar(weekly_usage, x="date", y="Total", width=500, height=300)
+    fig.update_traces(marker_color=COLORS)
     fig.update_layout(
         xaxis = dict(
             title = None,
@@ -89,8 +89,8 @@ def app_usage_graph():
         if (weekly_usage[target_app].values.tolist()[i]>app_usage_warning):
             COLORS[i] = 'rgba(221,151,151,0.6)'
     
-    fig = px.bar(weekly_usage, x="date", y=target_app, width=500, height=300, color=COLORS, color_discrete_map="identity")
-    
+    fig = px.bar(weekly_usage, x="date", y=target_app, width=500, height=300)
+    fig.update_traces(marker_color=COLORS)
     fig.update_layout(
         xaxis = dict(
             title = None,
