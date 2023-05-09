@@ -93,7 +93,8 @@ def goal_donut_plot(unlock_data, usage_data, app_usage_data, highlighted = None)
                 dash="dot"
             ))
     fig.update_traces(textinfo='none')
-    fig.update_layout(showlegend=False, plot_bgcolor='rgb(0,0,0,0)',paper_bgcolor="rgb(0,0,0,0)",)
+    fig.update_layout(showlegend=False, plot_bgcolor='rgb(0,0,0,0)',paper_bgcolor="rgb(0,0,0,0)",
+    hovermode=False,)
     return fig
 
 def convert_time(minute):
