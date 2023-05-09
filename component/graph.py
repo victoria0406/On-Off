@@ -26,8 +26,8 @@ def usage_graph():
         if (weekly_usage["Total"].values.tolist()[i]>today_usage_warning):
             COLORS[i] = 'rgba(221,151,151,0.6)'
     
-    fig = px.bar(weekly_usage, x="date", y="Total", width=500, height=300, color=COLORS, color_discrete_map="identity")
-    
+    fig = px.bar(weekly_usage, x="date", y="Total", width=500, height=300)
+    fig.update_traces(marker_color=COLORS)
     fig.update_layout(
         xaxis = dict(
             title = None,
@@ -47,6 +47,17 @@ def usage_graph():
     fig.update_layout(showlegend=False, plot_bgcolor='white',paper_bgcolor="rgb(0,0,0,0)",bargap=0.3)
     fig.add_hline(y=today_usage_warning, line_dash="dash", line_color="#D78A8A", annotation_text="warning!", 
               annotation_position="top right",annotation_font_size= 12, annotation_font_color='#D78A8A')
+    
+    fig.update_layout(
+        hoverlabel=dict(
+            bordercolor="rgba(0, 0, 0, 0.6)",
+            bgcolor="rgba(255, 255, 255,0.8)",
+            font_size=14,
+            ),
+            hoverlabel_namelength=100
+            )
+    fig.update_traces(
+        hovertemplate="%{y} minutes")
     
     return fig 
     
@@ -75,6 +86,16 @@ def unlock_graph():
             showgrid=True, linewidth=1,gridcolor='#E0E0E0',
         )
     )
+    fig.update_layout(
+        hoverlabel=dict(
+            bordercolor="rgba(0, 0, 0, 0.6)",
+            bgcolor="rgba(255, 255, 255,0.8)",
+            font_size=14,
+            ),
+            hoverlabel_namelength=100
+            )
+    fig.update_traces(
+        hovertemplate="%{y} times"+'<extra></extra>')
 
     fig.update_layout(showlegend=False, plot_bgcolor='white',paper_bgcolor="rgb(0,0,0,0)",width=510, height=320)
     fig.add_hline(y=today_unlock_warning, line_dash="dash", line_color="#D78A8A",annotation_text="warning!", 
@@ -89,8 +110,8 @@ def app_usage_graph():
         if (weekly_usage[target_app].values.tolist()[i]>app_usage_warning):
             COLORS[i] = 'rgba(221,151,151,0.6)'
     
-    fig = px.bar(weekly_usage, x="date", y=target_app, width=500, height=300, color=COLORS, color_discrete_map="identity")
-    
+    fig = px.bar(weekly_usage, x="date", y=target_app, width=500, height=300)
+    fig.update_traces(marker_color=COLORS)
     fig.update_layout(
         xaxis = dict(
             title = None,
@@ -107,6 +128,17 @@ def app_usage_graph():
             tickfont = dict(size=9)
         )
     )
+    fig.update_layout(
+        hoverlabel=dict(
+            bordercolor="rgba(0, 0, 0, 0.6)",
+            bgcolor="rgba(255, 255, 255,0.8)",
+            font_size=14,
+            ),
+            hoverlabel_namelength=100
+            )
+    fig.update_traces(
+        hovertemplate="%{y} minutes")
+    
     fig.update_layout(showlegend=False, plot_bgcolor='white',paper_bgcolor="rgb(0,0,0,0)",bargap=0.3)
     fig.add_hline(y=app_usage_warning, line_dash="dash", line_color="#D78A8A", annotation_text="warning!", 
               annotation_position="top right",annotation_font_size= 12, annotation_font_color='#D78A8A')

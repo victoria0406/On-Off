@@ -123,6 +123,16 @@ fig3.update_layout(
         showticklabels=False,
     )
 )
+fig3.update_layout(
+        hoverlabel=dict(
+            bordercolor="rgba(0, 0, 0, 0.6)",
+            bgcolor="rgba(255, 255, 255,0.8)",
+            font_size=14,
+            ),
+            hoverlabel_namelength=100
+            )
+fig3.update_traces(
+    hovertemplate="%{x}: %{y} times"+'<extra></extra>')
 
 fig3.update_layout(showlegend=False, plot_bgcolor='white',paper_bgcolor="rgb(0,0,0,0)",width=510, height=320)
 # fig3.show()
@@ -166,7 +176,7 @@ def layout():
                 html.Button(id="btn-3", n_clicks=0, className='APP_BUTTON_STYLE'),
                 html.Button(id="btn-4", n_clicks=0, className='APP_BUTTON_STYLE'),
                 html.Button(id="btn-5", n_clicks=0, className='APP_BUTTON_STYLE'),
-                html.Button(id="btn-6", n_clicks=0, className='APP_BUTTON_STYLE'),
+                html.Button(id="btn-6", n_clicks=0, className='OTHER_BUTTON_STYLE'),
                 ])], style=FCONTENT_STYLE),
             html.Div([html.P("Usage Time",style={"margin":"10px 0 -10px 15px"}),
                     html.Div(dcc.Graph(id="usage_time", config={'displayModeBar': False}),
@@ -286,10 +296,26 @@ def update_graph(btn1, btn2, btn3, btn4, btn5, btn6):
     fig = px.bar(today, y="date", x=[top[1],top[2],top[3],top[4],top[5],top[6]],orientation='h', color_discrete_sequence=APP_COLOR, width=540, height=90)
     fig.update_xaxes(title=None, showticklabels=False)
     fig.update_yaxes(title=None, showticklabels=False,)
-    fig.update_layout(showlegend=False, plot_bgcolor='white',paper_bgcolor="rgb(0,0,0,0)", margin=dict(b=0),)
+    fig.update_layout(showlegend=False, plot_bgcolor='white',paper_bgcolor="rgb(0,0,0,0)", margin=dict(b=0),hovermode=False)
+    
+    weekly_usage['top1_datetime'] = pd.to_datetime(weekly_usage[top[1]], unit='m')  
+    weekly_usage['top1'] = top[1]+": "+weekly_usage['top1_datetime'].dt.strftime('%Hh %Mm')
+    weekly_usage['top2_datetime'] = pd.to_datetime(weekly_usage[top[2]], unit='m')
+    weekly_usage['top2'] = top[2]+": "+weekly_usage['top2_datetime'].dt.strftime('%Hh %Mm')
+    weekly_usage['top3_datetime'] = pd.to_datetime(weekly_usage[top[3]], unit='m')
+    weekly_usage['top3'] = top[3]+": "+weekly_usage['top3_datetime'].dt.strftime('%Hh %Mm')
+    weekly_usage['top4_datetime'] = pd.to_datetime(weekly_usage[top[4]], unit='m')
+    weekly_usage['top4'] = top[4]+": "+weekly_usage['top4_datetime'].dt.strftime('%Hh %Mm')
+    weekly_usage['top5_datetime'] = pd.to_datetime(weekly_usage[top[5]], unit='m')
+    weekly_usage['top5'] = top[5]+": "+weekly_usage['top5_datetime'].dt.strftime('%Hh %Mm')
+    weekly_usage['top6_datetime'] = pd.to_datetime(weekly_usage[top[6]], unit='m')
+    weekly_usage['top6'] = top[6]+": "+weekly_usage['top6_datetime'].dt.strftime('%Hh %Mm')
     
     
-    fig1 = px.bar(weekly_usage, x="date", y=apps,color_discrete_sequence=GRAPH_COLOR,width=750, height=400)
+    print(weekly_usage)
+    
+    fig1 = px.bar(weekly_usage, x="date", y=apps,color_discrete_sequence=GRAPH_COLOR,width=750, height=400,hover_data={'variable': False, 'date': False, 'value':False, "top1":True,"top2":True,"top3":True,"top4":True,"top5":True,"top6":True})
+    
     fig1.update_layout(
         xaxis = dict(
             title = None,
@@ -311,10 +337,20 @@ def update_graph(btn1, btn2, btn3, btn4, btn5, btn6):
             tickfont = dict(size=9)
         )
     )
+    fig1.update_layout(
+        hoverlabel=dict(
+            bordercolor="rgba(0, 0, 0, 0.6)",
+            bgcolor="rgba(255, 255, 255,0.8)",
+            font_size=14,
+            ),
+            hoverlabel_namelength=100
+            )
+    fig1.update_traces(
+        hovertemplate="%{y} minutes")
+    
     fig1.update_layout(showlegend=False, plot_bgcolor='white',paper_bgcolor="rgb(0,0,0,0)",bargap=0.3)
     
     
-    # fig2 = px.bar(weekly_access, x=['1','2','3','4','5','6','7','8','9'], y=apps)
     fig2 = px.bar(weekly_access, x=weekly_access['date'], y=apps, color_discrete_sequence=GRAPH_COLOR, width=740, height=280)
     fig2.update_layout(
         xaxis = dict(
@@ -331,6 +367,16 @@ def update_graph(btn1, btn2, btn3, btn4, btn5, btn6):
             showgrid=True, linewidth=1,gridcolor='#E0E0E0'
         )
     )
+    fig2.update_layout(
+        hoverlabel=dict(
+            bordercolor="rgba(0, 0, 0, 0.6)",
+            bgcolor="rgba(255, 255, 255,0.8)",
+            font_size=14,
+            ),
+            hoverlabel_namelength=100
+            )
+    fig2.update_traces(
+        hovertemplate="%{y} times")
 
     fig2.update_layout(showlegend=False, plot_bgcolor='white',paper_bgcolor="rgb(0,0,0,0)",bargap=0.3,margin=dict(t=0))
 

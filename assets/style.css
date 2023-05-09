@@ -122,7 +122,37 @@ body {
   height:27px;
   transition-duration: 0.3s;
 }
+.APP_BUTTON_STYLE:hover {
+  width: 85%;
+  margin: 0px 10px 12px 30px;
+  border: none;
+  border-radius: 7px;
+  box-shadow: 0.5px 0.5px 0.5px rgba(0, 0, 0, 0.25);
+  height:27px;
+}
 
 .APP_BUTTON_STYLE:active {
   box-shadow: none;
+}
+
+
+.OTHER_BUTTON_STYLE {
+  width: 85%;
+  margin: 0px 10px 12px 30px;
+  border: none;
+  border-radius: 7px;
+  box-shadow: 1.5px 1.5px 1.5px rgba(0, 0, 0, 0.25);
+  height:27px;
+  transition-duration: 0.3s;
+
+}
+
+.OTHER_BUTTON_STYLE:hover {
+  cursor:default;
+  box-shadow:inset 1.5px 1.5px 1.5px rgba(0, 0, 0, 0.25);
+}
+
+#usage_graph .hoverlayer .bg {
+  rx: 3;
+  shape-rendering: auto;
 }
