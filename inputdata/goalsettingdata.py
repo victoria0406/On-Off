@@ -7,8 +7,7 @@ last_goal = last_goal.fillna(-1, axis=1)
 unlock = last_goal['unlock_goal'].values[0]
 usage = last_goal['total_usage_goal'].values[0]
 goal_app = last_goal['app_usage_app'].values[0]
-app_usage = last_goal['app_usage_goal'].values[0]
-print(unlock, usage, goal_app, app_usage)
+app_usage = last_goal['app_usage_goal'].values[0]\
 
 usage_time_info = {
     'checked': False if usage < 0 else True,

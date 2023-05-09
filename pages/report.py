@@ -232,8 +232,6 @@ def layout():
 
 def update_graph(btn1, btn2, btn3, btn4, btn5, btn6):
     
-    # print(btn1)
-    
     GRAPH_COLOR = COLORS
     mode = ['solid','solid','solid','solid','solid','solid']
     global click

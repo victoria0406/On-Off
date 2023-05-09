@@ -126,18 +126,6 @@ def get_calendar_donut_plot(day, index):
     donut = dcc.Graph(figure = fig, config={'displayModeBar': False}, className='calendar-donut')
     return donut
 
-# .goal-calendar {
-#     width: 100%;
-#     height: calc(100% - 60px);
-# }
-# .goal-calendar thead {
-#     background-color: #DAD4CE;
-# }
-# .goal-calendar th {
-#     width: calc(100% / 7);
-#     text-align: center;
-#     color: #515151;
-# }
 
 def unlock_weekly_calendar(highlighted=None):
     today_day = dt.datetime(2023, 5, 10)
