@@ -215,7 +215,7 @@ def unlock_weekly_calendar(highlighted=None):
                     className='weekly-calendar-container',),
         html.Div(children=[
             html.P('Unlock', style={'font-size': '20px'}),
-            html.Div(dcc.Graph(figure = unlock_graph(), config={'displayModeBar': False}),style={'margin-top':'-50px'})
+            html.Div(dcc.Graph(figure = unlock_graph(), config={'displayModeBar': False}),style={'margin-top':'-90px'})
         ], className='weekly-graph-container')
     ]
     return return_children
@@ -248,7 +248,7 @@ def usage_weekly_calendar(highlighted=None):
                     className='weekly-calendar-container',),
         html.Div(children=[
             html.P('Usage Time', style={'font-size': '20px'}),
-            html.Div(dcc.Graph(figure = usage_graph(), config={'displayModeBar': False})),
+            html.Div(dcc.Graph(figure = usage_graph(), config={'displayModeBar': False},style={'margin-top':'-60px'})),
         ], className='weekly-graph-container')
     ]
     return return_children
@@ -281,7 +281,7 @@ def app_weekly_calendar(highlighted=None):
                     className='weekly-calendar-container',),
         html.Div(children=[
             html.P('App Usage', style={'font-size': '20px'}),
-            html.Div(dcc.Graph(figure = app_usage_graph(), config={'displayModeBar': False})),
+            html.Div(dcc.Graph(figure = app_usage_graph(), config={'displayModeBar': False},style={'margin-top':'-60px'})),
         ], className='weekly-graph-container')
     ]
     return return_children
