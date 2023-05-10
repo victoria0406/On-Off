@@ -314,7 +314,7 @@ def update_graph(btn1, btn2, btn3, btn4, btn5, btn6):
     
     print(weekly_usage)
     
-    fig1 = px.bar(weekly_usage, x="date", y=apps,color_discrete_sequence=GRAPH_COLOR,width=750, height=400,hover_data={'variable': False, 'date': False, 'value':False, "top1":True,"top2":True,"top3":True,"top4":True,"top5":True,"top6":True})
+    fig1 = px.bar(weekly_usage, x="date", y=apps,color_discrete_sequence=GRAPH_COLOR,width=750, height=400)
     
     fig1.update_layout(
         xaxis = dict(
