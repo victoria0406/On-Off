@@ -283,15 +283,7 @@ def update_graph(btn1, btn2, btn3, btn4, btn5, btn6):
             color = ['#F7F8FA', '#F7F8FA', '#F7F8FA', '#F7F8FA', '#EBE3DA', '#F7F8FA']
         click4 = click[4]+1
         click = [0,0,0,0,click4,0]  
-    elif "btn-6" == ctx.triggered_id:
-        if(click[5]%2==0):   
-            APP_COLOR = ['#F5EFE3','#F8F7E2','#EDF4E2','#EBEBF1','#F1ECE6',COLORS[5]]
-            GRAPH_COLOR = [COLORS[5]]*6
-            apps = top[6] 
-            TEXT_COLOR = ['#7C7C7C','#7C7C7C','#7C7C7C','#7C7C7C','#7C7C7C','black']
-            color = ['#F7F8FA', '#F7F8FA', '#F7F8FA', '#F7F8FA', '#F7F8FA', '#E9E9E9']
-        click5 = click[5]+1
-        click = [0,0,0,0,0,click5]  
+    
         
     fig = px.bar(today, y="date", x=[top[1],top[2],top[3],top[4],top[5],top[6]],orientation='h', color_discrete_sequence=APP_COLOR, width=540, height=90)
     fig.update_xaxes(title=None, showticklabels=False)
