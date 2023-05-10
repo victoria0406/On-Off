@@ -26,7 +26,7 @@ def usage_graph():
         if (weekly_usage["Total"].values.tolist()[i]>today_usage_warning):
             COLORS[i] = 'rgba(221,151,151,0.6)'
     
-    fig = px.bar(weekly_usage, x="date", y="Total", width=500, height=300)
+    fig = px.bar(weekly_usage, x="date", y="Total", width=700, height=400)
     fig.update_traces(marker_color=COLORS)
     fig.update_layout(
         xaxis = dict(
@@ -97,7 +97,7 @@ def unlock_graph():
     fig.update_traces(
         hovertemplate="%{y} times"+'<extra></extra>')
 
-    fig.update_layout(showlegend=False, plot_bgcolor='white',paper_bgcolor="rgb(0,0,0,0)",width=510, height=320)
+    fig.update_layout(showlegend=False, plot_bgcolor='white',paper_bgcolor="rgb(0,0,0,0)",width=600, height=400)
     fig.add_hline(y=today_unlock_warning, line_dash="dash", line_color="#D78A8A",annotation_text="warning!", 
               annotation_position="top right",annotation_font_size= 12, annotation_font_color='#D78A8A')
     return fig 
@@ -108,9 +108,9 @@ def app_usage_graph():
     
     for i in range(0,7):
         if (weekly_usage[target_app].values.tolist()[i]>app_usage_warning):
-            COLORS[i] = 'rgba(221,151,151,0.6)'
+            COLORS[i] = 'rgba(221,151,151,0.8)'
     
-    fig = px.bar(weekly_usage, x="date", y=target_app, width=500, height=300)
+    fig = px.bar(weekly_usage, x="date", y=target_app, width=700, height=400)
     fig.update_traces(marker_color=COLORS)
     fig.update_layout(
         xaxis = dict(
