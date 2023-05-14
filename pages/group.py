@@ -103,6 +103,7 @@ fig1 = go.Figure(go.Histogram2dContour(
                     y = group_df["session_duration_time"],
                     colorscale=color_2d,
                     showscale=False,
+                    hoverinfo='none'
                     ))
 fig1.update_traces(contours_showlines=False, legendwidth=400)
 
@@ -110,6 +111,12 @@ fig1.update_traces(contours_showlines=False, legendwidth=400)
 # Define group names and colors
 group_names = ["RISK", "SPRINT", "SAFE", "ON/OFF"]
 group_colors = ['rgba(50,50,50,0.3)', 'rgba(50,50,50,0.3)', 'rgba(50,50,50,0.3)', 'rgba(50,50,50,0.3)']
+group_descriptions = [
+    "Users in the RISK group fall in the top 50% <br>in terms of both total phone usage time and <br>average duration of each session. Their extended <br>screen time and long individual sessions could <br>indicate a high level of device dependency, <br>signaling potential risk factors for digital wellness.",
+    "Users in the SPRINT group have less overall screen time, <br>falling in the bottom 50% for total phone usage time. <br>However, they tend to have longer sessions, falling in <br>the top 50% for average session duration. <br>Their usage pattern might reflect a preference for <br>fewer, but longer, periods of engagement with their devices.",
+    "Users in the SAFE group have both lower overall <br>screen time and shorter individual sessions, <br>falling in the bottom 50% for both total phone usage time <br>and average session duration. This usage pattern <br>might indicate a balanced relationship with their devices, <br>reducing potential risks associated with excessive screen time.",
+    "Users in the ON/OFF group use their phones frequently, <br>falling in the top 50% for total phone usage time, <br>but have shorter sessions on average, placing them <br>in the bottom 50% for session duration. This could <br>indicate a pattern of frequent checking or multitasking, <br>with shorter periods of engagement spread throughout the day.",
+    ]
 size = [25, 25, 25, 25]
 
 # Determine the group that the user belongs to based on usage time and session duration time medians
@@ -132,7 +139,12 @@ group_colors[user_group_index] = 'rgba(255,130,0,0.8)'
 texts = ['<b>' + group_names[i] + '</b>' if i == user_group_index else group_names[i] for i in range(4)]
 fig1.add_trace(go.Scatter(x=x, y=y, mode='text', text=texts, textposition='middle center',
                            textfont_size=size, textfont_family='Sherif', textfont_color=group_colors,
-                           showlegend=False))
+                           showlegend=False, hovertext=group_descriptions, hoverinfo='text',  
+                           hoverlabel=dict(
+                            bordercolor="rgba(0, 0, 0, 0.6)",
+                            bgcolor="rgba(255, 255, 255,0.8)",
+                            font_size=14,
+                            ),))
 
 x0 = [group_ust_median, xlb, xlb, group_ust_mean]
 y0 = [group_sdt_median, group_sdt_median, ybb, ybb]
@@ -149,7 +161,7 @@ fig1.add_shape(type='rect', xref='x', yref='y',
 fig1.add_trace(go.Scatter(x=[your_ust], y=[your_sdt], mode='markers+text', 
                           text=["<b>You</b>"], textposition="bottom center",
                           textfont=dict(family="Arial", size=15, color="#10135B"),
-                          marker=dict(color='#10135B', size=10)))
+                          marker=dict(color='#10135B', size=10), hoverinfo='none'))
 fig1.add_vline(x=group_ust_median, line_dash="dot", line_color="#7C6542", line_width=1)
 fig1.add_hline(y=group_sdt_median, line_dash="dot", line_color="#7C6542", line_width=1)
 
@@ -158,12 +170,6 @@ fig1.update_layout(
     title="your group: RISK Group",
     width=488, height=336,
     showlegend=False,
-    hoverlabel=dict(
-        bordercolor="rgba(0, 0, 0, 0.6)",
-        bgcolor="rgba(255, 255, 255,0.8)",
-        font_size=14,
-    ),
-    hoverlabel_namelength=100,
     xaxis={
         'automargin': True,
         'title': {
