@@ -296,7 +296,7 @@ def update_graph(btn1, btn2, btn3, btn4, btn5, btn6):
     total['top5_datetime'] = pd.to_datetime(total['top5'], unit='m')
     total['top5_datetime_string'] = total['top5_datetime'].dt.strftime('%Hh %Mm')
     
-    print(total['top1_datetime_string'])
+    # print(total['top1_datetime_string'])
     
     fig1 = go.Figure()
     fig1.add_trace(go.Scatter(x=total['time'], y=total['top1'], mode='lines', name=top[1],line_color=GRAPH_COLOR[0], line=dict(dash=mode[0]),text=total['top1_datetime_string']))

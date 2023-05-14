@@ -158,7 +158,12 @@ fig1.update_layout(
     title="your group: RISK Group",
     width=488, height=336,
     showlegend=False,
-    hovermode=False,
+    hoverlabel=dict(
+        bordercolor="rgba(0, 0, 0, 0.6)",
+        bgcolor="rgba(255, 255, 255,0.8)",
+        font_size=14,
+    ),
+    hoverlabel_namelength=100,
     xaxis={
         'automargin': True,
         'title': {

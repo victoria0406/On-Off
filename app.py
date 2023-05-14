@@ -1,10 +1,6 @@
 import dash
-from dash import dcc
 from dash import html
-from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
-import plotly.express as px
-import pandas as pd
 from flask import redirect
 
 from callback import get_callbacks
@@ -12,13 +8,11 @@ from callback import get_callbacks
 from component.sidebar import sidebar
 # from themes.colors import main_color, sub_text_color, main_bg_color, sub_color
 
-
 app = dash.Dash(__name__, use_pages=True, external_stylesheets=[dbc.themes.BOOTSTRAP, "assets/style.css"])
 
 HEAD_STYLE = {
     "height": "6.5rem",
 }
-
 
 app.layout = html.Div([
     sidebar,
