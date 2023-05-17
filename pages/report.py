@@ -8,7 +8,7 @@ import plotly.graph_objects as go
 from datetime import date
 
 
-from inputdata.data import COLORS, click, app_usage_time, today, yesterday, top, hour, min, app_usage_hour, access, unlock, top_apps, keys, top_access
+from inputdata.data import COLORS, click, app_usage_time, today, yesterday, top, hour, min, app_usage_hour, top_apps, keys, top_access, unlocks
 
 
 dash.register_page(__name__)
@@ -120,12 +120,7 @@ for idx, row in app_usage_hour.iterrows():
         total = total.append({'time':minute, 'top1':top1, 'top2':top2, 'top3':top3, 'top4':top4, 'top5':top5},ignore_index=True)
 
 # fig1.show() 
-############ number of access ################
 
-access_today=access.loc[today.index]
-access_yesterday=access.loc[today.index-1]
-
-# fig2.show()
 ############## statistics ##################
 differ=int(str(today['Total']).split()[1])-int(str(yesterday['Total']).split()[1])
 
@@ -137,15 +132,6 @@ else:
     differ_usage = "- "+str(differ//60)+"h "+str(differ%60)+"m"
     usage_color="#AEBF9E"
     
-    
-unlock_today=unlock.loc[today.index]
-unlock_yesterday=unlock.loc[today.index-1]
-
-unlock_differ=int(str(unlock_today['unlock']).split()[1])-int(str(unlock_yesterday['unlock']).split()[1])
-if(unlock_differ>0):
-    unlock_color ="#BBA083"
-else:
-    unlock_color="#AEBF9E"
 ###############################################
 
 def layout():
@@ -156,7 +142,7 @@ def layout():
                     dbc.NavLink(dcc.DatePickerSingle(id="date-picker",
                     clearable=False,
                     with_portal=True,
-                    date=date(2023, 5, 1),style={'margin-top':'-20px'},
+                    date=date(2023, 5, 6),style={'margin-top':'-20px'},
                     )     
                     , href="/report", active="exact"),
                     dbc.NavLink('WEEKLY', href="/report/weekly", active="exact"),
@@ -199,8 +185,7 @@ def layout():
                                 html.Div([html.P(id="access_value"),html.Div(id="access_differ")])
                             ],style=STATISTICS_STYLE),   
                     html.Div([html.P("Unlock",style={'margin-left':'15px','padding-top':'3px','font-size':'14px'}),
-                                html.Div([html.P(str(unlock_today['unlock']).split()[1], style={'font-weight':"bold",'font-size':'18px','margin':'-12px 0 0 20px',"float":"left"}),
-                                        html.Div([html.P(unlock_differ,style={"float":"left","margin-right":"10px",'font-size':'15px','color':unlock_color}),html.P(" yesterday",style={"float":"right",'font-size':'14px'})],style={"float":"right",'margin':'-12px 15px 0 0'})])
+                                html.Div([html.P(id="unlock_value"), html.Div(id="unlock_differ")])
                             ],style=STATISTICS_STYLE),  
                     ], style=FHCONTENT_STYLE),
         ], style = CONTENT_STYLE
@@ -225,6 +210,8 @@ def layout():
     Output('access_graph','figure'),
     Output('access_value','children'),
     Output('access_differ','children'),
+    Output('unlock_value','children'),
+    Output('unlock_differ','children'),
         
     Input("date-picker", "date"),
     Input('btn-nclicks-1', 'n_clicks'),
@@ -350,16 +337,7 @@ def update_graph(date,btn1, btn2, btn3, btn4, btn5, btn6):
     ###### access graph ######
     
     fig2 = go.Figure()
-    today_access = top_access[top_access['Key'] == k[0]]
-    access_differ = today_access['number_of_access'].sum() - top_access[top_access['Key'] == (k[0]-1)]['number_of_access'].sum()
-    
-    if(access_differ>0):
-        access_differ = "+ "+ str(access_differ)
-        access_color ="#BBA083"
-    else:
-        access_color="#AEBF9E"
-        
-    # fig2.add_traces(go.Bar(x=top[1:7], y=access_today.values.tolist()[0][1:7],  marker_color=GRAPH_COLOR, hovertext=access_today.values.tolist()[0][1:7], hoverinfo="text",))
+    today_access = top_access[top_access['Key'] == k[0]]      
     fig2.add_traces(go.Bar(x=today_access["name"], y=today_access['number_of_access'],  marker_color=GRAPH_COLOR, hovertemplate="%{x}: "+"%{y} times"+'<extra></extra>'))
     
     fig2.update_layout(showlegend=False, plot_bgcolor='white',paper_bgcolor="rgb(0,0,0,0)",width=720, height=270, margin=dict(t=0))
@@ -387,8 +365,31 @@ def update_graph(date,btn1, btn2, btn3, btn4, btn5, btn6):
     children5 = html.Div([html.Div([html.Div("5",style={"text-align":"center","line-height":"20px","background-color":COLORS[4],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div(tops[4],style={"float":"right","margin-left":"10px","font-weight":"bold", "color":TEXT_COLOR[4]})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(today_value[5]//60,"h ", today_value[5]%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold", "color":TEXT_COLOR[4]})])
     children6 = html.Div([html.Div([html.Div("6",style={"text-align":"center","line-height":"20px","background-color":COLORS[5],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div("Others",style={"float":"right","margin-left":"10px","font-weight":"bold", "color":TEXT_COLOR[5]})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(today_value[6]//60,"h ", today_value[6]%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold", "color":TEXT_COLOR[5]})])
     
+    ##### statistics #####
+    access_differ = today_access['number_of_access'].sum() - top_access[top_access['Key'] == (k[0]-1)]['number_of_access'].sum()
+    
+    if(access_differ>0):
+        access_differ = "+ "+ str(access_differ)
+        access_color ="#BBA083"
+    else:
+        access_color="#AEBF9E"
+    
     children7 = html.P(today_access['number_of_access'].sum(),style={'font-weight':"bold",'font-size':'18px','margin':'-12px 0 0 20px',"float":"left"})
     children8 = html.Div([html.P(access_differ,style={"float":"left","margin-right":"10px",'font-size':'15px','color':access_color}),html.P(" yesterday",style={"float":"right",'font-size':'14px'})],style={"float":"right",'margin':'-12px 15px 0 0'})
     
-    return fig, children1, {'background-color': color[0]},children2, {'background-color': color[1]}, children3,{'background-color': color[2]}, children4, {'background-color': color[3]}, children5, {'background-color': color[4]}, children6, {'background-color': color[5]}, fig1, fig2, children7, children8
+    today_unlock = unlocks["0"][k[0]]
+    if (k[0]==0):
+        differ_unlock=0
+    else:
+        differ_unlock = today_unlock - unlocks["0"][k[0]-1]
+    
+    if(differ_unlock>0):
+        differ_unlock = "+" + str(differ_unlock)
+        unlock_color ="#BBA083"
+    else:
+        unlock_color="#AEBF9E"
+    
+    children9 =  html.P(today_unlock,style={'font-weight':"bold",'font-size':'18px','margin':'-12px 0 0 20px',"float":"left"})
+    children10 = html.Div([html.P(differ_unlock,style={"float":"left","margin-right":"10px",'font-size':'15px','color':unlock_color}),html.P(" yesterday",style={"float":"right",'font-size':'14px'})],style={"float":"right",'margin':'-12px 15px 0 0'})
+    return fig, children1, {'background-color': color[0]},children2, {'background-color': color[1]}, children3,{'background-color': color[2]}, children4, {'background-color': color[3]}, children5, {'background-color': color[4]}, children6, {'background-color': color[5]}, fig1, fig2, children7, children8, children9, children10
 

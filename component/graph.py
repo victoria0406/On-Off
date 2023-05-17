@@ -4,8 +4,9 @@ from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_in
 import plotly.express as px
 import pandas as pd
 import plotly.graph_objects as go
+import datetime
 
-from inputdata.data import app_usage_time, today_index, unlock
+from inputdata.data import app_usage_time, today_index, unlocks, date
 
 
 weekly_usage = app_usage_time[today_index-6:today_index+1]
@@ -62,14 +63,13 @@ def usage_graph():
     return fig 
     
 def unlock_graph():
-    weekly_unlock = unlock[today_index-6:today_index+1]
-    weekly_unlock['date']=weekly_usage['date']
     color = [
         '#E4AE44' if v < app_usage_warning else '#E46060'
-        for v in weekly_unlock['unlock']
+        for v in unlocks['0']
     ]
+
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=weekly_unlock['date'], y=weekly_unlock['unlock'], mode='lines+markers', line_color='#E4AE44',
+    fig.add_trace(go.Scatter(x=date, y=unlocks['0'], mode='lines+markers', line_color='#E4AE44',
                             marker=dict(
                                     color='white',
                                     size=12,
