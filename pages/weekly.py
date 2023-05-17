@@ -90,17 +90,13 @@ weekly_usage['date']=pd.to_datetime(weekly_usage['date'], format = "%Y %m %d")
 weekly_usage['date']=weekly_usage['date'].dt.strftime('%b %d')
 
 ################ screen on ####################
-screen_on = 150
 
-date = list(keys.values())
-    
-for i in range(len(date)):
-    date[i] = datetime.datetime.strptime(date[i], '%Y-%m-%d')
-for i in range(len(date)):
-    date[i] = date[i].strftime("%m/%d")    
+screen_on_df = pd.read_csv('./datas/screen_on.csv')
+
+screen_on = int(screen_on_df['0'].mean())
 
 fig3 = go.Figure()
-fig3.add_trace(go.Scatter(x=date, y=unlocks['0'], mode='lines+markers', line_color='#686CAD',
+fig3.add_trace(go.Scatter(x=date, y=screen_on_df['0'], mode='lines+markers', line_color='#686CAD',
                           marker=dict(
                                 color='white',
                                 size=14,
