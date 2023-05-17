@@ -20,6 +20,13 @@ total_usage = today_df['Total'].values[0]
 app_usage = today_df[app_usage_info['app']].values[0]
 unlock = unlock_df[unlock_df['day'] == today_day]['unlock'].values[0]
 
+color_info_component = html.Div([
+    html.Div([html.Div("", className="square"),"Unlocks"], className="unlock"),
+    html.Div([html.Div("", className="square"),"Total Usage Time"], className="usage"),
+    html.Div([html.Div("", className="square"),"App Usage Time"], className="app"),
+    html.Div([html.Div("", className="square"),"Exceed"], className="exceed"),
+], className='today-goal-list goal-label')
+
 
 def unlock_component(highlighted=None):
     data = unlock;
@@ -30,9 +37,9 @@ def unlock_component(highlighted=None):
             if unlock_info['time'] >= data
             else html.Img(src="./assets/icons/close.png", className='goal-state-check exceed'),
             html.Span([html.B(data), f" / {unlock_info['time']} times ({(data / unlock_info['time'] * 100):.1f}%)"])
-        ], className=f"goal-list unlock {'active' if (highlighted == 'unlock') else ''}",
+        ], className=f"goal-list {'active' if (highlighted == 'unlock') else ''}",
         href='/goal?setting=True' if (highlighted == 'unlock') else '/goal?setting=True?unlock')
-    ])
+    ], className="unlock")
     return component
 
 def usage_time_component(highlighted=None):
@@ -45,9 +52,9 @@ def usage_time_component(highlighted=None):
             if usage_goal_minite >= data
             else html.Img(src="./assets/icons/close.png", className='goal-state-check exceed'),
             html.Span([html.B(round(data, 1)), f" / {usage_goal_minite} h ({(data / usage_goal_minite * 100):.1f}%)"])
-        ], className= f"goal-list usage {'active' if (highlighted == 'usage') else ''}",
+        ], className= f"goal-list {'active' if (highlighted == 'usage') else ''}",
         href='/goal?setting=True' if (highlighted == 'usage') else '/goal?setting=True?usage')
-    ])
+    ], className="usage")
     return component
 
 def app_usage_component(highlighted=None):
@@ -60,9 +67,9 @@ def app_usage_component(highlighted=None):
             if usage_goal_minite > data
             else html.Img(src="./assets/icons/close.png", className='goal-state-check exceed'),
             html.Span([html.B(round(data, 1)), f" / {usage_goal_minite} h ({(data / usage_goal_minite * 100):.1f}%)"])
-        ], className=f"goal-list app {'active' if (highlighted == 'app') else ''}",
+        ], className=f"goal-list {'active' if (highlighted == 'app') else ''}",
         href='/goal?setting=True' if (highlighted == 'app') else '/goal?setting=True?app')
-    ])
+    ], className="app")
     return component
 
 def get_goal_today():
@@ -94,14 +101,16 @@ def today_goal_setting(highlighted=None):
     return_children = [html.P('Today Goal', style={'font-weight': 'bold'})]
     fig = today_goal_donut_plot(highlighted)
     return_children.append(dcc.Graph(figure = fig, config={'displayModeBar': False}, className='today-goal-fig'))
+    return_children.append(color_info_component)
+    goal_list = [];
     if unlock_info['checked']:
-        return_children.append(unlock_component(highlighted))
+        goal_list.append(unlock_component(highlighted))
     if usage_time_info['checked']:
-        return_children.append(usage_time_component(highlighted))
+        goal_list.append(usage_time_component(highlighted))
     if app_usage_info['checked']:
-        return_children.append(app_usage_component(highlighted))
-    component = html.Div(return_children, className='today-goal-list')
-    return component
+        goal_list.append(app_usage_component(highlighted))
+    return_children.append(html.Div(goal_list, className="today-goal-list"))
+    return return_children
 
 goal_states_df= pd.read_csv('./datas/goal_states.csv')
 ## goal_states_df = goal_states_df.fillna(-1, axis=1)
@@ -287,9 +296,9 @@ def app_weekly_calendar(highlighted=None):
     return return_children
 
 today_goal_not_setting = [
-    html.P('Today Goal', style={'font-weight': 'bold'}),
+    html.P('Set Your Goal', style={'font-weight': 'bold'}),
     html.A('+', className='set-goal-button',href='/goal/setting'),
-    html.P('Set Your Goal!'),
+    color_info_component,
     html.Div([
         html.Div([
             html.Img(src="./assets/icons/info.png", style={"height": "24px", "width": "24px"}),
