@@ -156,3 +156,26 @@ body {
   rx: 3;
   shape-rendering: auto;
 }
+
+.SingleDatePickerInput {
+  background-color: rgba(0, 0, 0, 0);
+  border: 0px;
+}
+
+.DateInput{
+  width: 100%; /* replace with whatever length you prefer */
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.DateInput_input{
+  /* my personal stuff */
+  text-align: center;
+  font-weight: 400;
+  background-color: rgba(0, 0, 0, 0);
+  margin-top: -5px;
+}
+
+.DateInput_clearDate{
+  /* my personal stuff */
+  color: red
+}
