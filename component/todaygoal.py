@@ -289,5 +289,12 @@ def app_weekly_calendar(highlighted=None):
 today_goal_not_setting = [
     html.P('Today Goal', style={'font-weight': 'bold'}),
     html.A('+', className='set-goal-button',href='/goal/setting'),
-    html.P('Set Your Goal!', style={'margin-bottom': '120px'})
+    html.P('Set Your Goal!'),
+    html.Div([
+        html.Div([
+            html.Img(src="./assets/icons/info.png", style={"height": "24px", "width": "24px"}),
+            html.P('INFO', style={"font-weight": "600", "margin-left": "6px", "font-size": "20px", "line-height": "20px"}) 
+        ], style={'display': 'flex', "color": "#515151"}),
+        html.P(['You could set daily goals.',html.Br(),'Once you set your goal for the day, you cannot change it.'], style={"font-size": "14px"}),
+    ], className="today-goal-info")
 ]

@@ -223,3 +223,9 @@
 .weekly-calendar-saturday {
     color: #FDB03D;
 }
+.today-goal-info{
+    background: #F7F8FA;
+    border: 1px solid #B7AFAF;
+    border-radius: 10px;
+    padding: 12px;
+}
