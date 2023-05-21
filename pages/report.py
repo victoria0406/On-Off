@@ -5,10 +5,9 @@ import plotly.express as px
 import pandas as pd 
 import math
 import plotly.graph_objects as go
-from datetime import date
+from datetime import date, timedelta, datetime
 
-
-from inputdata.data import COLORS, click, app_usage_time, today, yesterday, top, hour, min, app_usage_hour, top_apps, keys, top_access, unlocks
+from inputdata.data import COLORS, click, app_usage_hour, top_apps, keys, top_access, unlocks
 
 
 dash.register_page(__name__)
@@ -61,7 +60,7 @@ FHCONTENT_STYLE ={
 
 
 BUTTON_STYLE = {
-  'margin' : '-4.5rem 27rem 1.5rem 0',
+  'margin' : '-4.5rem 26rem 1.5rem 0',
   'width' : '15rem',
   'float': 'right',
   'background-color': '#EBEBF0',
@@ -88,7 +87,7 @@ STATISTICS_STYLE={
 }
 
 
-today_value=today.values.tolist()[0]
+
 
 ######## usage time #############
 
@@ -122,37 +121,33 @@ for idx, row in app_usage_hour.iterrows():
 # fig1.show() 
 
 ############## statistics ##################
-differ=int(str(today['Total']).split()[1])-int(str(yesterday['Total']).split()[1])
 
-if (differ>0):
-    differ_usage ="+ "+str(differ//60)+"h "+str(differ%60)+"m"
-    usage_color="#BBA083"
-else:
-    differ = -differ
-    differ_usage = "- "+str(differ//60)+"h "+str(differ%60)+"m"
-    usage_color="#AEBF9E"
     
 ###############################################
 
 def layout():
     return html.Div(children=[
         html.Div([
-                html.Div(html.A(html.Button("Compare with Others!",style=BUTTON_STYLE), href="/report/group")),
-                html.Div(dbc.Nav([
-                    dbc.NavLink(dcc.DatePickerSingle(id="date-picker",
+                html.Div([
+                html.Div([html.Div(dcc.DatePickerSingle(id="date-picker",
                     clearable=False,
                     with_portal=True,
-                    date=date(2023, 5, 6),style={'margin-top':'-20px'},
-                    )     
-                    , href="/report", active="exact"),
+                    date=date(2019, 5, 6)
+                    ),style={"position": "absolute",'padding-left':"30%"}),
+                    html.Div(html.Img(src='assets/calendar.png', style={'width':'30px', 'height':'30px',}),style={"position": "relative"}),
+                         
+                          ],style={"float":"left", "margin-top":'-4.5rem', "padding-right":"2rem"}),
+                html.Div([html.Div(html.A(html.Button("Compare with Others!",style=BUTTON_STYLE), href="/report/group")),
+                html.Div(dbc.Nav([
+                    dbc.NavLink("DAILY", href="/report", active="exact"),
                     dbc.NavLink('WEEKLY', href="/report/weekly", active="exact"),
                 ],
                 className='report-nav'
-            ), style=TOGGLE_STYLE)
-            ], style={'display': 'inline-block','float':"right"}
+            ), style=TOGGLE_STYLE)], style={"width":"50%","float":"right"})])
+            ], style={'display': 'inline-block','float':"right","width":"100%"}
         ),
         html.Div([
-            html.Div([html.P("Apps Top",style={"margin":"10px 0 -5px 10px"}), html.P(str(hour).split()[1]+"h "+str(min).split()[1]+"m Used",style={'font-weight':'bold','font-size':"20px","margin":"0px 20px -60px 15px",'text-align':'right'}),
+            html.Div([html.P("Apps Top",style={"margin":"10px 0 -5px 10px"}), html.P(id="total_time",style={'font-weight':'bold','font-size':"20px","margin":"-10px 20px -60px 15px",'text-align':'right'}),
                 html.Div(dcc.Graph(id="app_graph", config={'displayModeBar': False}),
                 style={'margin-left': '-60px', 'margin-bottom':'10px'}),
                 html.Div([
@@ -178,8 +173,7 @@ def layout():
             ], style=TCONTENT_STYLE),
             html.Div([html.P("Statistics",style={"margin":"5px 0 -5px 15px"}),
                     html.Div([html.P("Usage Time",style={'margin-left':'15px','padding-top':'3px','font-size':'14px'}),
-                            html.Div([html.P(str(hour).split()[1]+"h "+str(min).split()[1]+"m", style={'font-weight':"bold",'font-size':'18px','margin':'-12px 0 0 20px',"float":"left"}),
-                                        html.Div([html.P(differ_usage,style={"float":"left","margin-right":"10px",'font-size':'15px','color':usage_color}),html.P(" yesterday",style={"float":"right",'font-size':'14px'})],style={"float":"right",'margin':'-12px 15px 0 0'})]) 
+                            html.Div([html.P(id="usage_value"),html.Div(id="usage_differ")]) 
                             ],style=STATISTICS_STYLE),
                     html.Div([html.P("Access",style={'margin-left':'15px','padding-top':'3px','font-size':'14px'}),
                                 html.Div([html.P(id="access_value"),html.Div(id="access_differ")])
@@ -193,6 +187,7 @@ def layout():
     ])
     
 @callback(
+    Output("total_time", "children"),
     Output("app_graph", 'figure'),
     Output('btn-nclicks-1', 'children'),
     Output('btn-nclicks-1', 'style'),
@@ -208,6 +203,8 @@ def layout():
     Output('btn-nclicks-6', 'style'),
     Output('usage_graph','figure'),
     Output('access_graph','figure'),
+    Output('usage_value','children'),
+    Output('usage_differ','children'),
     Output('access_value','children'),
     Output('access_differ','children'),
     Output('unlock_value','children'),
@@ -224,14 +221,46 @@ def layout():
 
 
 def update_graph(date,btn1, btn2, btn3, btn4, btn5, btn6):
+    
+    usage_time =  pd.read_csv('./datas/usage_time.csv')
+    
+    date_value=datetime.strptime(date, '%Y-%m-%d')
+    yesterday_index = date_value - timedelta(days = 1)
+        
+    date_value = date_value.strftime('%Y-%m-%d')    
+    yesterday_index= yesterday_index.strftime('%Y-%m-%d')
+
+    today_usage_time = usage_time.loc[usage_time['date']==date_value]
+    yesterday = usage_time.loc[usage_time['date']==yesterday_index]
+    
+    others_value =today_usage_time["Others"].values
+    total_value = today_usage_time["Total"].values
+    yesterday_total =yesterday["Total"].values
+    
+    today_usage_time=today_usage_time.drop(columns='Total')
+    today_usage_time=today_usage_time.drop(columns='Others')
+    
+    today_usage_time=today_usage_time.dropna(axis=1)
+    today_usage_time = today_usage_time.iloc[:, 2:7]
+    
+    top_app = today_usage_time.iloc[0].sort_values(ascending=False).index.tolist()
+    top_app=top_app+["Others"]
+    today_usage_time = today_usage_time.reindex(columns=top_app)
+    today_usage_time["Others"]=others_value
+    # print(today_usage_time)  
+    
+    today_value = today_usage_time.values.tolist()[0]
+    today_usage_time["date"]=date_value
+    
+    hour = total_value[0]//60
+    min = total_value[0]%60
+
+    total_time = html.Div(str(int(hour))+"h "+str(int(min)) +"m Used")
 
     k = [k for k, v in keys.items() if v == str(date)]
-    if (len(k) == 0): #임시
-        tops = top[1:6]  
-    else:
-        tops = (top_apps[str(k[0])].values.tolist())
+    
+    tops = (top_apps[str(k[0])].values.tolist())+["Others"]    
 
-    print(tops)  
     GRAPH_COLOR = COLORS
     mode = ['solid','solid','solid','solid','solid','solid']
     global click
@@ -279,9 +308,9 @@ def update_graph(date,btn1, btn2, btn3, btn4, btn5, btn6):
         click4 = click[4]+1
         click = [0,0,0,0,click4,0] 
         
-    today_data = app_usage_time.loc[app_usage_time['date']==date]    
+   
         
-    fig = px.bar(today_data, y="date", x=[top[1],top[2],top[3],top[4],top[5],top[6]],orientation='h', color_discrete_sequence=GRAPH_COLOR, width=540, height=90)
+    fig = px.bar(today_usage_time, y="date", x=[tops[0],tops[1],tops[2],tops[3],tops[4],tops[5]],orientation='h', color_discrete_sequence=GRAPH_COLOR, width=540, height=90)
     fig.update_xaxes(title=None, showticklabels=False)
     fig.update_yaxes(title=None, showticklabels=False,)
     fig.update_layout(showlegend=False, plot_bgcolor='white',paper_bgcolor="rgb(0,0,0,0)", margin=dict(b=0),hovermode= False)
@@ -357,15 +386,33 @@ def update_graph(date,btn1, btn2, btn3, btn4, btn5, btn6):
             hoverlabel_namelength=100
     )
 
+    # print(today)
+    
+    # today_value=today.values.tolist()[0]
+    
                 
-    children1 = html.Div([html.Div([html.Div("1",style={"text-align":"center","line-height":"20px","background-color":COLORS[0],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div(tops[0],style={"float":"right","margin-left":"10px","font-weight":"bold", "color":TEXT_COLOR[0]})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(today_value[1]//60,"h ", today_value[1]%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold", "color":TEXT_COLOR[0]})])
-    children2 = html.Div([html.Div([html.Div("2",style={"text-align":"center","line-height":"20px","background-color":COLORS[1],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div(tops[1],style={"float":"right","margin-left":"10px","font-weight":"bold", "color":TEXT_COLOR[1]})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(today_value[2]//60,"h ", today_value[2]%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold", "color":TEXT_COLOR[1]})])
-    children3 = html.Div([html.Div([html.Div("3",style={"text-align":"center","line-height":"20px","background-color":COLORS[2],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div(tops[2],style={"float":"right","margin-left":"10px","font-weight":"bold", "color":TEXT_COLOR[2]})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(today_value[3]//60,"h ", today_value[3]%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold", "color":TEXT_COLOR[2]})])
-    children4 = html.Div([html.Div([html.Div("4",style={"text-align":"center","line-height":"20px","background-color":COLORS[3],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div(tops[3],style={"float":"right","margin-left":"10px","font-weight":"bold", "color":TEXT_COLOR[3]})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(today_value[4]//60,"h ", today_value[4]%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold", "color":TEXT_COLOR[3]})])
-    children5 = html.Div([html.Div([html.Div("5",style={"text-align":"center","line-height":"20px","background-color":COLORS[4],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div(tops[4],style={"float":"right","margin-left":"10px","font-weight":"bold", "color":TEXT_COLOR[4]})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(today_value[5]//60,"h ", today_value[5]%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold", "color":TEXT_COLOR[4]})])
-    children6 = html.Div([html.Div([html.Div("6",style={"text-align":"center","line-height":"20px","background-color":COLORS[5],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div("Others",style={"float":"right","margin-left":"10px","font-weight":"bold", "color":TEXT_COLOR[5]})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(today_value[6]//60,"h ", today_value[6]%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold", "color":TEXT_COLOR[5]})])
+    children1 = html.Div([html.Div([html.Div("1",style={"text-align":"center","line-height":"20px","background-color":COLORS[0],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div(tops[0],style={"float":"right","margin-left":"10px","font-weight":"bold", "color":TEXT_COLOR[0]})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(int(today_value[0])//60,"h ", int(today_value[0])%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold", "color":TEXT_COLOR[0]})])
+    children2 = html.Div([html.Div([html.Div("2",style={"text-align":"center","line-height":"20px","background-color":COLORS[1],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div(tops[1],style={"float":"right","margin-left":"10px","font-weight":"bold", "color":TEXT_COLOR[1]})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(int(today_value[1])//60,"h ", int(today_value[1])%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold", "color":TEXT_COLOR[1]})])
+    children3 = html.Div([html.Div([html.Div("3",style={"text-align":"center","line-height":"20px","background-color":COLORS[2],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div(tops[2],style={"float":"right","margin-left":"10px","font-weight":"bold", "color":TEXT_COLOR[2]})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(int(today_value[2])//60,"h ", int(today_value[2])%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold", "color":TEXT_COLOR[2]})])
+    children4 = html.Div([html.Div([html.Div("4",style={"text-align":"center","line-height":"20px","background-color":COLORS[3],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div(tops[3],style={"float":"right","margin-left":"10px","font-weight":"bold", "color":TEXT_COLOR[3]})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(int(today_value[3])//60,"h ", int(today_value[3])%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold", "color":TEXT_COLOR[3]})])
+    children5 = html.Div([html.Div([html.Div("5",style={"text-align":"center","line-height":"20px","background-color":COLORS[4],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div(tops[4],style={"float":"right","margin-left":"10px","font-weight":"bold", "color":TEXT_COLOR[4]})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(int(today_value[4])//60,"h ", int(today_value[4])%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold", "color":TEXT_COLOR[4]})])
+    children6 = html.Div([html.Div([html.Div("6",style={"text-align":"center","line-height":"20px","background-color":COLORS[5],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div("Others",style={"float":"right","margin-left":"10px","font-weight":"bold", "color":TEXT_COLOR[5]})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(int(today_value[5])//60,"h ", int(today_value[5])%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold", "color":TEXT_COLOR[5]})])
     
     ##### statistics #####
+    
+    children_usage = html.P(str(int(hour))+"h "+str(int(min))+"m", style={'font-weight':"bold",'font-size':'18px','margin':'-12px 0 0 20px',"float":"left"})
+
+    differ=int(total_value[0])-int(yesterday_total[0])
+
+    if (differ>0):
+        differ_usage ="+ "+str(differ//60)+"h "+str(differ%60)+"m"
+        usage_color="#BBA083"
+    else:
+        differ = -differ
+        differ_usage = "- "+str(differ//60)+"h "+str(differ%60)+"m"
+        usage_color="#AEBF9E"
+    children_usage_diff = html.Div([html.P(differ_usage,style={"float":"left","margin-right":"10px",'font-size':'15px','color':usage_color}),html.P(" yesterday",style={"float":"right",'font-size':'14px'})],style={"float":"right",'margin':'-12px 15px 0 0'})
+    
     access_differ = today_access['number_of_access'].sum() - top_access[top_access['Key'] == (k[0]-1)]['number_of_access'].sum()
     
     if(access_differ>0):
@@ -391,5 +438,5 @@ def update_graph(date,btn1, btn2, btn3, btn4, btn5, btn6):
     
     children9 =  html.P(today_unlock,style={'font-weight':"bold",'font-size':'18px','margin':'-12px 0 0 20px',"float":"left"})
     children10 = html.Div([html.P(differ_unlock,style={"float":"left","margin-right":"10px",'font-size':'15px','color':unlock_color}),html.P(" yesterday",style={"float":"right",'font-size':'14px'})],style={"float":"right",'margin':'-12px 15px 0 0'})
-    return fig, children1, {'background-color': color[0]},children2, {'background-color': color[1]}, children3,{'background-color': color[2]}, children4, {'background-color': color[3]}, children5, {'background-color': color[4]}, children6, {'background-color': color[5]}, fig1, fig2, children7, children8, children9, children10
+    return total_time, fig, children1, {'background-color': color[0]},children2, {'background-color': color[1]}, children3,{'background-color': color[2]}, children4, {'background-color': color[3]}, children5, {'background-color': color[4]}, children6, {'background-color': color[5]}, fig1, fig2, children_usage, children_usage_diff, children7, children8, children9, children10
 

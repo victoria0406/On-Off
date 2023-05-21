@@ -6,10 +6,9 @@ import pandas as pd
 import plotly.graph_objects as go
 import datetime
 
-from inputdata.data import app_usage_time, today_index, unlocks, date
+from inputdata.data import app_usage_time,  unlocks, date, weekly_usage
 
 
-weekly_usage = app_usage_time[today_index-6:today_index+1]
 weekly_usage['date']=pd.to_datetime(weekly_usage['date'], format = "%Y %m %d")
 weekly_usage['date']=weekly_usage['date'].dt.strftime('%m/%d')
 
@@ -17,7 +16,7 @@ today_usage_warning = usage_time_info['hour']*60+usage_time_info['minite']
 today_unlock_warning = unlock_info['time']
 app_usage_warning = app_usage_info['hour']*60+app_usage_info['minite']
 
-target_app = app_usage_info['app']
+target_app = '카카오톡' #임시
 
 
 def usage_graph():
@@ -37,7 +36,11 @@ def usage_graph():
             
         ),
         yaxis = dict(
-            
+            title=dict(
+                text ="Usage Time (hour)",
+                font=dict(
+                size=12,
+            )),
             tickmode = 'array',
             tickvals = [0,120,240,360,480,600,720],
             ticktext = ['0', '2', '4', '6', '8', '10','12'],
@@ -58,7 +61,7 @@ def usage_graph():
             hoverlabel_namelength=100
             )
     fig.update_traces(
-        hovertemplate="%{y} minutes")
+        hovertemplate="%{y:.0f} minutes")
     
     return fig 
     
@@ -137,7 +140,7 @@ def app_usage_graph():
             hoverlabel_namelength=100
             )
     fig.update_traces(
-        hovertemplate="%{y} minutes")
+        hovertemplate="%{y:.0f} minutes")
     
     fig.update_layout(showlegend=False, plot_bgcolor='white',paper_bgcolor="rgb(0,0,0,0)",bargap=0.3)
     fig.add_hline(y=app_usage_warning, line_dash="dash", line_color="#D78A8A", annotation_text="warning!", 
