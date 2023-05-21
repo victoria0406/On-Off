@@ -25,48 +25,57 @@
     flex-direction: column;
     align-items: center;
 }
-.today-goal-list > *:not(.today-goal-fig){
-    position: relative;
-    left: 72px;
-}
-
-.today-goal-list > *:not(.today-goal-fig):not(:first-child){
-    top: -160px;
-}
-.today-goal-list > *:first-child {
-    width: 16rem;
-    text-align: center;
-}
 .today-goal-list .unlock {
     --goal-color: #E4AE44;
     --goal-color_op1: #E4AE4420;
     --goal-color_op2: #E4AE4460;
     --goal-color_op3: #E4AE4480;
+    --goal-color_dark: #B99245;
 }
 .today-goal-list .usage {
     --goal-color: #A4BD85;
     --goal-color_op1: #A4BD8520;
     --goal-color_op2: #A4BD8560;
     --goal-color_op3: #A4BD8580;
+    --goal-color_dark: #778863;
 }
 .today-goal-list .app {
     --goal-color: #686986;
     --goal-color_op1: #68698620;
     --goal-color_op2: #68698660;
     --goal-color_op3: #68698680;
+    --goal-color_dark: #585971;
+}
+.today-goal-list .exceed {
+    --goal-color: #b40000;
+}
+.square {
+    background-color: var(--goal-color);
+    width: 12px;
+    height: 12px;
+}
+.goal-label {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    font-size: 12px;
+    width: 15rem;
+    gap: 6px;
+}
+.goal-label > * {
+    display: flex;
+    color: var(--goal-color);
+    align-items: center;
+    gap: 6px;
 }
 
-.today-goal-list .today-goal-fig {
-    left: -70px;
-    position: relative;
-    top: -100px;
-    left: 0px;
-    width: 400px;
-    height: 400px;
+.today-goal-fig {
+    width: 14rem;
+    height: 14rem;
 }
 .today-goal-list .goal-title {
     margin: 4px 0;
-    color: var(--goal-color);
+    color: var(--goal-color_dark);
+    width: 16rem;
 }
 
 .today-goal-list .goal-list {
@@ -115,6 +124,30 @@
     justify-content: space-between;
     gap: 1rem;
 }
+.calendar-container > :first-child {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+.calendar-container > :first-child > :first-child:hover, 
+.calendar-container > :first-child > :last-child:hover {
+    background-color: #99A68D40;
+}
+.calendar-container > :first-child > :first-child.disabled {
+    cursor: not-allowed;
+}
+
+.calendar-container > :first-child > :first-child, 
+.calendar-container > :first-child > :last-child {
+    width: 42px;
+    color: #99A68D;
+    text-align: center;
+    font-weight: 900;
+    border-radius: 5px;
+    border: none;
+    background-color: #0000;
+    height: 30px;
+}
 
 .weekly-calendar-container {
     height:40%;
@@ -136,6 +169,7 @@
 	align-items: center;
     padding: 1rem;
     border-radius: 6px;
+    user-select:none;
 }
 
 .calendar-container {
@@ -181,11 +215,12 @@
 }
 
 .calendar-donut {
-    width: 260px;
-    height: 260px;
+    --plot-size:calc(min(100%, 120px));
+    width: var(--plot-size);
+    height: var(--plot-size);
     position: absolute;
-    top: calc((100% - 280px) / 2);
-    left: calc((100% - 260px) / 2);
+    top: calc(50% - var(--plot-size) / 2);
+    left: calc(50% - var(--plot-size) / 2);
 }
 
 .weekly-calendar-title {
@@ -222,4 +257,10 @@
 }
 .weekly-calendar-saturday {
     color: #FDB03D;
+}
+.today-goal-info{
+    background: #F7F8FA;
+    border: 1px solid #B7AFAF;
+    border-radius: 10px;
+    padding: 12px;
 }

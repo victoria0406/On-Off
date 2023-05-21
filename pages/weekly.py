@@ -4,13 +4,12 @@ import plotly.express as px
 import pandas as pd
 import dash_bootstrap_components as dbc
 import math
+import datetime
 import plotly.graph_objects as go
 
-from inputdata.data import COLORS, click, app_usage_time, today, yesterday, top, hour, min, app_usage_hour, access, today_index, unlock
+from inputdata.data import COLORS, click, today, weekly_usage, date
 
 dash.register_page(__name__, path='/report/weekly')
-
-
 
 
 CONTENT_STYLE = {
@@ -59,9 +58,9 @@ FHCONTENT_STYLE ={
 
 
 BUTTON_STYLE = {
-  'margin' : '-4.5rem 27rem 1.5rem 0',
-  'width' : '15rem',
-  'float': 'right',
+  'margin' : '-5rem 0rem 1.5rem 20rem',
+  'width' : '13rem',
+  'float': 'left',
   'background-color': '#EBEBF0',
   'color': '#000',
   'text-align': 'center',
@@ -71,8 +70,8 @@ BUTTON_STYLE = {
 }
 
 TOGGLE_STYLE ={
-    "margin": '-4.5rem -2rem 1.5rem 0',
-    "width":"27rem",
+    "margin": '-5rem -2rem 1.5rem 0',
+    "width":"21rem",
     "float":"right",
 }
 
@@ -85,27 +84,17 @@ AVERAGE_STYLE={
     'background-color':'#F7F8FA'
 }
 
-
-
-
-
-weekly_usage = app_usage_time[today_index-6:today_index+1]
-weekly_usage['date']=pd.to_datetime(weekly_usage['date'], format = "%Y %m %d")
+weekly_usage['date']=pd.to_datetime(weekly_usage['date'], format = "%m/%d")
 weekly_usage['date']=weekly_usage['date'].dt.strftime('%b %d')
 
-############ number of access ################
-
-weekly_access = access[today_index-6:today_index+1]
-weekly_access['date']=weekly_usage['date']
-
 ################ screen on ####################
-screen_on = 150
 
-weekly_unlock = unlock[today_index-6:today_index+1]
-weekly_unlock['date']=weekly_usage['date']
+screen_on_df = pd.read_csv('./datas/screen_on.csv')
+
+screen_on = int(screen_on_df['0'].mean())
 
 fig3 = go.Figure()
-fig3.add_trace(go.Scatter(x=weekly_unlock['date'], y=weekly_unlock['unlock'], mode='lines+markers', line_color='#686CAD',
+fig3.add_trace(go.Scatter(x=date, y=screen_on_df['0'], mode='lines+markers', line_color='#686CAD',
                           marker=dict(
                                 color='white',
                                 size=14,
@@ -137,12 +126,15 @@ fig3.update_traces(
 fig3.update_layout(showlegend=False, plot_bgcolor='white',paper_bgcolor="rgb(0,0,0,0)",width=510, height=320)
 # fig3.show()
 ###############################################
-top1 = weekly_usage[top[1]].values.tolist()
-top2 = weekly_usage[top[2]].values.tolist()
-top3 = weekly_usage[top[3]].values.tolist()
-top4 = weekly_usage[top[4]].values.tolist()
-top5 = weekly_usage[top[5]].values.tolist()
-others = weekly_usage[top[6]].values.tolist()
+
+weekly_tops=weekly_usage.columns.values.tolist()[3:9]
+
+top1 = weekly_usage[weekly_tops[0]].values.tolist()
+top2 = weekly_usage[weekly_tops[1]].values.tolist()
+top3 = weekly_usage[weekly_tops[2]].values.tolist()
+top4 = weekly_usage[weekly_tops[3]].values.tolist()
+top5 = weekly_usage[weekly_tops[4]].values.tolist()
+others = weekly_usage[weekly_tops[5]].values.tolist()
 
 top1.insert(7,sum(top1))
 top2.insert(7,sum(top2))
@@ -157,17 +149,18 @@ total_time = top1[7]+top2[7]+top3[7]+top4[7]+top5[7]+others[7]
 
 def layout():
     return html.Div(children=[
-        html.Div([html.Div(html.A(html.Button("Compare with Others!",style=BUTTON_STYLE), href="/report/group")),
-                html.Div(dbc.Nav([
-                    dbc.NavLink('DAILY', href="/report", active="exact"),
-                    dbc.NavLink('WEEKLY', href="/report/weekly", active="exact"),
-                ],
-                className='report-nav'
-            ), style=TOGGLE_STYLE)
-            ],style={'display': 'inline-block','float':"right"}
-        ),    
         html.Div([
-            html.Div([html.P("Apps Top",style={"margin":"10px 0 -5px 10px"}), html.P("{}{}{}{}".format(total_time//60,"h ", total_time%60,"m Used"),style={'font-weight':'bold','font-size':"20px","margin":"0px 20px -60px 15px",'text-align':'right'}),
+                html.Div((html.A(html.Button("Compare with Others!",style=BUTTON_STYLE), href="/report/group"))),
+                html.Div([                
+                    html.Div(dbc.Nav([
+                        dbc.NavLink("DAILY", href="/report", active="exact"),
+                        dbc.NavLink('WEEKLY', href="/report/weekly", active="exact"),
+                    ],
+                    className='report-nav'
+                ), style=TOGGLE_STYLE)])
+            ], style={'display': 'inline-block','float':"left","width":"100%"}),   
+        html.Div([
+            html.Div([html.P("Apps Top",style={"margin":"10px 0 -5px 10px"}), html.P("{}{}{}{}".format(int(total_time)//60,"h ", int(total_time)%60,"m Used"),style={'font-weight':'bold','font-size':"20px","margin":"0px 20px -60px 15px",'text-align':'right'}),
                 html.Div(dcc.Graph(id='top5', config={'displayModeBar': False}),
                 style={'margin-left': '-60px', 'margin-bottom':'10px'}),
                 html.Div([
@@ -229,8 +222,9 @@ def layout():
 )
 
 def update_graph(btn1, btn2, btn3, btn4, btn5, btn6):
+
+    apps = weekly_tops
     
-    apps = top[1:7]
     APP_COLOR = COLORS
     GRAPH_COLOR =COLORS
     global click
@@ -242,7 +236,7 @@ def update_graph(btn1, btn2, btn3, btn4, btn5, btn6):
         if(click[0] %2 == 0):  
             APP_COLOR = [COLORS[0],'#F8F7E2','#EDF4E2','#EBEBF1','#F1ECE6','#F0F0F0']
             GRAPH_COLOR = [COLORS[0]]*6
-            apps = top[1]
+            apps = weekly_tops[0]
             TEXT_COLOR = ['black','#7C7C7C','#7C7C7C','#7C7C7C','#7C7C7C','#7C7C7C']
             color = ['#FFF4DF', '#F7F8FA', '#F7F8FA', '#F7F8FA', '#F7F8FA', '#F7F8FA']
         click0 = click[0]+1
@@ -251,7 +245,7 @@ def update_graph(btn1, btn2, btn3, btn4, btn5, btn6):
         if(click[1] %2 == 0):  
             APP_COLOR = ['#F5EFE3',COLORS[1],'#EDF4E2','#EBEBF1','#F1ECE6','#F0F0F0']
             GRAPH_COLOR = [COLORS[1]]*6
-            apps = top[2]
+            apps = weekly_tops[1]
             TEXT_COLOR = ['#7C7C7C','black','#7C7C7C','#7C7C7C','#7C7C7C','#7C7C7C']
             color = ['#F7F8FA', '#F5F3D4', '#F7F8FA', '#F7F8FA', '#F7F8FA', '#F7F8FA']
         click1 = click[1]+1
@@ -260,7 +254,7 @@ def update_graph(btn1, btn2, btn3, btn4, btn5, btn6):
         if(click[2] %2 == 0):  
             APP_COLOR = ['#F5EFE3','#F8F7E2',COLORS[2],'#EBEBF1','#F1ECE6','#F0F0F0']
             GRAPH_COLOR = [COLORS[2]]*6
-            apps = top[3]
+            apps = weekly_tops[2]
             TEXT_COLOR = ['#7C7C7C','#7C7C7C','black','#7C7C7C','#7C7C7C','#7C7C7C']
             color = ['#F7F8FA', '#F7F8FA', '#E5EED5', '#F7F8FA', '#F7F8FA', '#F7F8FA']
         click2 = click[2]+1
@@ -269,7 +263,7 @@ def update_graph(btn1, btn2, btn3, btn4, btn5, btn6):
         if(click[3] %2 == 0):  
             APP_COLOR = ['#F5EFE3','#F8F7E2','#EDF4E2',COLORS[3],'#F1ECE6','#F0F0F0']
             GRAPH_COLOR = [COLORS[3]]*6
-            apps = top[4]
+            apps = weekly_tops[3]
             TEXT_COLOR = ['#7C7C7C','#7C7C7C','#7C7C7C','black','#7C7C7C','#7C7C7C']
             color = ['#F7F8FA', '#F7F8FA', '#F7F8FA', '#E1E1EA', '#F7F8FA', '#F7F8FA']
         click3 = click[3]+1
@@ -278,44 +272,36 @@ def update_graph(btn1, btn2, btn3, btn4, btn5, btn6):
         if(click[4]%2==0):     
             APP_COLOR = ['#F5EFE3','#F8F7E2','#EDF4E2','#EBEBF1',COLORS[4],'#F0F0F0']
             GRAPH_COLOR = [COLORS[4]]*6
-            apps = top[5]
+            apps = weekly_tops[4]
             TEXT_COLOR = ['#7C7C7C','#7C7C7C','#7C7C7C','#7C7C7C','black','#7C7C7C']
             color = ['#F7F8FA', '#F7F8FA', '#F7F8FA', '#F7F8FA', '#EBE3DA', '#F7F8FA']
         click4 = click[4]+1
         click = [0,0,0,0,click4,0]  
-    elif "btn-6" == ctx.triggered_id:
-        if(click[5]%2==0):   
-            APP_COLOR = ['#F5EFE3','#F8F7E2','#EDF4E2','#EBEBF1','#F1ECE6',COLORS[5]]
-            GRAPH_COLOR = [COLORS[5]]*6
-            apps = top[6] 
-            TEXT_COLOR = ['#7C7C7C','#7C7C7C','#7C7C7C','#7C7C7C','#7C7C7C','black']
-            color = ['#F7F8FA', '#F7F8FA', '#F7F8FA', '#F7F8FA', '#F7F8FA', '#E9E9E9']
-        click5 = click[5]+1
-        click = [0,0,0,0,0,click5]  
-        
-    fig = px.bar(today, y="date", x=[top[1],top[2],top[3],top[4],top[5],top[6]],orientation='h', color_discrete_sequence=APP_COLOR, width=540, height=90)
+    
+       
+    fig = px.bar(today, y="date", x=[weekly_tops[0],weekly_tops[1],weekly_tops[2],weekly_tops[3],weekly_tops[4],weekly_tops[5]],orientation='h', color_discrete_sequence=APP_COLOR, width=540, height=90)
     fig.update_xaxes(title=None, showticklabels=False)
     fig.update_yaxes(title=None, showticklabels=False,)
     fig.update_layout(showlegend=False, plot_bgcolor='white',paper_bgcolor="rgb(0,0,0,0)", margin=dict(b=0),hovermode=False)
     
-    weekly_usage['top1_datetime'] = pd.to_datetime(weekly_usage[top[1]], unit='m')  
-    weekly_usage['top1'] = top[1]+": "+weekly_usage['top1_datetime'].dt.strftime('%Hh %Mm')
-    weekly_usage['top2_datetime'] = pd.to_datetime(weekly_usage[top[2]], unit='m')
-    weekly_usage['top2'] = top[2]+": "+weekly_usage['top2_datetime'].dt.strftime('%Hh %Mm')
-    weekly_usage['top3_datetime'] = pd.to_datetime(weekly_usage[top[3]], unit='m')
-    weekly_usage['top3'] = top[3]+": "+weekly_usage['top3_datetime'].dt.strftime('%Hh %Mm')
-    weekly_usage['top4_datetime'] = pd.to_datetime(weekly_usage[top[4]], unit='m')
-    weekly_usage['top4'] = top[4]+": "+weekly_usage['top4_datetime'].dt.strftime('%Hh %Mm')
-    weekly_usage['top5_datetime'] = pd.to_datetime(weekly_usage[top[5]], unit='m')
-    weekly_usage['top5'] = top[5]+": "+weekly_usage['top5_datetime'].dt.strftime('%Hh %Mm')
-    weekly_usage['top6_datetime'] = pd.to_datetime(weekly_usage[top[6]], unit='m')
-    weekly_usage['top6'] = top[6]+": "+weekly_usage['top6_datetime'].dt.strftime('%Hh %Mm')
+    # weekly_usage['top1_datetime'] = pd.to_datetime(weekly_usage[top[1]], unit='m')  
+    # weekly_usage['top1'] = tops[0]+": "+weekly_usage['top1_datetime'].dt.strftime('%Hh %Mm')
+    # weekly_usage['top2_datetime'] = pd.to_datetime(weekly_usage[top[2]], unit='m')
+    # weekly_usage['top2'] = tops[1]+": "+weekly_usage['top2_datetime'].dt.strftime('%Hh %Mm')
+    # weekly_usage['top3_datetime'] = pd.to_datetime(weekly_usage[top[3]], unit='m')
+    # weekly_usage['top3'] = tops[2]+": "+weekly_usage['top3_datetime'].dt.strftime('%Hh %Mm')
+    # weekly_usage['top4_datetime'] = pd.to_datetime(weekly_usage[top[4]], unit='m')
+    # weekly_usage['top4'] = tops[3]+": "+weekly_usage['top4_datetime'].dt.strftime('%Hh %Mm')
+    # weekly_usage['top5_datetime'] = pd.to_datetime(weekly_usage[top[5]], unit='m')
+    # weekly_usage['top5'] = tops[4]+": "+weekly_usage['top5_datetime'].dt.strftime('%Hh %Mm')
+    # weekly_usage['top6_datetime'] = pd.to_datetime(weekly_usage[top[6]], unit='m')
+    # weekly_usage['top6'] = tops[5]+": "+weekly_usage['top6_datetime'].dt.strftime('%Hh %Mm')
     
+
+    weekly_usage["date"] = date
     
-    # print(weekly_usage)
-    
-    fig1 = px.bar(weekly_usage, x="date", y=apps,color_discrete_sequence=GRAPH_COLOR,width=750, height=400,hover_data={'variable': False, 'date': False, 'value':False, "top1":True,"top2":True,"top3":True,"top4":True,"top5":True,"top6":True})
-    
+    fig1 = px.bar(weekly_usage, x="date", y=apps,color_discrete_sequence=GRAPH_COLOR,width=750, height=400)
+        
     fig1.update_layout(
         xaxis = dict(
             title = None,
@@ -326,9 +312,9 @@ def update_graph(btn1, btn2, btn3, btn4, btn5, btn6):
         yaxis = dict(
             # title = "Usage Time (hour)",
             title=dict(
-                text="Usage Time (hour)",
+                text ="Usage Time",
                 font=dict(
-                    size=12,
+                size=12,
             )),
             tickmode = 'array',
             tickvals = [0,120,240,360,480,600,720],
@@ -337,6 +323,14 @@ def update_graph(btn1, btn2, btn3, btn4, btn5, btn6):
             tickfont = dict(size=9)
         )
     )
+    
+    if (apps == weekly_tops):
+        fig1.update_layout(yaxis = dict(title=dict(
+                text ="Usage Time (hour)",
+                font=dict(
+                size=12,
+            ))))
+    
     fig1.update_layout(
         hoverlabel=dict(
             bordercolor="rgba(0, 0, 0, 0.6)",
@@ -346,12 +340,18 @@ def update_graph(btn1, btn2, btn3, btn4, btn5, btn6):
             hoverlabel_namelength=100
             )
     fig1.update_traces(
-        hovertemplate="%{y} minutes")
+        hovertemplate="%{y:.0f} minutes")
     
     fig1.update_layout(showlegend=False, plot_bgcolor='white',paper_bgcolor="rgb(0,0,0,0)",bargap=0.3)
     
     
-    fig2 = px.bar(weekly_access, x=weekly_access['date'], y=apps, color_discrete_sequence=GRAPH_COLOR, width=740, height=280)
+    ############ number of access ################
+    weekly = pd.read_csv('./datas/weekly_access.csv')
+    
+    weekly['date']=date
+    
+    fig2 = px.bar(weekly, x="date", y=apps, color_discrete_sequence=GRAPH_COLOR, width=740, height=280)
+
     fig2.update_layout(
         xaxis = dict(
             title = None,
@@ -362,8 +362,6 @@ def update_graph(btn1, btn2, btn3, btn4, btn5, btn6):
         yaxis = dict(
             title = None,
             tickmode = 'array',
-            tickvals = [0,10,20,30,40,50,60,70],
-            ticktext = ['0', '10', '20', '30', '40', '50','60','70'],
             showgrid=True, linewidth=1,gridcolor='#E0E0E0'
         )
     )
@@ -380,12 +378,12 @@ def update_graph(btn1, btn2, btn3, btn4, btn5, btn6):
 
     fig2.update_layout(showlegend=False, plot_bgcolor='white',paper_bgcolor="rgb(0,0,0,0)",bargap=0.3,margin=dict(t=0))
 
-    children1 = html.Div([html.Div([html.Div("1",style={"text-align":"center","line-height":"20px","background-color":COLORS[0],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div(top[1],style={"float":"right","margin-left":"10px","font-weight":"bold", "color":TEXT_COLOR[0]})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(top1[7]//60,"h ", top1[7]%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold", "color":TEXT_COLOR[0]})])
-    children2 = html.Div([html.Div([html.Div("2",style={"text-align":"center","line-height":"20px","background-color":COLORS[1],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div(top[2],style={"float":"right","margin-left":"10px","font-weight":"bold", "color":TEXT_COLOR[1]})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(top2[7]//60,"h ", top2[7]%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold", "color":TEXT_COLOR[1]})])
-    children3 = html.Div([html.Div([html.Div("3",style={"text-align":"center","line-height":"20px","background-color":COLORS[2],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div(top[3],style={"float":"right","margin-left":"10px","font-weight":"bold", "color":TEXT_COLOR[2]})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(top3[7]//60,"h ", top3[7]%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold", "color":TEXT_COLOR[2]})])
-    children4 = html.Div([html.Div([html.Div("4",style={"text-align":"center","line-height":"20px","background-color":COLORS[3],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div(top[4],style={"float":"right","margin-left":"10px","font-weight":"bold", "color":TEXT_COLOR[3]})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(top4[7]//60,"h ", top4[7]%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold", "color":TEXT_COLOR[3]})])
-    children5 = html.Div([html.Div([html.Div("5",style={"text-align":"center","line-height":"20px","background-color":COLORS[4],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div(top[5],style={"float":"right","margin-left":"10px","font-weight":"bold", "color":TEXT_COLOR[4]})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(top5[7]//60,"h ", top5[7]%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold", "color":TEXT_COLOR[4]})])
-    children6 = html.Div([html.Div([html.Div("6",style={"text-align":"center","line-height":"20px","background-color":COLORS[5],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div(top[6],style={"float":"right","margin-left":"10px","font-weight":"bold", "color":TEXT_COLOR[5]})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(others[7]//60,"h ", others[7]%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold", "color":TEXT_COLOR[5]})])
+    children1 = html.Div([html.Div([html.Div("1",style={"text-align":"center","line-height":"20px","background-color":COLORS[0],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div(weekly_tops[0],style={"float":"right","margin-left":"10px","font-weight":"bold", "color":TEXT_COLOR[0]})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(int(top1[7])//60,"h ", int(top1[7])%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold", "color":TEXT_COLOR[0]})])
+    children2 = html.Div([html.Div([html.Div("2",style={"text-align":"center","line-height":"20px","background-color":COLORS[1],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div(weekly_tops[1],style={"float":"right","margin-left":"10px","font-weight":"bold", "color":TEXT_COLOR[1]})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(int(top2[7])//60,"h ", int(top2[7])%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold", "color":TEXT_COLOR[1]})])
+    children3 = html.Div([html.Div([html.Div("3",style={"text-align":"center","line-height":"20px","background-color":COLORS[2],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div(weekly_tops[2],style={"float":"right","margin-left":"10px","font-weight":"bold", "color":TEXT_COLOR[2]})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(int(top3[7])//60,"h ", int(top3[7])%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold", "color":TEXT_COLOR[2]})])
+    children4 = html.Div([html.Div([html.Div("4",style={"text-align":"center","line-height":"20px","background-color":COLORS[3],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div(weekly_tops[3],style={"float":"right","margin-left":"10px","font-weight":"bold", "color":TEXT_COLOR[3]})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(int(top4[7])//60,"h ", int(top4[7])%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold", "color":TEXT_COLOR[3]})])
+    children5 = html.Div([html.Div([html.Div("5",style={"text-align":"center","line-height":"20px","background-color":COLORS[4],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div(weekly_tops[4],style={"float":"right","margin-left":"10px","font-weight":"bold", "color":TEXT_COLOR[4]})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(int(top5[7])//60,"h ", int(top5[7])%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold", "color":TEXT_COLOR[4]})])
+    children6 = html.Div([html.Div([html.Div("6",style={"text-align":"center","line-height":"20px","background-color":COLORS[5],"margin-top":"2px","height":'20px',"width":"30px","float":"left","border-radius":"5px"}),html.Div("Others",style={"float":"right","margin-left":"10px","font-weight":"bold", "color":TEXT_COLOR[5]})],style={"float":"left","margin-left":"10px"}),html.Div("{}{}{}{}".format(int(others[7])//60,"h ", int(others[7])%60,"m"),style={"float":"right","margin-right":"10px","font-weight":"bold", "color":TEXT_COLOR[5]})])
     
     
     return fig, children1, {'background-color': color[0]},children2, {'background-color': color[1]}, children3,{'background-color': color[2]}, children4, {'background-color': color[3]}, children5, {'background-color': color[4]}, children6, {'background-color': color[5]}, fig1, fig2

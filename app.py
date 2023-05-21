@@ -26,7 +26,8 @@ app.layout = html.Div([
             ),
             html.P(
                 'Let’s check your phone usage this week!',
-                style={'color': "#636363"}
+                style={'color': "#636363"},
+                id='header-mention'
             )
             ],
             style=HEAD_STYLE,    
@@ -39,6 +40,7 @@ app.layout = html.Div([
 className='main-container',
 )
 for callback, *arcs  in get_callbacks():
-    app.callback(*arcs)(callback)
+    app.callback(*arcs)(callback)  
+    
 if __name__ == '__main__':
     app.run_server(debug=True)
