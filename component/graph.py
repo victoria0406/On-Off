@@ -12,14 +12,14 @@ from inputdata.data import unlocks, date, weekly_usage
 weekly_usage['date']=pd.to_datetime(weekly_usage['date'], format = "%Y %m %d")
 weekly_usage['date']=weekly_usage['date'].dt.strftime('%m/%d')
 
-today_usage_warning = usage_time_info['hour']*60+usage_time_info['minute']
-today_unlock_warning = unlock_info['time']
-app_usage_warning = app_usage_info['hour']*60+app_usage_info['minute']
 
-target_app = '카카오톡' #임시
+
 
 
 def usage_graph():
+    today_usage_warning = usage_time_info['hour']*60+usage_time_info['minute']
+    
+    
     COLORS = ['rgba(164,189,133,0.6)'] * 7
     
     for i in range(0,7):
@@ -66,8 +66,10 @@ def usage_graph():
     return fig 
     
 def unlock_graph():
+    today_unlock_warning = unlock_info['time']
+    
     color = [
-        '#E4AE44' if v < app_usage_warning else '#E46060'
+        '#E4AE44' if v < today_unlock_warning else '#E46060'
         for v in unlocks['0']
     ]
 
@@ -106,6 +108,9 @@ def unlock_graph():
     return fig 
 
 def app_usage_graph():
+    app_usage_warning = app_usage_info['hour']*60+app_usage_info['minute']
+    
+    target_app = app_usage_info['app']
     COLORS = ['rgba(104,105,134,0.6)'] * 7
     # app_usage = weekly_usage.loc[weekly_usage['']]
     
