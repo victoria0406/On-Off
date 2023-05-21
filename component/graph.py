@@ -12,9 +12,9 @@ weekly_usage = app_usage_time[today_index-6:today_index+1]
 weekly_usage['date']=pd.to_datetime(weekly_usage['date'], format = "%Y %m %d")
 weekly_usage['date']=weekly_usage['date'].dt.strftime('%m/%d')
 
-today_usage_warning = usage_time_info['hour']*60+usage_time_info['minite']
+today_usage_warning = usage_time_info['hour']*60+usage_time_info['minute']
 today_unlock_warning = unlock_info['time']
-app_usage_warning = app_usage_info['hour']*60+app_usage_info['minite']
+app_usage_warning = app_usage_info['hour']*60+app_usage_info['minute']
 
 target_app = app_usage_info['app']
 

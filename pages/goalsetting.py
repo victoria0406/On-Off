@@ -9,10 +9,10 @@ from inputdata.data import top
 
 dash.register_page(__name__, path='/goal/setting')
 
-app_usage_df = pd.read_csv('./datas/app_usage_time.csv')
+app_usage_df = pd.read_csv('./datas/usage_time.csv')
 unlock_df = pd.read_csv('./datas/unlock.csv')
 # print(app_usage_df.iloc[:, 1:6].mean().sort_values(ascending=False))
-app_list = app_usage_df.iloc[:, 1:6].mean().sort_values(ascending=False).index.tolist()
+app_list = app_usage_df.iloc[-2, 2:].drop(['Total', 'Others']).dropna().sort_values(ascending=False).index.tolist()
 avg_unlock = unlock_df['unlock'].mean()
 avg_total_usage = app_usage_df['Total'].mean()
 def avg_app_usage(app):
@@ -40,9 +40,9 @@ goalsettingcontext = [
             '.'
         ],
         'value_component': [
-            dbc.Input(type='number', min=0, max=24, value=usage_time_info['hour'], id='goal-switch-disable-usage-time-1'),
+            dbc.Input(type='number', min=0, max=23, value=usage_time_info['hour'], id='goal-switch-disable-usage-time-1'),
             'h',
-            dbc.Input(type='number', min=0, max=30, step=30, value=usage_time_info['minite'], id='goal-switch-disable-usage-time-2'),
+            dbc.Input(type='number', min=0, max=30, step=30, value=usage_time_info['minute'], id='goal-switch-disable-usage-time-2'),
             'm',
         ],
         'checked': usage_time_info['checked'],
@@ -67,9 +67,9 @@ goalsettingcontext = [
             '.'
         ],
         'value_component': [
-            dbc.Input(type='number', min=0, max=24, value=app_usage_info['hour'], id='goal-switch-disable-app-usage-2'),
+            dbc.Input(type='number', min=0, max=23, value=app_usage_info['hour'], id='goal-switch-disable-app-usage-2'),
             'h',
-            dbc.Input(type='number', min=0, max=30, step=30, value=app_usage_info['minite'], id='goal-switch-disable-app-usage-3'),
+            dbc.Input(type='number', min=0, max=30, step=30, value=app_usage_info['minute'], id='goal-switch-disable-app-usage-3'),
             'm',
         ],
         'checked': app_usage_info['checked'],
@@ -84,9 +84,60 @@ layout = html.Div([
         for context in goalsettingcontext
     ]),
     dbc.Nav([
-        html.A('Cormfirm', className='link-button goal-setting main', id='goal-confirm', n_clicks=0, href='/goal?setting=True'),
+        html.Button('Cormfirm', className='link-button goal-setting main', id='goal-confirm', n_clicks=0),
         html.A('Cancel', className='link-button goal-setting sub', href='/goal?setting=False'),
     ]),
+    dbc.Modal(
+        [
+            dbc.ModalHeader(dbc.ModalTitle("Confirm Goal")),
+            dbc.ModalBody([
+                'Would you like to set a daily goal?',
+                html.Br(),
+                'If you confirm,',
+                html.B('the goal cannot be changed until the end of today'),
+                '.'
+            ]),
+            dbc.ModalFooter([
+                html.A(
+                    "Yes", id="goal-confirm-final", n_clicks=0,
+                    href='/goal?setting=True', 
+                    className='link-button main',
+                ),
+                html.Button(
+                    "No", id="close", n_clicks=0,
+                    className='link-button sub',
+                )
+            ]),
+        ],
+        id="modal",
+        centered=True,
+        is_open=False,
+    ),
+    dbc.Modal(
+        [
+            dbc.ModalHeader(dbc.ModalTitle("Setting Wrong Value")),
+            dbc.ModalBody([
+                'Your goal setting value is not valid.',
+                html.Br(),
+                html.Br(),
+                'Please check the following:',
+                html.Ul([
+                    html.Li("If you haven't registered any goals."),
+                    html.Li("If the time or count is set in invalid range."),
+                    html.Li("If the application is empty."),
+                ])
+            ]),
+            dbc.ModalFooter([
+                dbc.Button(
+                    "Close", id="close-fault", n_clicks=0,
+                    className='link-button sub',
+                )
+            ], style={}),
+        ],
+        id="modal-fault",
+        centered=True,
+        is_open=False,
+    ),
     ],
     className='goal-setting-container'
 )

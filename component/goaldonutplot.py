@@ -133,10 +133,10 @@ def week_donut_plot(data, index):
         fig.update_layout(showlegend=False, 
                         plot_bgcolor='rgb(0,0,0,0)',
                         paper_bgcolor="rgb(0,0,0,0)",
-                        margin_l=0,
-                        margin_r=0,
-                        margin_b=0,
-                        margin_t=0,
+                        margin_l=12,
+                        margin_r=12,
+                        margin_b=12,
+                        margin_t=12,
                         # annotations=[dict(text=str(int(data[1]))+"<br>/"+str(int(data[2])), showarrow=False)]
                         )
     return fig

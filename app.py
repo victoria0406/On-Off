@@ -32,7 +32,8 @@ app.layout = html.Div([
             ),
             html.P(
                 'Let’s check your phone usage this week!',
-                style={'color': "#636363"}
+                style={'color': "#636363"},
+                id='header-mention'
             )
             ],
             style=HEAD_STYLE,    

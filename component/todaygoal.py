@@ -8,17 +8,32 @@ from component.graph import usage_graph, unlock_graph, app_usage_graph
 import pandas as pd
 import numpy as np
 
-today_day = 10
+goal_states_df= pd.read_csv('./datas/goal_states.csv')
+## goal_states_df = goal_states_df.fillna(-1, axis=1)
+goal_states_df['day'] = pd.to_datetime(goal_states_df['date']).dt.day
+goal_states_df['exceed-unlock'] = (goal_states_df['unlock_real'] - goal_states_df['unlock_goal']).apply(lambda x: 0 if x <= 0 else x)
+goal_states_df['real-unlock'] = goal_states_df.apply(lambda row: min(row['unlock_real'], 2*row['unlock_goal']-row['unlock_real']) if (row['unlock_real'] and 2*row['unlock_goal']-row['unlock_real']) >= 0 else 0, axis=1)
+goal_states_df['goal-unlock'] = (goal_states_df['unlock_goal'] - goal_states_df['unlock_real']).apply(lambda x: 0 if x <= 0 else x)
+goal_states_df['exceed-total_usage'] = (goal_states_df['total_usage_real'] - goal_states_df['total_usage_goal']).apply(lambda x: 0 if x <= 0 else x)
+goal_states_df['real-total_usage'] = goal_states_df.apply(lambda row: min(row['total_usage_real'], 2*row['total_usage_goal']-row['total_usage_real']) if (row['total_usage_real'] and 2*row['total_usage_goal']-row['total_usage_real']) >= 0 else 0, axis=1)
+goal_states_df['goal-total_usage'] = (goal_states_df['total_usage_goal'] - goal_states_df['total_usage_real']).apply(lambda x: 0 if x <= 0 else x)
+goal_states_df['exceed-app_usage'] = (goal_states_df['app_usage_real'] - goal_states_df['app_usage_goal']).apply(lambda x: 0 if x <= 0 else x)
+goal_states_df['real-app_usage'] = goal_states_df.apply(lambda row: min(row['app_usage_real'], 2*row['app_usage_goal']-row['app_usage_real']) if (row['app_usage_real'] and 2*row['app_usage_goal']-row['app_usage_real']) >= 0 else 0, axis=1)
+goal_states_df['goal-app_usage'] = (goal_states_df['app_usage_goal'] - goal_states_df['app_usage_real']).apply(lambda x: 0 if x <= 0 else x)
+goal_states_df = goal_states_df.fillna(-1, axis=1)
 
-app_usage_df = pd.read_csv('./datas/app_usage_time.csv')
+today = pd.to_datetime(goal_states_df.iloc[-1, :]['date']).date()
+today_str = today.strftime("%Y-%m-%d")
+
+app_usage_df = pd.read_csv('./datas/usage_time.csv')
 app_usage_df['day'] = pd.to_datetime(app_usage_df['date']).dt.day
 unlock_df = pd.read_csv('./datas/unlock.csv')
-unlock_df['day'] = pd.to_datetime(unlock_df['date']).dt.day
 
-today_df = app_usage_df[app_usage_df['day'] == today_day]
-total_usage = today_df['Total'].values[0]
-app_usage = today_df[app_usage_info['app']].values[0]
-unlock = unlock_df[unlock_df['day'] == today_day]['unlock'].values[0]
+today_df = app_usage_df.iloc[-1]
+print(today_df['Total'])
+total_usage = today_df['Total']
+app_usage = today_df[app_usage_info['app']]
+unlock = unlock_df.iloc[-1]['unlock']
 
 color_info_component = html.Div([
     html.Div([html.Div("", className="square"),"Unlocks"], className="unlock"),
@@ -44,14 +59,14 @@ def unlock_component(highlighted=None):
 
 def usage_time_component(highlighted=None):
     data = float(total_usage) / 60;
-    usage_goal_minite = float(usage_time_info['hour']) + float(usage_time_info['minite']) / 60
+    usage_goal_minute = float(usage_time_info['hour']) + float(usage_time_info['minute']) / 60
     component = html.Div([
         html.P('Usage Time',className='goal-title'),
         html.A([
             html.Img(src="./assets/icons/check-usage.png", className='goal-state-check')
-            if usage_goal_minite >= data
+            if usage_goal_minute >= data
             else html.Img(src="./assets/icons/close.png", className='goal-state-check exceed'),
-            html.Span([html.B(round(data, 1)), f" / {usage_goal_minite} h ({(data / usage_goal_minite * 100):.1f}%)"])
+            html.Span([html.B(round(data, 1)), f" / {usage_goal_minute} h ({(data / usage_goal_minute * 100):.1f}%)"])
         ], className= f"goal-list {'active' if (highlighted == 'usage') else ''}",
         href='/goal?setting=True' if (highlighted == 'usage') else '/goal?setting=True?usage')
     ], className="usage")
@@ -59,14 +74,14 @@ def usage_time_component(highlighted=None):
 
 def app_usage_component(highlighted=None):
     data = float(app_usage) / 60;
-    usage_goal_minite = float(app_usage_info['hour']) + float(app_usage_info['minite']) / 60
+    usage_goal_minute = float(app_usage_info['hour']) + float(app_usage_info['minute']) / 60
     component = html.Div([
         html.P(f"App Usage Time for {app_usage_info['app']}",className='goal-title'),
         html.A([
             html.Img(src="./assets/icons/check-app.png", className='goal-state-check')
-            if usage_goal_minite > data
+            if usage_goal_minute > data
             else html.Img(src="./assets/icons/close.png", className='goal-state-check exceed'),
-            html.Span([html.B(round(data, 1)), f" / {usage_goal_minite} h ({(data / usage_goal_minite * 100):.1f}%)"])
+            html.Span([html.B(round(data, 1)), f" / {usage_goal_minute} h ({(data / usage_goal_minute * 100):.1f}%)"])
         ], className=f"goal-list {'active' if (highlighted == 'app') else ''}",
         href='/goal?setting=True' if (highlighted == 'app') else '/goal?setting=True?app')
     ], className="app")
@@ -80,13 +95,13 @@ def get_goal_today():
         goal = max(0, unlock_info['time']-unlock)
         return_data[0] = [exceed, real, goal]
     if (usage_time_info['checked']):
-        usage_by_m = usage_time_info['hour'] * 60 + usage_time_info['minite'];
+        usage_by_m = usage_time_info['hour'] * 60 + usage_time_info['minute'];
         exceed = max(total_usage - usage_by_m, 0)
         real = max(0, min(total_usage, 2 * usage_by_m - total_usage))
         goal = max(0, usage_by_m-total_usage)
         return_data[1] = [exceed, real, goal]
     if (app_usage_info['checked']):
-        app_usage_by_m = app_usage_info['hour'] * 60 + app_usage_info['minite'];
+        app_usage_by_m = app_usage_info['hour'] * 60 + app_usage_info['minute'];
         exceed = max(app_usage - app_usage_by_m, 0)
         real = max(0, min(app_usage, 2 * app_usage_by_m - app_usage))
         goal = max(0, app_usage_by_m-app_usage)
@@ -112,24 +127,11 @@ def today_goal_setting(highlighted=None):
     return_children.append(html.Div(goal_list, className="today-goal-list"))
     return return_children
 
-goal_states_df= pd.read_csv('./datas/goal_states.csv')
-## goal_states_df = goal_states_df.fillna(-1, axis=1)
-goal_states_df['day'] = pd.to_datetime(goal_states_df['date']).dt.day
-goal_states_df['exceed-unlock'] = (goal_states_df['unlock_real'] - goal_states_df['unlock_goal']).apply(lambda x: 0 if x <= 0 else x)
-goal_states_df['real-unlock'] = goal_states_df.apply(lambda row: min(row['unlock_real'], 2*row['unlock_goal']-row['unlock_real']) if (row['unlock_real'] and 2*row['unlock_goal']-row['unlock_real']) >= 0 else 0, axis=1)
-goal_states_df['goal-unlock'] = (goal_states_df['unlock_goal'] - goal_states_df['unlock_real']).apply(lambda x: 0 if x <= 0 else x)
-goal_states_df['exceed-total_usage'] = (goal_states_df['total_usage_real'] - goal_states_df['total_usage_goal']).apply(lambda x: 0 if x <= 0 else x)
-goal_states_df['real-total_usage'] = goal_states_df.apply(lambda row: min(row['total_usage_real'], 2*row['total_usage_goal']-row['total_usage_real']) if (row['total_usage_real'] and 2*row['total_usage_goal']-row['total_usage_real']) >= 0 else 0, axis=1)
-goal_states_df['goal-total_usage'] = (goal_states_df['total_usage_goal'] - goal_states_df['total_usage_real']).apply(lambda x: 0 if x <= 0 else x)
-goal_states_df['exceed-app_usage'] = (goal_states_df['app_usage_real'] - goal_states_df['app_usage_goal']).apply(lambda x: 0 if x <= 0 else x)
-goal_states_df['real-app_usage'] = goal_states_df.apply(lambda row: min(row['app_usage_real'], 2*row['app_usage_goal']-row['app_usage_real']) if (row['app_usage_real'] and 2*row['app_usage_goal']-row['app_usage_real']) >= 0 else 0, axis=1)
-goal_states_df['goal-app_usage'] = (goal_states_df['app_usage_goal'] - goal_states_df['app_usage_real']).apply(lambda x: 0 if x <= 0 else x)
-goal_states_df = goal_states_df.fillna(-1, axis=1)
 
 
-def get_goal_state(day): # 코드 고치기
-    if (day == today_day): return get_goal_today()
-    day_goal_state = goal_states_df[goal_states_df['day'] == day]
+def get_goal_state(date): # 코드 고치기
+    if (date == today): return get_goal_today()
+    day_goal_state = goal_states_df[goal_states_df['date'] == date.strftime("%Y-%m-%d")]
     if day_goal_state.size == 0 : return None
     day_goal_array = np.array(day_goal_state[[
         'exceed-unlock', 'real-unlock', 'goal-unlock',
@@ -143,12 +145,12 @@ def get_goal_state(day): # 코드 고치기
 
 raw_goal_today = [
     [unlock, unlock_info['time']],
-    [total_usage, usage_time_info['hour'] * 60 + usage_time_info['minite']],
-    [app_usage, app_usage_info['hour'] * 60 + app_usage_info['minite']],
+    [total_usage, usage_time_info['hour'] * 60 + usage_time_info['minute']],
+    [app_usage, app_usage_info['hour'] * 60 + app_usage_info['minute']],
 ]
 
 def raw_goal_state(day):
-    if (day == today_day): return raw_goal_today
+    if (day == today.day): return raw_goal_today
     day_goal_state = goal_states_df[goal_states_df['day'] == day]
     if day_goal_state.size == 0 : return None
     day_goal_array = np.array(day_goal_state[[
