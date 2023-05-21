@@ -14,7 +14,7 @@
     - 재사용되는 component를 만들 경우
 3. datas
    더미 데이터 파일들
-   - app_usage_time.csv: 앱 별 하루 총 사용량 데이터 (9일치)
+   - usage_time.csv: 앱 별 하루 총 사용량 데이터 (9일치)
    - app_usage_hour.csv: 앱 별 시간 별 사용량 (NA 는 해당 어플리케이션을 그 시간에 사용하지 않았다는 의미)
    - unlock.csv: 하루 unlock 횟수 (9일치)
    - total_user_usage.csv: 모든 사람들의 total usage / session duraion (group 을 확인하기 위한 2d distribution 에 사용)

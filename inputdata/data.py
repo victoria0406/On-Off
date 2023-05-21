@@ -11,7 +11,6 @@ top_apps = pd.read_csv('./datas/top_apps.csv')
 
 top_access = pd.read_csv('./datas/access.csv')
 
-app_usage_time = pd.read_csv('./datas/app_usage_time.csv')
 weekly_usage =  pd.read_csv('./datas/app_usage_weekly.csv')
 
 today = weekly_usage.loc[weekly_usage['date']=='2019-05-06']
@@ -19,7 +18,6 @@ yesterday = weekly_usage.loc[weekly_usage['date']=='2019-05-05']
 hour = today['Total']//60
 min = today['Total']%60
 
-top=list(app_usage_time)
 
 weekly_hour=[]
 weekly_hour.append(pd.read_csv('./datas/usage_hour/app_usage_hour_2019_04_30.csv'))
