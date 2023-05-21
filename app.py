@@ -39,8 +39,8 @@ app.layout = html.Div([
 ],
 className='main-container',
 )
+
+server = app.server
+
 for callback, *arcs  in get_callbacks():
     app.callback(*arcs)(callback)  
-    
-if __name__ == '__main__':
-    server = app.server
