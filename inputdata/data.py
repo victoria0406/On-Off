@@ -21,7 +21,17 @@ min = today['Total']%60
 
 top=list(app_usage_time)
 
-app_usage_hour = pd.read_csv('./datas/app_usage_hour.csv')
+weekly_hour=[]
+weekly_hour.append(pd.read_csv('./datas/usage_hour/app_usage_hour_2019_04_30.csv'))
+weekly_hour.append(pd.read_csv('./datas/usage_hour/app_usage_hour_2019_05_01.csv'))
+weekly_hour.append(pd.read_csv('./datas/usage_hour/app_usage_hour_2019_05_02.csv'))
+weekly_hour.append(pd.read_csv('./datas/usage_hour/app_usage_hour_2019_05_03.csv'))
+weekly_hour.append(pd.read_csv('./datas/usage_hour/app_usage_hour_2019_05_04.csv'))
+weekly_hour.append(pd.read_csv('./datas/usage_hour/app_usage_hour_2019_05_05.csv'))
+weekly_hour.append(pd.read_csv('./datas/usage_hour/app_usage_hour_2019_05_06.csv'))
+
+
+today_hour = pd.read_csv('./datas/usage_hour/app_usage_hour_2019_05_06.csv')
 
 unlocks = pd.read_csv('./datas/unlocks.csv')
 

@@ -7,7 +7,7 @@ import math
 import plotly.graph_objects as go
 from datetime import date, timedelta, datetime
 
-from inputdata.data import COLORS, click, app_usage_hour, top_apps, keys, top_access, unlocks
+from inputdata.data import COLORS, click, top_apps, keys, top_access, unlocks, today_hour, weekly_hour
 
 
 dash.register_page(__name__)
@@ -85,45 +85,6 @@ STATISTICS_STYLE={
     'margin': '10px 0 0 20px',
     'height': '25%'
 }
-
-
-
-
-######## usage time #############
-
-
-pd.to_datetime(app_usage_hour['time'], format = "%H:%M")
-total = pd.DataFrame(data=None, index=None, columns=["time","top1","top2","top3","top4","top5"], dtype=None, copy=False)
-top1=0
-top2=0
-top3=0
-top4=0
-top5=0
-
-for idx, row in app_usage_hour.iterrows():
-    minute=int(row[0].split(":")[0])*60+int(row[0].split(":")[1])
-    if(not math.isnan(row[1])):
-        top1 = top1+row[1]
-        total = total.append({'time':minute, 'top1':top1, 'top2':top2, 'top3':top3, 'top4':top4, 'top5':top5},ignore_index=True)
-    if(not math.isnan(row[2])):
-        top2 = top2+row[2]
-        total = total.append({'time':minute, 'top1':top1, 'top2':top2, 'top3':top3, 'top4':top4, 'top5':top5},ignore_index=True)
-    if(not math.isnan(row[3])):
-        top3 = top3+row[3]
-        total = total.append({'time':minute, 'top1':top1, 'top2':top2, 'top3':top3, 'top4':top4, 'top5':top5},ignore_index=True)
-    if(not math.isnan(row[4])):
-        top4 = top4+row[4]
-        total = total.append({'time':minute, 'top1':top1, 'top2':top2, 'top3':top3, 'top4':top4, 'top5':top5},ignore_index=True)
-    if(not math.isnan(row[5])):
-        top5 = top5+row[5]
-        total = total.append({'time':minute, 'top1':top1, 'top2':top2, 'top3':top3, 'top4':top4, 'top5':top5},ignore_index=True)
-
-# fig1.show() 
-
-############## statistics ##################
-
-    
-###############################################
 
 def layout():
     return html.Div(children=[
@@ -221,7 +182,7 @@ def layout():
 
 
 def update_graph(date,btn1, btn2, btn3, btn4, btn5, btn6):
-    
+    global weekly_hour
     usage_time =  pd.read_csv('./datas/usage_time.csv')
     
     date_value=datetime.strptime(date, '%Y-%m-%d')
@@ -315,6 +276,39 @@ def update_graph(date,btn1, btn2, btn3, btn4, btn5, btn6):
     fig.update_yaxes(title=None, showticklabels=False,)
     fig.update_layout(showlegend=False, plot_bgcolor='white',paper_bgcolor="rgb(0,0,0,0)", margin=dict(b=0),hovermode= False)
     
+    ######## usage time #############
+    today_hour = weekly_hour[k[0]]
+    
+    today_hour=today_hour.iloc[:, 1:7].reindex(columns=["timestamp",tops[0],tops[1],tops[2],tops[3],tops[4]])    
+    pd.to_datetime(today_hour['timestamp'], format = "%Y-%m-%d %H:%M:%S")
+    total = pd.DataFrame(data=None, index=None, columns=["time","top1","top2","top3","top4","top5"], dtype=None, copy=False)
+
+    top1=0
+    top2=0
+    top3=0
+    top4=0
+    top5=0
+
+    for idx, row in today_hour.iterrows():
+        today_time = row[0].split()[1]
+        minute=int(today_time.split(":")[0])*60+int(today_time.split(":")[1])
+        # print(minute)
+        if(not math.isnan(row[1])):
+            top1 = row[1]
+            total = total.append({'time':minute, 'top1':top1, 'top2':top2, 'top3':top3, 'top4':top4, 'top5':top5},ignore_index=True)
+        if(not math.isnan(row[2])):
+            top2 = row[2]
+            total = total.append({'time':minute, 'top1':top1, 'top2':top2, 'top3':top3, 'top4':top4, 'top5':top5},ignore_index=True)
+        if(not math.isnan(row[3])):
+            top3 = row[3]
+            total = total.append({'time':minute, 'top1':top1, 'top2':top2, 'top3':top3, 'top4':top4, 'top5':top5},ignore_index=True)
+        if(not math.isnan(row[4])):
+            top4 = row[4]
+            total = total.append({'time':minute, 'top1':top1, 'top2':top2, 'top3':top3, 'top4':top4, 'top5':top5},ignore_index=True)
+        if(not math.isnan(row[5])):
+            top5 = row[5]
+            total = total.append({'time':minute, 'top1':top1, 'top2':top2, 'top3':top3, 'top4':top4, 'top5':top5},ignore_index=True)
+
     total['top1_datetime'] = pd.to_datetime(total['top1'], unit='m')
     total['top1_datetime_string'] = total['top1_datetime'].dt.strftime('%Hh %Mm')
     total['top2_datetime'] = pd.to_datetime(total['top2'], unit='m')
@@ -342,10 +336,10 @@ def update_graph(date,btn1, btn2, btn3, btn4, btn5, btn6):
             
         ),
         yaxis = dict(
-            title = "Usage Time (hour)",
+            title = "Usage Time (min)",
             tickmode = 'array',
-            tickvals = [0,120,240,360,480,600,720],
-            ticktext = ['0', '2', '4', '6', '8', '10','12'],
+            # tickvals = [0,120,240,360,480,600,720],
+            # ticktext = ['0', '2', '4', '6', '8', '10','12'],
             linecolor="#BEBEBE",
             showgrid=True, linewidth=1,gridcolor='#E0E0E0'
         )
