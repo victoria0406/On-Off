@@ -31,7 +31,7 @@ app.layout = html.Div([
                 }
             ),
             html.P(
-                'Let’s check your phone usage this week!',
+                'Let’s check your phone usage pattern!',
                 style={'color': "#636363"}
             )
             ],
