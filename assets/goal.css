@@ -216,11 +216,12 @@
 
 .calendar-donut {
     --plot-size:calc(min(100%, 120px));
-    width: var(--plot-size);
+    aspect-ratio: 1;
     height: var(--plot-size);
     position: absolute;
-    top: calc(50% - var(--plot-size) / 2);
-    left: calc(50% - var(--plot-size) / 2);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .weekly-calendar-title {
