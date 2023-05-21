@@ -9,6 +9,7 @@ from component.sidebar import sidebar
 # from themes.colors import main_color, sub_text_color, main_bg_color, sub_color
 
 app = dash.Dash(__name__, use_pages=True, external_stylesheets=[dbc.themes.BOOTSTRAP, "assets/style.css"])
+server = app.server
 
 HEAD_STYLE = {
     "height": "6.5rem",

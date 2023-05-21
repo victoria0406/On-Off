@@ -30,7 +30,7 @@ app_usage_df['day'] = pd.to_datetime(app_usage_df['date']).dt.day
 unlock_df = pd.read_csv('./datas/unlock.csv')
 
 today_df = app_usage_df.iloc[-1]
-print(today_df['Total'])
+# print(today_df['Total'])
 total_usage = today_df['Total']
 app_usage = today_df[app_usage_info['app']]
 unlock = unlock_df.iloc[-1]['unlock']
@@ -130,7 +130,7 @@ def today_goal_setting(highlighted=None):
 
 
 def get_goal_state(date):
-    print(date)
+    # print(date)
     if (date == today): return get_goal_today()
     day_goal_state = goal_states_df[goal_states_df['date'] == date.strftime("%Y-%m-%d")]
     if day_goal_state.size == 0 : return None
@@ -174,7 +174,7 @@ def convert_time(minute):
 
 def get_calendar_donut_plot(date, index):
     goal_state = get_goal_state(date)
-    print(goal_state)
+    # print(goal_state)
     if goal_state == None : return None
     fig = week_donut_plot(goal_state[index], index)
     if (goal_state[index] != None):
