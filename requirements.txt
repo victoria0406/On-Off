@@ -318,4 +318,10 @@ yapf @ file:///tmp/build/80754af9/yapf_1615749224965/work
 zict==2.1.0
 zipp @ file:///C:/ci/zipp_1652273994994/work
 zope.interface @ file:///C:/ci/zope.interface_1625036252485/work
-psycopg2==2.6.2
+# psycopg2==2.6.2
+
+django>=4.0,<5.0
+gunicorn>=20.0,<21.0
+dj-database-url>=2.0,<3.0
+whitenoise[brotli]>=6.0,<7.0
+psycopg2>=2.0,<3.0
