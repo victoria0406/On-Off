@@ -76,7 +76,7 @@ child_classes = 'm-2'
 group_df = pd.read_csv('datas/total_user_usage.csv')
 
 # Get your usage and session duration times
-your_id = 5
+your_id = 64
 your_ust = group_df.loc[your_id, 'usage_time']
 your_sdt = group_df.loc[your_id, 'session_duration_time']
 
@@ -91,7 +91,7 @@ group_sdt_mean = int(group_df["session_duration_time"].mean().round())
 group_sdt_median = group_df['session_duration_time'].median()
 
 # Set range of axis
-xlb, xrb = -200, max_ust*1.5
+xlb, xrb = -100, max_ust*0.9
 ybb, ytb = -20, max_sdt*0.4
 xlim = [xlb, xrb]
 ylim = [ybb, ytb]
@@ -203,6 +203,11 @@ fig1.update_layout(
     margin=dict(autoexpand=False, b=30, t=90),
 )
 
+if user_group_index == 0 or user_group_index == 1:
+    group_sdt_mean = group_df[group_df["session_duration_time"] > group_sdt_median]["session_duration_time"].mean().round()
+elif user_group_index == 2 or user_group_index == 3:
+    group_sdt_mean = group_df[group_df["session_duration_time"] <= group_sdt_median]["session_duration_time"].mean().round()
+
 fig2 = go.Figure()
 
 group_sdt_mean_bar = go.Bar(
@@ -241,9 +246,27 @@ fig2.update_yaxes(showline=True, showticklabels=False, linewidth=2, linecolor='b
 fig2.update_xaxes(showgrid=True, gridwidth=1, gridcolor='#e5e5e5')
 
 user = group_df.loc[your_id, 'User']
+print(user)
 df = pd.read_csv('datas/total_user_usage_whole.csv')
+
 df['Date'] = pd.to_datetime(df['Date'])
 df['Day'] = df['Date'].dt.day_name().str[:3]
+
+def assign_group(row):
+    if row['usage_time'] > group_ust_median:
+        return 1  # RISK/ON/OFF
+    else:
+        return 0  # SPRINT/SAFE
+
+group_df['group'] = group_df.apply(assign_group, axis=1)
+if group_df.loc[your_id, 'usage_time'] > group_ust_median:
+    user_group = 1  # RISK/ON/OFF
+else:
+    user_group = 0  # SPRINT/SAFE
+same_group_users = group_df[group_df['group'] == user_group]['User'].tolist()
+print(same_group_users)
+df = df[df['User'].isin(same_group_users)]
+print(df)
 
 user_usage_time = df[df['User'] == user].groupby('Day')['TotalUsageTime'].sum()
 group_usage_time = df.groupby('Day')['TotalUsageTime'].mean().round()
