@@ -83,6 +83,7 @@ Flask-Compress @ file:///home/conda/feedstock_root/build_artifacts/flask-compres
 fonttools==4.25.0
 fsspec @ file:///C:/Windows/TEMP/abs_a2mhnomvfy/croots/recipe/fsspec_1659972224540/work
 future @ file:///C:/ci/future_1607568713721/work
+gunicorn
 gensim @ file:///C:/ci/gensim_1646825438310/work
 glob2 @ file:///home/linux1/recipes/ci/glob2_1610991677669/work
 greenlet @ file:///C:/ci/greenlet_1628888275363/work
