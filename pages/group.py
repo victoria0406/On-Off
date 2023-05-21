@@ -4,6 +4,8 @@ import dash_bootstrap_components as dbc
 import plotly.express as px
 import plotly.graph_objects as go
 import pandas as pd
+import os
+from datetime import timezone, timedelta, datetime
 
 user_square_style = {
     'width': '20px',
@@ -31,7 +33,7 @@ col_item_style = {
 }
 
 button_style = {
-    'margin' : '-4.5rem 2rem 1.5rem 0',
+    'margin' : '-4.5rem 15rem 1.5rem 0',
     'width' : '15rem',
     'float': 'right',
     'background-color': '#EBEBF0',
@@ -74,7 +76,7 @@ child_classes = 'm-2'
 group_df = pd.read_csv('datas/total_user_usage.csv')
 
 # Get your usage and session duration times
-your_id = 2
+your_id = 5
 your_ust = group_df.loc[your_id, 'usage_time']
 your_sdt = group_df.loc[your_id, 'session_duration_time']
 
@@ -85,12 +87,12 @@ min_sdt = group_df['session_duration_time'].min()
 max_sdt = group_df['session_duration_time'].max()
 group_ust_mean = group_df["usage_time"].mean()
 group_ust_median = group_df['usage_time'].median()
-group_sdt_mean = group_df["session_duration_time"].mean()
+group_sdt_mean = int(group_df["session_duration_time"].mean().round())
 group_sdt_median = group_df['session_duration_time'].median()
 
 # Set range of axis
-xlb, xrb = -100, max_ust*1.2
-ybb, ytb = -10, max_sdt*1.2
+xlb, xrb = -200, max_ust*1.5
+ybb, ytb = -20, max_sdt*0.4
 xlim = [xlb, xrb]
 ylim = [ybb, ytb]
 
@@ -112,10 +114,10 @@ fig1.update_traces(contours_showlines=False, legendwidth=400)
 group_names = ["RISK", "SPRINT", "SAFE", "ON/OFF"]
 group_colors = ['rgba(50,50,50,0.3)', 'rgba(50,50,50,0.3)', 'rgba(50,50,50,0.3)', 'rgba(50,50,50,0.3)']
 group_descriptions = [
-    "Users in the RISK group fall in the top 50% <br>in terms of both total phone usage time and <br>average duration of each session. Their extended <br>screen time and long individual sessions could <br>indicate a high level of device dependency, <br>signaling potential risk factors for digital wellness.",
-    "Users in the SPRINT group have less overall screen time, <br>falling in the bottom 50% for total phone usage time. <br>However, they tend to have longer sessions, falling in <br>the top 50% for average session duration. <br>Their usage pattern might reflect a preference for <br>fewer, but longer, periods of engagement with their devices.",
-    "Users in the SAFE group have both lower overall <br>screen time and shorter individual sessions, <br>falling in the bottom 50% for both total phone usage time <br>and average session duration. This usage pattern <br>might indicate a balanced relationship with their devices, <br>reducing potential risks associated with excessive screen time.",
-    "Users in the ON/OFF group use their phones frequently, <br>falling in the top 50% for total phone usage time, <br>but have shorter sessions on average, placing them <br>in the bottom 50% for session duration. This could <br>indicate a pattern of frequent checking or multitasking, <br>with shorter periods of engagement spread throughout the day.",
+    "RISK group's usage pattern could indicate, a high level of device <br>dependency, signaling potential risk factors for digital wellness.",
+    "SPRINT group's usage pattern might reflect a preference for <br>fewer, but longer, periods of engagement with their devices.",
+    "SAFE group's usage pattern might indicate a balanced relationship <br>with their devices, reducing potential risks associated with excessive screen time.",
+    "ON/OFF group shows a pattern of frequent checking or multitasking,<br>with shorter periods of engagement spread throughout the day.",
     ]
 size = [25, 25, 25, 25]
 
@@ -146,7 +148,7 @@ fig1.add_trace(go.Scatter(x=x, y=y, mode='text', text=texts, textposition='middl
                             font_size=14,
                             ),))
 
-x0 = [group_ust_median, xlb, xlb, group_ust_mean]
+x0 = [group_ust_median, xlb, xlb, group_ust_median]
 y0 = [group_sdt_median, group_sdt_median, ybb, ybb]
 x1 = [xrb, group_ust_median, group_ust_median, xrb]
 y1 = [ytb, ytb, group_sdt_median, group_sdt_median]
@@ -165,11 +167,17 @@ fig1.add_trace(go.Scatter(x=[your_ust], y=[your_sdt], mode='markers+text',
 fig1.add_vline(x=group_ust_median, line_dash="dot", line_color="#7C6542", line_width=1)
 fig1.add_hline(y=group_sdt_median, line_dash="dot", line_color="#7C6542", line_width=1)
 
+user_group_description = group_descriptions[user_group_index]
 # Define plot layout
 fig1.update_layout(
-    title="your group: RISK Group",
-    width=488, height=336,
+    title={
+        'text': f"Your group - {group_names[user_group_index]}<br><span style='font-size: 10px;'>{user_group_description}</span>",
+        'y':0.9,
+        },
+    autosize=False, width=488, height=336,
     showlegend=False,
+    plot_bgcolor='white', 
+    paper_bgcolor='white', 
     xaxis={
         'automargin': True,
         'title': {
@@ -192,7 +200,7 @@ fig1.update_layout(
         },
         'range': [ylim[0],ylim[1]],
     },
-    margin=dict(b=30, t=60,)
+    margin=dict(autoexpand=False, b=30, t=90),
 )
 
 fig2 = go.Figure()
@@ -223,7 +231,7 @@ fig2.update_traces(
       'color': "#FFF"
     }
     },
-    hovertemplate="%{x}<extra></extra>"
+    hovertemplate="%{x}m<extra></extra>"
     )
 
 fig2.update_layout(plot_bgcolor = 'white', title="Weekly Average Session Time", 
@@ -232,20 +240,41 @@ fig2.update_layout(plot_bgcolor = 'white', title="Weekly Average Session Time",
 fig2.update_yaxes(showline=True, showticklabels=False, linewidth=2, linecolor='black',)
 fig2.update_xaxes(showgrid=True, gridwidth=1, gridcolor='#e5e5e5')
 
-app_df = pd.read_csv('datas/weekly_average.csv')
+user = group_df.loc[your_id, 'User']
+df = pd.read_csv('datas/total_user_usage_whole.csv')
+df['Date'] = pd.to_datetime(df['Date'])
+df['Day'] = df['Date'].dt.day_name().str[:3]
+
+user_usage_time = df[df['User'] == user].groupby('Day')['TotalUsageTime'].sum()
+group_usage_time = df.groupby('Day')['TotalUsageTime'].mean().round()
+app_df = pd.merge(user_usage_time, group_usage_time, on='Day').reset_index()
+app_df.columns = ['day', 'user_usage_time', 'group_usage_time']
+
+day_order = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+day_mapping = {day: i for i, day in enumerate(day_order)}
+app_df['day_id'] = app_df['day'].map(day_mapping)
+app_df = app_df.sort_values('day_id')
+app_df = app_df.drop('day_id', axis=1)
+
+def convert_time(minute):
+    if minute >= 60:
+        if minute % 60 != 0: return str(int(minute // 60))+"h "+str(int(minute % 60))+"m"
+        else: return str(int(minute // 60))+"h"
+    else: return str(int(minute % 60))+"m"
+app_df['converted_user_usage_time'] = app_df['user_usage_time'].apply(lambda x: convert_time(x))
+app_df['converted_group_usage_time'] = app_df['group_usage_time'].apply(lambda x: convert_time(x))
 
 fig3 = go.Figure()
-
-for col in app_df.columns[1:]:
+for col in ['converted_user_usage_time', 'converted_group_usage_time']:
     fig3.add_trace(
         go.Bar(
             x=app_df['day'],
-            y=app_df[col],
-            marker_color='#A7A8C1' if col == 'user_usage_time' else '#F8D294',
+            y=app_df[col.split('_')[1] + '_usage_time'],  # Use original data for plotting
+            marker_color='#A7A8C1' if 'user' in col else '#F8D294',
             opacity=0.8,
             hoverinfo='none',
-            # text=app_df[col],
-            name='You' if col == 'user_usage_time' else 'Others'
+            name='You' if 'user' in col else 'Others',
+            hovertext=app_df[col]  # Use converted data for hover text
         )
     )
     
@@ -256,8 +285,8 @@ fig3.update_traces(
       'color': "#FFF"
     }
     },
-    hovertemplate="%{y}<extra></extra>"
-    )
+    hovertemplate="%{hovertext}<extra></extra>"
+)
 
 fig3.update_layout(
     plot_bgcolor='white',
@@ -278,6 +307,7 @@ fig3.update_layout(
     ),
     margin=dict(b=0, t=60)
 )
+
 dash.register_page(__name__, path='/report/group')
 
 layout = html.Div(children=[

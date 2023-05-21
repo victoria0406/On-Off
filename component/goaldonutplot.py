@@ -115,8 +115,6 @@ def week_donut_plot(data, index):
     if index == 2: colors = ['#B40000','#686986', '#68698650']
     elif index == 1: colors = ['#B40000','#A4BD85', '#A4BD8550']
     elif index == 0: colors = ['#B40000','#E4AE44', '#E4AE4450']
-    
-    
 
     if data == None:
         fig.add_shape(
