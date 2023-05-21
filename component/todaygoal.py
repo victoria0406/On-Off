@@ -129,7 +129,8 @@ def today_goal_setting(highlighted=None):
 
 
 
-def get_goal_state(date): # 코드 고치기
+def get_goal_state(date):
+    print(date)
     if (date == today): return get_goal_today()
     day_goal_state = goal_states_df[goal_states_df['date'] == date.strftime("%Y-%m-%d")]
     if day_goal_state.size == 0 : return None
@@ -143,15 +144,17 @@ def get_goal_state(date): # 코드 고치기
             day_goal_array[i] = None
     return day_goal_array
 
-raw_goal_today = [
-    [unlock, unlock_info['time']],
-    [total_usage, usage_time_info['hour'] * 60 + usage_time_info['minute']],
-    [app_usage, app_usage_info['hour'] * 60 + app_usage_info['minute']],
-]
+def raw_goal_today():
+    return [
+        [unlock, unlock_info['time']],
+        [total_usage, usage_time_info['hour'] * 60 + usage_time_info['minute']],
+        [app_usage, app_usage_info['hour'] * 60 + app_usage_info['minute']],
+    ]
 
-def raw_goal_state(day):
-    if (day == today.day): return raw_goal_today
-    day_goal_state = goal_states_df[goal_states_df['day'] == day]
+def raw_goal_state(date):
+    if (date == today):
+        return raw_goal_today()
+    day_goal_state = goal_states_df[goal_states_df['date'] == date.strftime('%Y-%m-%d')]
     if day_goal_state.size == 0 : return None
     day_goal_array = np.array(day_goal_state[[
         'unlock_real', 'unlock_goal',
@@ -169,12 +172,13 @@ def convert_time(minute):
         else: return str(minute // 60)+"h"
     else: return str(minute % 60)+"m"
 
-def get_calendar_donut_plot(day, index):
-    goal_state = get_goal_state(day)
+def get_calendar_donut_plot(date, index):
+    goal_state = get_goal_state(date)
+    print(goal_state)
     if goal_state == None : return None
     fig = week_donut_plot(goal_state[index], index)
     if (goal_state[index] != None):
-        [real_data, goal_data] = raw_goal_state(day)[index]
+        [real_data, goal_data] = raw_goal_state(date)[index]
         if index == 2: colors = ['#B40000','#686986', '#68698650']
         elif index == 1: colors = ['#B40000','#A4BD85', '#A4BD8550']
         elif index == 0: colors = ['#B40000','#E4AE44', '#E4AE4450']
@@ -199,8 +203,7 @@ def get_calendar_donut_plot(day, index):
 
 
 def unlock_weekly_calendar(highlighted=None):
-    today_day = dt.datetime(2023, 5, 10)
-    date_list = [today_day - dt.timedelta(days=x) for x in range(7)]
+    date_list = [today - dt.timedelta(days=x) for x in range(7)]
     date_list.reverse()
     
     table = html.Table(className=f'weekly-calendar', children=[
@@ -214,8 +217,8 @@ def unlock_weekly_calendar(highlighted=None):
         html.Tbody(children=[
             html.Tr(children=[
                 html.Td(children=[
-                    get_calendar_donut_plot(day.day, 0)
-                ], className='today' if (day == today_day) else '' ) if day != 0 else html.Td('')
+                    get_calendar_donut_plot(day, 0)
+                ], className='today' if (day == today) else '' )
                 for day in date_list
             ])
         ])
@@ -232,8 +235,7 @@ def unlock_weekly_calendar(highlighted=None):
     return return_children
 
 def usage_weekly_calendar(highlighted=None):
-    today_day = dt.datetime(2023, 5, 10)
-    date_list = [today_day - dt.timedelta(days=x) for x in range(7)]
+    date_list = [today - dt.timedelta(days=x) for x in range(7)]
     date_list.reverse()
     
     table = html.Table(className=f'weekly-calendar', children=[
@@ -247,8 +249,8 @@ def usage_weekly_calendar(highlighted=None):
         html.Tbody(children=[
             html.Tr(children=[
                 html.Td(children=[
-                    get_calendar_donut_plot(day.day, 1)
-                ], className='today' if (day == today_day) else '' ) if day != 0 else html.Td('')
+                    get_calendar_donut_plot(day, 1)
+                ], className='today' if (day == today) else '' )
                 for day in date_list
             ])
         ])
@@ -265,8 +267,7 @@ def usage_weekly_calendar(highlighted=None):
     return return_children
 
 def app_weekly_calendar(highlighted=None):
-    today_day = dt.datetime(2023, 5, 10)
-    date_list = [today_day - dt.timedelta(days=x) for x in range(7)]
+    date_list = [today - dt.timedelta(days=x) for x in range(7)]
     date_list.reverse()
     
     table = html.Table(className=f'weekly-calendar', children=[
@@ -280,8 +281,8 @@ def app_weekly_calendar(highlighted=None):
         html.Tbody(children=[
             html.Tr(children=[
                 html.Td(children=[
-                    get_calendar_donut_plot(day.day, 2)
-                ], className='today' if (day == today_day) else '' ) if day != 0 else html.Td('')
+                    get_calendar_donut_plot(day, 2)
+                ], className='today' if (day == today) else '' )
                 for day in date_list
             ])
         ])

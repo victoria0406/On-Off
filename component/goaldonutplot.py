@@ -5,6 +5,10 @@ def goal_donut_plot(unlock_data, usage_data, app_usage_data, highlighted = None)
     if unlock_data == [None, None, None]: unlock_data = None
     if usage_data == [None, None, None]: usage_data = None
     if app_usage_data == [None, None, None]: app_usage_data = None
+    for i in range(0, 3):
+        if unlock_data != None: unlock_data[i] /=60;
+        if usage_data != None: usage_data[i] /=60;
+        if app_usage_data != None: app_usage_data[i] /=60;
     
     fig = go.Figure()
     if (app_usage_data != None):
@@ -73,7 +77,7 @@ def goal_donut_plot(unlock_data, usage_data, app_usage_data, highlighted = None)
             )
     fig.update_traces(
         textinfo='none',
-        hovertemplate='%{text}<br>%{label}<extra></extra>',
+        hovertemplate='%{text}<br>%{label}:%{value:.1f}(h)<extra></extra>',
     )
     fig.update_layout(
         margin_l=12,
@@ -98,6 +102,7 @@ def week_donut_plot(data, index):
     if index == 2: colors = ['#B40000','#686986', '#68698650']
     elif index == 1: colors = ['#B40000','#A4BD85', '#A4BD8550']
     elif index == 0: colors = ['#B40000','#E4AE44', '#E4AE4450']
+    text=['Unlocks', 'Usage Time', 'App Usage Time']
     
     
 
@@ -127,9 +132,14 @@ def week_donut_plot(data, index):
             sort=False,
             domain=dict(x=[0, 1], y=[0, 1]),
             direction='clockwise',
-            opacity=1
+            opacity=1,
+            labels=labels,
+            text=[text[index] for i in range(0, 3)]
             ))
-        fig.update_traces(textinfo='none')
+        fig.update_traces(
+            textinfo='none',
+            hovertemplate='%{text}<br>%{label}<extra></extra>',
+        )
         fig.update_layout(showlegend=False, 
                         plot_bgcolor='rgb(0,0,0,0)',
                         paper_bgcolor="rgb(0,0,0,0)",
