@@ -10,6 +10,7 @@ dash-html-components==2.0.0
 dash-table==5.0.0
 Flask==2.3.1
 fonttools==4.39.3
+gunicorn==20.1.0
 itsdangerous==2.1.2
 Jinja2==3.1.2
 kiwisolver==1.4.4
@@ -26,22 +27,3 @@ pytz==2023.3
 six==1.16.0
 tenacity==8.2.2
 Werkzeug==2.3.0
-# widgetsnbextension @ file:///C:/ci/widgetsnbextension_1644991377168/work
-win-inet-pton @ file:///C:/ci/win_inet_pton_1605306162074/work
-win-unicode-console==0.5
-wincertstore==0.2
-wrapt @ file:///C:/Windows/Temp/abs_7c3dd407-1390-477a-b542-fd15df6a24085_diwiza/croots/recipe/wrapt_1657814452175/work
-xarray @ file:///opt/conda/conda-bld/xarray_1639166117697/work
-xlrd @ file:///tmp/build/80754af9/xlrd_1608072521494/work
-XlsxWriter @ file:///opt/conda/conda-bld/xlsxwriter_1649073856329/work
-xlwings @ file:///C:/b/abs_41rmpiyy58/croots/recipe/xlwings_1664932818417/work
-yapf @ file:///tmp/build/80754af9/yapf_1615749224965/work
-zict==2.1.0
-zipp @ file:///C:/ci/zipp_1652273994994/work
-zope.interface @ file:///C:/ci/zope.interface_1625036252485/work
-# psycopg2==2.6.2
-django>=4.0,<5.0
-gunicorn>=20.0,<21.0
-dj-database-url>=2.0,<3.0
-whitenoise[brotli]>=6.0,<7.0
-psycopg2>=2.0,<3.0
