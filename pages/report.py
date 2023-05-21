@@ -60,9 +60,9 @@ FHCONTENT_STYLE ={
 
 
 BUTTON_STYLE = {
-  'margin' : '-4.5rem 26rem 1.5rem 0',
-  'width' : '15rem',
-  'float': 'right',
+  'margin' : '-5rem 0rem 1.5rem 20rem',
+  'width' : '13rem',
+  'float': 'left',
   'background-color': '#EBEBF0',
   'color': '#000',
   'text-align': 'center',
@@ -72,8 +72,8 @@ BUTTON_STYLE = {
 }
 
 TOGGLE_STYLE ={
-    "margin": '-4.5rem -2rem 1.5rem 0',
-    "width":"27rem",
+    "margin": '-5rem -2rem 1.5rem 0',
+    "width":"21rem",
     "float":"right",
 }
 
@@ -89,19 +89,18 @@ STATISTICS_STYLE={
 def layout():
     return html.Div(children=[
         html.Div([
-                html.Div([
+                html.Div((html.A(html.Button("Compare with Others!",style=BUTTON_STYLE), href="/report/group"))),
                 html.Div([html.Div(html.Img(src='assets/calendar.png', style={'width':'30px', 'height':'30px',}),style={"position":"absolute"}),
                           html.Div(dcc.DatePickerSingle(id="date-picker",clearable=False, with_portal=True, date=date(2019, 5, 6)),style={"position":"relative"}),
-                          ],style={"float":"right", "margin-top":'-4.5rem',"width":"62%"}),
-                html.Div([html.Div(html.A(html.Button("Compare with Others!",style=BUTTON_STYLE), href="/report/group")),
-                html.Div(dbc.Nav([
-                    dbc.NavLink("DAILY", href="/report", active="exact"),
-                    dbc.NavLink('WEEKLY', href="/report/weekly", active="exact"),
-                ],
-                className='report-nav'
-            ), style=TOGGLE_STYLE)], style={"width":"50%","float":"right"})])
-            ], style={'display': 'inline-block','float':"right","width":"100%"}
-        ),
+                          ],style={"margin-top":'-5rem','float': 'left','margin' : '-5rem 0rem 1.5rem 42rem'}),
+                html.Div([                
+                    html.Div(dbc.Nav([
+                        dbc.NavLink("DAILY", href="/report", active="exact"),
+                        dbc.NavLink('WEEKLY', href="/report/weekly", active="exact"),
+                    ],
+                    className='report-nav'
+                ), style=TOGGLE_STYLE)])
+            ], style={'display': 'inline-block','float':"left","width":"100%"}),
         html.Div([
             html.Div([html.P("Apps Top",style={"margin":"10px 0 -5px 10px"}), html.P(id="total_time",style={'font-weight':'bold','font-size':"20px","margin":"-10px 20px -60px 15px",'text-align':'right'}),
                 html.Div(dcc.Graph(id="app_graph", config={'displayModeBar': False}),
