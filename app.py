@@ -2,10 +2,9 @@ import dash
 from dash import html
 import dash_bootstrap_components as dbc
 from flask import redirect
-
 from callback import get_callbacks
-
 from component.sidebar import sidebar
+import os
 # from themes.colors import main_color, sub_text_color, main_bg_color, sub_color
 
 app = dash.Dash(__name__, use_pages=True, external_stylesheets=[dbc.themes.BOOTSTRAP, "assets/style.css"])
@@ -46,4 +45,5 @@ for callback, *arcs  in get_callbacks():
     app.callback(*arcs)(callback)  
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    server_port = os.environ.get('PORT', 8050)  # use default port 8050 if PORT not set
+    app.run_server(debug=False, host='0.0.0.0', port=server_port)
