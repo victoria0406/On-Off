@@ -33,7 +33,7 @@ col_item_style = {
 }
 
 button_style = {
-    'margin' : '-4.5rem 15rem 1.5rem 0',
+    'margin' : '-5rem 16rem 1.5rem 0',
     'width' : '15rem',
     'float': 'right',
     'background-color': '#EBEBF0',
@@ -45,7 +45,7 @@ button_style = {
 }
 
 menu_style = {
-    'margin' : '-4.5rem -7rem 0 0',
+    'margin' : '-5rem -7rem 0 0',
     'width' : '20rem',
     'background-color': '#EBEBF0',
     'text-align': 'center',
@@ -264,9 +264,7 @@ if group_df.loc[your_id, 'usage_time'] > group_ust_median:
 else:
     user_group = 0  # SPRINT/SAFE
 same_group_users = group_df[group_df['group'] == user_group]['User'].tolist()
-print(same_group_users)
 df = df[df['User'].isin(same_group_users)]
-print(df)
 
 user_usage_time = df[df['User'] == user].groupby('Day')['TotalUsageTime'].sum()
 group_usage_time = df.groupby('Day')['TotalUsageTime'].mean().round()
@@ -353,8 +351,8 @@ layout = html.Div(children=[
                     html.Div(style=others_square_style),
                         className=child_classes
                     ),
-                    html.P('Others', className=child_classes)
-                ], style={'margin-left': '3rem', 'display': 'flex', 'flex-direction': 'row'})
+                    html.P('Others in Same Group', className=child_classes)
+                ], style={'margin-left': '1rem', 'display': 'flex', 'flex-direction': 'row'})
             ])
         ], style=menu_style),
         ], style={'display': 'flex', 'width': '1024px', 'justify-content': 'flex-end'}
