@@ -1,5 +1,5 @@
 import pandas as pd
-goal_states_df= pd.read_csv('./datas/goal_states.csv')
+goal_states_df= pd.read_csv('./data/goal_states.csv')
 goal_states_df['day'] = pd.to_datetime(goal_states_df['date']).dt.day
 
 last_goal = goal_states_df[goal_states_df['day'] == 6]
@@ -8,7 +8,7 @@ unlock = last_goal['unlock_goal'].values[0]
 usage = last_goal['total_usage_goal'].values[0]
 goal_app = last_goal['app_usage_app'].values[0]
 if goal_app == -1:
-    app_usage_df = pd.read_csv('./datas/usage_time.csv')
+    app_usage_df = pd.read_csv('./data/usage_time.csv')
     goal_app = app_usage_df.columns[2]
 app_usage = last_goal['app_usage_goal'].values[0]
 

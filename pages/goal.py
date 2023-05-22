@@ -1,7 +1,4 @@
-import calendar
 import dash
-import datetime as dt
-import pandas as pd
 from dash import html, dcc, callback, Output, Input, State
 from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_info
 from component.todaygoal import today_goal_not_setting, today_goal_setting, today_goal_donut_plot, unlock_weekly_calendar, usage_weekly_calendar, app_weekly_calendar, today

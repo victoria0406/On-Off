@@ -8,7 +8,7 @@ from component.graph import usage_graph, unlock_graph, app_usage_graph
 import pandas as pd
 import numpy as np
 
-goal_states_df= pd.read_csv('./datas/goal_states.csv')
+goal_states_df= pd.read_csv('./data/goal_states.csv')
 ## goal_states_df = goal_states_df.fillna(-1, axis=1)
 goal_states_df['day'] = pd.to_datetime(goal_states_df['date']).dt.day
 goal_states_df['exceed-unlock'] = (goal_states_df['unlock_real'] - goal_states_df['unlock_goal']).apply(lambda x: 0 if x <= 0 else x)
@@ -25,9 +25,9 @@ goal_states_df = goal_states_df.fillna(-1, axis=1)
 today = pd.to_datetime(goal_states_df.iloc[-1, :]['date']).date()
 today_str = today.strftime("%Y-%m-%d")
 
-app_usage_df = pd.read_csv('./datas/usage_time.csv')
+app_usage_df = pd.read_csv('./data/usage_time.csv')
 app_usage_df['day'] = pd.to_datetime(app_usage_df['date']).dt.day
-unlock_df = pd.read_csv('./datas/unlock.csv')
+unlock_df = pd.read_csv('./data/unlock.csv')
 
 today_df = app_usage_df.iloc[-1]
 # print(today_df['Total'])
@@ -117,7 +117,7 @@ def today_goal_setting(highlighted=None):
     fig = today_goal_donut_plot(highlighted)
     return_children.append(dcc.Graph(figure = fig, config={'displayModeBar': False}, className='today-goal-fig'))
     return_children.append(color_info_component)
-    goal_list = [];
+    goal_list = []
     if unlock_info['checked']:
         goal_list.append(unlock_component(highlighted))
     if usage_time_info['checked']:

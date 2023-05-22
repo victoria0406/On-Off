@@ -89,7 +89,7 @@ weekly_usage['date']=weekly_usage['date'].dt.strftime('%b %d')
 
 ################ screen on ####################
 
-screen_on_df = pd.read_csv('./datas/screen_on.csv')
+screen_on_df = pd.read_csv('./data/screen_on.csv')
 
 screen_on = int(screen_on_df['0'].mean())
 
@@ -346,7 +346,7 @@ def update_graph(btn1, btn2, btn3, btn4, btn5, btn6):
     
     
     ############ number of access ################
-    weekly = pd.read_csv('./datas/weekly_access.csv')
+    weekly = pd.read_csv('./data/weekly_access.csv')
     
     weekly['date']=date
     

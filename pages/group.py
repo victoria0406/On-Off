@@ -73,7 +73,7 @@ graph_wrapper = {
 child_classes = 'm-2'
 
 # Load data
-group_df = pd.read_csv('datas/total_user_usage.csv')
+group_df = pd.read_csv('data/total_user_usage.csv')
 
 # Get your usage and session duration times
 your_id = 64
@@ -247,7 +247,7 @@ fig2.update_xaxes(showgrid=True, gridwidth=1, gridcolor='#e5e5e5')
 
 user = group_df.loc[your_id, 'User']
 print(user)
-df = pd.read_csv('datas/total_user_usage_whole.csv')
+df = pd.read_csv('data/total_user_usage_whole.csv')
 
 df['Date'] = pd.to_datetime(df['Date'])
 df['Day'] = df['Date'].dt.day_name().str[:3]

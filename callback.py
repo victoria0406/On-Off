@@ -6,7 +6,7 @@ from component.todaygoal import today_goal_setting, today_goal_donut_plot, unloc
 from component.calendar import get_calendar
 import pandas as pd
 
-app_usage_df = pd.read_csv('./datas/usage_time.csv')
+app_usage_df = pd.read_csv('./data/usage_time.csv')
 def avg_app_usage(app):
     return app_usage_df[app].mean()
 
