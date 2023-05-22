@@ -9,7 +9,7 @@ import datetime
 from inputdata.data import unlocks, date, weekly_usage
 
 
-weekly_usage['date']=pd.to_datetime(weekly_usage['date'], format = "%Y %m %d")
+weekly_usage['date']=pd.to_datetime(weekly_usage['date'], format = "%Y-%m-%d")
 weekly_usage['date']=weekly_usage['date'].dt.strftime('%m/%d')
 
 
