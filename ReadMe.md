@@ -1,16 +1,16 @@
-## File Directory
-1. pages: Each page will have a router applied
+## 1. pages: Each page will have a router applied
+   - root.py: Initial page
    - goal.py: Initially, you can set a goal, and after setting a goal, it shows the daily goal achievement rate
    - report.py: Shows the user's phone usage pattern for a specific date
    - weekly.py: Shows the user's weekly phone usage pattern
    - group.py: Assigns users to specific groups based on their usage patterns and compares the average within the group with the user's pattern
 
-2. component: There are additional components <br/>
+## 2. component: There are additional components <br/>
    Files in this folder
    - The code to create a component is too long
    - In case of creating reusable components
 
-3. data: Contains data used for data visualization (except for the file for all users, values of 'P3016' user are used)
+## 3. data: Contains data used for data visualization (except for the file for all users, values of 'P3016' user are used)
    - access.csv: Top 5 apps in terms of user access count over 7 days
    - app_usage_weekly.csv: Total usage of the top 5 apps used by the user for a week
    - goal_states.csv: Goal time and practice time
@@ -25,9 +25,3 @@
    - unlock.csv: Number of times unlocked in a day (for 7 days)
    - usage_time.csv: Total daily usage by app over 7 days
    - weekly_access.csv: Daily access count by app over 7 days
-
-## Commands
-1. pip install -r requirements.txt <br/>
-   Install the packages used
-2. git checkout -b dev/"name" <br/>
-   Create and checkout a branch
