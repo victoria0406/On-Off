@@ -1,4 +1,4 @@
-## 파일 구조 설명
+## File Directory
 1. pages: Each page will have a router applied
    - goal.py: Initially, you can set a goal, and after setting a goal, it shows the daily goal achievement rate
    - report.py: Shows the user's phone usage pattern for a specific date
