@@ -2,11 +2,10 @@ import dash
 from dash.dependencies import Input, Output, State
 from dash import html, dcc
 from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_info
-from component.todaygoal import today_goal_setting, today_goal_donut_plot, unlock_weekly_calendar, usage_weekly_calendar, app_weekly_calendar
-from component.calendar import get_calendar
 import pandas as pd
 
 app_usage_df = pd.read_csv('./datas/usage_time.csv')
+
 def avg_app_usage(app):
     return app_usage_df[app].mean()
 
