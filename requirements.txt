@@ -12,7 +12,6 @@ dash-html-components==2.0.0
 dash-table==5.0.0
 Flask==2.3.1
 fonttools==4.39.3
-heroku==0.1.4
 idna==3.4
 itsdangerous==2.1.2
 Jinja2==3.1.2
@@ -33,3 +32,4 @@ tenacity==8.2.2
 tzdata==2023.3
 urllib3==2.0.2
 Werkzeug==2.3.0
+gunicorn==20.1.0
