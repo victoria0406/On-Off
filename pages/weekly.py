@@ -84,9 +84,6 @@ AVERAGE_STYLE={
     'background-color':'#F7F8FA'
 }
 
-weekly_usage['date']=pd.to_datetime(weekly_usage['date'], format = "%m/%d")
-weekly_usage['date']=weekly_usage['date'].dt.strftime('%b %d')
-
 ################ screen on ####################
 
 screen_on_df = pd.read_csv('./data/screen_on.csv')

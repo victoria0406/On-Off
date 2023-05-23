@@ -274,7 +274,6 @@ def update_graph(date,btn1, btn2, btn3, btn4, btn5, btn6):
     today_hour = weekly_hour[k[0]]
     
     today_hour=today_hour.iloc[:, 1:7].reindex(columns=["timestamp",tops[0],tops[1],tops[2],tops[3],tops[4]])    
-    pd.to_datetime(today_hour['timestamp'], format = "%Y-%m-%d %H:%M:%S")
     total = pd.DataFrame(data=None, index=None, columns=["time","top1","top2","top3","top4","top5"], dtype=None, copy=False)
 
     top1=0

@@ -29,3 +29,10 @@ app_usage_info = {
     'hour': 0 if app_usage < 0 else app_usage // 60,
     'minute': 0 if app_usage < 0 else app_usage % 60,
 }
+
+def get_usage_time_info():
+    return usage_time_info
+def get_unlock_info():
+    return unlock_info
+def get_app_usage_info():
+    return app_usage_info

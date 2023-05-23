@@ -3,7 +3,6 @@ import dash
 import datetime as dt
 import pandas as pd
 from dash import html, dcc
-from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_info
 from component.todaygoal import today_goal_not_setting, get_goal_today, get_goal_state, today
 from component.goaldonutplot import goal_donut_plot
 
