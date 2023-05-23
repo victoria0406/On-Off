@@ -176,4 +176,65 @@ def goal_setting(n1, n2, n_fault, unlock_time, usage_hour, usage_minute, app_usa
     else:
         return [False, False, 0, 0, 0]
     
-    
+@callback(
+    [Output('selected-app', 'children'), Output('avg-app-usage', 'children')],
+    Input('app-dropdown', 'value'),
+)
+def selected_app(value):
+    usage = app_usage_df[value].mean()
+    return [value, f'{usage // 60:.0f}h {usage % 60:.0f}m']
+
+plus_layout = html.Div([
+'+'
+], className="custom-checkbox plus")
+minus_layout = html.Div([
+    '-'
+], className="custom-checkbox minus")
+@callback(
+    [
+        Output('goal-switch-output-usage-time', 'children'),
+        Output('goal-switch-disable-usage-time-1', 'disabled'),
+        Output('goal-switch-disable-usage-time-2', 'disabled'),
+        Output('goal-setting-list-container-usage-time', 'className'),
+    ],
+    Input('goal-switch-input-usage-time', 'value')
+)
+def usage_time_switch(value):
+    if 'on' in value:
+        usage_time_info['checked'] = True
+        return [[plus_layout], False, False, 'goal-setting-list-container active']
+    else:
+        usage_time_info['checked'] = False
+        return [[minus_layout], True, True, 'goal-setting-list-container']
+@callback(
+    [
+        Output('goal-switch-output-unlock', 'children'),
+        Output('goal-switch-disable-unlock-1', 'disabled'),
+        Output('goal-setting-list-container-unlock', 'className'),
+    ],
+    Input('goal-switch-input-unlock', 'value')
+)
+def unlock_switch(value):
+    if 'on' in value:
+        unlock_info['checked'] = True
+        return [[plus_layout], False, 'goal-setting-list-container active']
+    else:
+        unlock_info['checked'] = False
+        return [[minus_layout], True, 'goal-setting-list-container']
+@callback(
+    [
+        Output('goal-switch-output-app-usage', 'children'),
+        Output('app-dropdown', 'disabled'),
+        Output('goal-switch-disable-app-usage-2', 'disabled'),
+        Output('goal-switch-disable-app-usage-3', 'disabled'),
+        Output('goal-setting-list-container-app-usage', 'className'),
+    ],
+    Input('goal-switch-input-app-usage', 'value')
+)
+def app_usage_switch(value):
+        if 'on' in value:
+            app_usage_info['checked'] = True
+            return [[plus_layout], False, False, False, 'goal-setting-list-container active']
+        else:
+            app_usage_info['checked'] = False
+            return [[minus_layout], True, True, True, 'goal-setting-list-container']
