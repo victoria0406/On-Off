@@ -31,7 +31,7 @@ weekly_hour.append(pd.read_csv('./data/usage_hour/app_usage_hour_2019_05_06.csv'
 
 today_hour = pd.read_csv('./data/usage_hour/app_usage_hour_2019_05_06.csv')
 
-unlocks = pd.read_csv('./data/unlocks.csv')
+unlock = pd.read_csv('./data/unlock.csv')
 
 date = list(keys.values())
     

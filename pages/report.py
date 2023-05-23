@@ -7,7 +7,7 @@ import math
 import plotly.graph_objects as go
 from datetime import date, timedelta, datetime
 
-from inputdata.data import COLORS, click, top_apps, keys, top_access, unlocks, today_hour, weekly_hour
+from inputdata.data import COLORS, click, top_apps, keys, top_access, unlock, today_hour, weekly_hour
 
 
 dash.register_page(__name__)
@@ -177,7 +177,7 @@ def layout():
 
 def update_graph(date,btn1, btn2, btn3, btn4, btn5, btn6):
     global weekly_hour
-    usage_time =  pd.read_csv('./datas/usage_time.csv')
+    usage_time =  pd.read_csv('./data/usage_time.csv')
     
     date_value=datetime.strptime(date, '%Y-%m-%d')
     yesterday_index = date_value - timedelta(days = 1)
@@ -412,11 +412,11 @@ def update_graph(date,btn1, btn2, btn3, btn4, btn5, btn6):
     children7 = html.P(today_access['number_of_access'].sum(),style={'font-weight':"bold",'font-size':'18px','margin':'-12px 0 0 20px',"float":"left"})
     children8 = html.Div([html.P(access_differ,style={"float":"left","margin-right":"10px",'font-size':'15px','color':access_color}),html.P(" yesterday",style={"float":"right",'font-size':'14px'})],style={"float":"right",'margin':'-12px 15px 0 0'})
     
-    today_unlock = unlocks["0"][k[0]]
+    today_unlock = unlock["0"][k[0]]
     if (k[0]==0):
         differ_unlock=0
     else:
-        differ_unlock = today_unlock - unlocks["0"][k[0]-1]
+        differ_unlock = today_unlock - unlock["0"][k[0]-1]
     
     if(differ_unlock>0):
         differ_unlock = "+" + str(differ_unlock)

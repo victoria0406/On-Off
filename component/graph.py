@@ -6,7 +6,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import datetime
 
-from inputdata.data import unlocks, date, weekly_usage
+from inputdata.data import unlock, date, weekly_usage
 
 
 weekly_usage['date']=pd.to_datetime(weekly_usage['date'], format = "%Y-%m-%d")
@@ -70,11 +70,11 @@ def unlock_graph():
     
     color = [
         '#E4AE44' if v < today_unlock_warning else '#E46060'
-        for v in unlocks['0']
+        for v in unlock['0']
     ]
 
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=date, y=unlocks['0'], mode='lines+markers', line_color='#E4AE44',
+    fig.add_trace(go.Scatter(x=date, y=unlock['0'], mode='lines+markers', line_color='#E4AE44',
                             marker=dict(
                                     color='white',
                                     size=12,
