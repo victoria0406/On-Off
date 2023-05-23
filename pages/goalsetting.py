@@ -3,14 +3,14 @@ import dash_bootstrap_components as dbc
 import pandas as pd 
 from dash import html, dcc, callback, Input, Output, State
 from component.goalsettingcomponent import goalsettingcomponent
-from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_info
+from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_info, update_goal_df
+from inputdata.data import top_apps, unlocks as unlock_df, usage_time as app_usage_df
 
 dash.register_page(__name__, path='/goal/setting')
 
-app_usage_df = pd.read_csv('./data/usage_time.csv')
-unlock_df = pd.read_csv('./data/unlock.csv')
-app_list = app_usage_df.iloc[-2, 2:].drop(['Total', 'Others']).dropna().sort_values(ascending=False).index.tolist()
-avg_unlock = unlock_df['unlock'].mean()
+app_list = tops = top_apps.iloc[:,-1].values.tolist()  
+print(app_list)
+avg_unlock = unlock_df['0'].mean()
 avg_total_usage = app_usage_df['Total'].mean()
 def avg_app_usage(app):
     return app_usage_df[app].mean()
@@ -166,6 +166,7 @@ def goal_setting(n1, n2, n_fault, unlock_time, usage_hour, usage_minute, app_usa
             return [False, True, 0, 0, 0]
         if (app_usage_info['checked'] and ((app_usage_hour == 0 and app_usage_minute == 0) or app_usage_hour == None or app_usage_minute == None)):
             return [False, True, 0, 0, 0]
+        update_goal_df()
         unlock_info['time'] = unlock_time
         usage_time_info['hour'] = usage_hour
         usage_time_info['minute'] = usage_minute
