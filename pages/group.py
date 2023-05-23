@@ -5,6 +5,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import pandas as pd
 import os
+import numpy as np
 from datetime import timezone, timedelta, datetime
 
 user_square_style = {
@@ -72,8 +73,14 @@ graph_wrapper = {
 
 child_classes = 'm-2'
 
+def convert_time(minute):
+    if minute >= 60:
+        if minute % 60 != 0: return str(int(minute // 60))+"h "+str(int(minute % 60))+"m"
+        else: return str(int(minute // 60))+"h"
+    else: return str(int(minute % 60))+"m"
+
 # Load data
-group_df = pd.read_csv('datas/total_user_usage.csv')
+group_df = pd.read_csv('data/total_user_usage.csv')
 
 # Get your usage and session duration times
 your_id = 64
@@ -116,7 +123,7 @@ group_colors = ['rgba(50,50,50,0.3)', 'rgba(50,50,50,0.3)', 'rgba(50,50,50,0.3)'
 group_descriptions = [
     "RISK group's usage pattern could indicate, a high level of device <br>dependency, signaling potential risk factors for digital wellness.",
     "SPRINT group's usage pattern might reflect a preference for <br>fewer, but longer, periods of engagement with their devices.",
-    "SAFE group's usage pattern might indicate a balanced relationship <br>with their devices, reducing potential risks associated with excessive screen time.",
+    "SAFE group's usage pattern might indicate a balanced relationship <br>with their devices, reducing potential risks associated with phone usage.",
     "ON/OFF group shows a pattern of frequent checking or multitasking,<br>with shorter periods of engagement spread throughout the day.",
     ]
 size = [25, 25, 25, 25]
@@ -163,9 +170,29 @@ fig1.add_shape(type='rect', xref='x', yref='y',
 fig1.add_trace(go.Scatter(x=[your_ust], y=[your_sdt], mode='markers+text', 
                           text=["<b>You</b>"], textposition="bottom center",
                           textfont=dict(family="Arial", size=15, color="#10135B"),
-                          marker=dict(color='#10135B', size=10), hoverinfo='none'))
-fig1.add_vline(x=group_ust_median, line_dash="dot", line_color="#7C6542", line_width=1)
-fig1.add_hline(y=group_sdt_median, line_dash="dot", line_color="#7C6542", line_width=1)
+                          marker=dict(color='#10135B', size=10), 
+                          customdata=[convert_time(your_ust)],
+                          hovertemplate='Usage Time: %{customdata}<br>Session Duration Time: %{y}m<extra></extra>'))
+
+fig1.add_vline(x=group_ust_median, 
+               line_dash="dot", line_color="#7C6542", line_width=1, annotation_text="median: "+convert_time(group_ust_median), 
+               annotation_position="top left",
+               annotation_showarrow=True,
+               annotation_arrowhead=1,
+               annotation_ay=5,
+               annotation_ax=-10,
+               annotation_font_size=12,
+               )
+fig1.add_hline(y=group_sdt_median, 
+               line_dash="dot", line_color="#7C6542", line_width=1,
+               annotation_text="median: "+convert_time(group_sdt_median), 
+               annotation_position="bottom right",
+               annotation_showarrow=True,
+               annotation_arrowhead=1,
+               annotation_ay=5,
+               annotation_ax=10,
+               annotation_font_size=12,
+               )
 
 user_group_description = group_descriptions[user_group_index]
 # Define plot layout
@@ -200,6 +227,9 @@ fig1.update_layout(
         },
         'range': [ylim[0],ylim[1]],
     },
+    hoverlabel=dict(
+        font_size=11,
+    ),
     margin=dict(autoexpand=False, b=30, t=90),
 )
 
@@ -247,7 +277,7 @@ fig2.update_xaxes(showgrid=True, gridwidth=1, gridcolor='#e5e5e5')
 
 user = group_df.loc[your_id, 'User']
 print(user)
-df = pd.read_csv('datas/total_user_usage_whole.csv')
+df = pd.read_csv('data/total_user_usage_whole.csv')
 
 df['Date'] = pd.to_datetime(df['Date'])
 df['Day'] = df['Date'].dt.day_name().str[:3]
@@ -277,11 +307,6 @@ app_df['day_id'] = app_df['day'].map(day_mapping)
 app_df = app_df.sort_values('day_id')
 app_df = app_df.drop('day_id', axis=1)
 
-def convert_time(minute):
-    if minute >= 60:
-        if minute % 60 != 0: return str(int(minute // 60))+"h "+str(int(minute % 60))+"m"
-        else: return str(int(minute // 60))+"h"
-    else: return str(int(minute % 60))+"m"
 app_df['converted_user_usage_time'] = app_df['user_usage_time'].apply(lambda x: convert_time(x))
 app_df['converted_group_usage_time'] = app_df['group_usage_time'].apply(lambda x: convert_time(x))
 

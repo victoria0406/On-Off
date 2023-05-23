@@ -177,7 +177,7 @@ def layout():
 
 def update_graph(date,btn1, btn2, btn3, btn4, btn5, btn6):
     global weekly_hour
-    usage_time =  pd.read_csv('./datas/usage_time.csv')
+    usage_time =  pd.read_csv('./data/usage_time.csv')
     
     date_value=datetime.strptime(date, '%Y-%m-%d')
     yesterday_index = date_value - timedelta(days = 1)

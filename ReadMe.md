@@ -1,26 +1,27 @@
-# Starting url is /report
+## 1. pages: Each page will have a router applied
+   - root.py: Initial page
+   - goal.py: Initially, you can set a goal, and after setting a goal, it shows the daily goal achievement rate
+   - report.py: Shows the user's phone usage pattern for a specific date
+   - weekly.py: Shows the user's weekly phone usage pattern
+   - group.py: Assigns users to specific groups based on their usage patterns and compares the average within the group with the user's pattern
 
-## Commands
-1. pip install -r requirements.txt <br/>
-    사용된 패키지 설치
-2. git checkout -b dev/이름 <br/>
-   브랜치 생성 및 체크아웃
+## 2. component: There are additional components <br/>
+   Files in this folder
+   - The code to create a component is too long
+   - In case of creating reusable components
 
-## 파일 구조 설명
-1. pages: router 적용될 페이지가 각각 존재
-2. component: 부가적인 component가 존재 <br/>
-    해당 폴더에 들어가는 파일
-    - 하나의 component에 생성에 코드가 너무 김
-    - 재사용되는 component를 만들 경우
-3. datas
-   더미 데이터 파일들
-   - usage_time.csv: 앱 별 하루 총 사용량 데이터 (9일치)
-   - app_usage_hour.csv: 앱 별 시간 별 사용량 (NA 는 해당 어플리케이션을 그 시간에 사용하지 않았다는 의미)
-   - unlock.csv: 하루 unlock 횟수 (9일치)
-   - total_user_usage.csv: 모든 사람들의 total usage / session duraion (group 을 확인하기 위한 2d distribution 에 사용)
-   - goal_status.csv: 목표 시간과 실천 시간 <br />
-      - {목표명}_real: 당일 실제 사용 시간
-      - {목표명}_goal: 당일 목표 사용 시간
-      - app_usage_app: 사용 목표 어플리케이션 
-      - 해당 목표가 없는 날은 관련 데이터 NA로 처리
-   - weekly_average.csv: user와 group의 요일 별 평균 사용량
+## 3. data: Contains data used for data visualization (except for the file for all users, values of 'P3016' user are used)
+   - access.csv: Top 5 apps in terms of user access count over 7 days
+   - app_usage_weekly.csv: Total usage of the top 5 apps used by the user for a week
+   - goal_states.csv: Goal time and practice time
+   - {goal name}_real: Actual usage time of the day
+   - {goal name}_goal: Daily goal usage time
+   - app_usage_app: Application used as a usage goal
+   - Relevant data is treated as NA on days when there is no goal
+   - screen_on.csv: Number of times the user turned on the screen over 7 days (irrelevant to unlocking)
+   - top_apps.csv: Top 5 most used apps by the user (for 7 days)
+   - total_user_usage.csv: Average total usage / session duration of all users over 7 days (used for checking 2d - distribution for groups)
+   - total_user_usage_whole.csv: Total usage and session duration of all users over 7 days
+   - unlock.csv: Number of times unlocked in a day (for 7 days)
+   - usage_time.csv: Total daily usage by app over 7 days
+   - weekly_access.csv: Daily access count by app over 7 days

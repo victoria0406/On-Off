@@ -4,8 +4,7 @@ from dash import html, dcc
 from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_info
 import pandas as pd
 
-app_usage_df = pd.read_csv('./datas/usage_time.csv')
-
+app_usage_df = pd.read_csv('./data/usage_time.csv')
 def avg_app_usage(app):
     return app_usage_df[app].mean()
 
