@@ -5,6 +5,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import pandas as pd
 import os
+import numpy as np
 from datetime import timezone, timedelta, datetime
 
 user_square_style = {
@@ -170,15 +171,16 @@ fig1.add_trace(go.Scatter(x=[your_ust], y=[your_sdt], mode='markers+text',
                           text=["<b>You</b>"], textposition="bottom center",
                           textfont=dict(family="Arial", size=15, color="#10135B"),
                           marker=dict(color='#10135B', size=10), 
-                          hovertemplate='Usage Time: %{x}<br>Session Duration Time: %{y}<extra></extra>'))
+                          customdata=[convert_time(your_ust)],
+                          hovertemplate='Usage Time: %{customdata}<br>Session Duration Time: %{y}m<extra></extra>'))
 
 fig1.add_vline(x=group_ust_median, 
                line_dash="dot", line_color="#7C6542", line_width=1, annotation_text="median: "+convert_time(group_ust_median), 
                annotation_position="top left",
                annotation_showarrow=True,
                annotation_arrowhead=1,
-               annotation_ay=10,
-               annotation_ax=-20,
+               annotation_ay=5,
+               annotation_ax=-10,
                annotation_font_size=12,
                )
 fig1.add_hline(y=group_sdt_median, 
@@ -187,8 +189,8 @@ fig1.add_hline(y=group_sdt_median,
                annotation_position="bottom right",
                annotation_showarrow=True,
                annotation_arrowhead=1,
-               annotation_ay=10,
-               annotation_ax=20,
+               annotation_ay=5,
+               annotation_ax=10,
                annotation_font_size=12,
                )
 
