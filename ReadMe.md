@@ -71,3 +71,4 @@ gunicorn==20.1.0
    - unlock.csv: Number of times unlocked in a day (for 7 days)
    - usage_time.csv: Total daily usage by app over 7 days
    - weekly_access.csv: Daily access count by app over 7 days
+   - usage_hour/app_usage_hour_{date}.csv: Usage by app in each hour (each file contains data about each date) 
