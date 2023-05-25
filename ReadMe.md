@@ -60,10 +60,10 @@ gunicorn==20.1.0
    - access.csv: Top 5 apps in terms of user access count over 7 days
    - app_usage_weekly.csv: Total usage of the top 5 apps used by the user for a week
    - goal_states.csv: Goal time and practice time
-   - {goal name}_real: Actual usage time of the day
-   - {goal name}_goal: Daily goal usage time
-   - app_usage_app: Application used as a usage goal
-       - Relevant data is treated as NA on days when there is no goal
+      - {goal name}_real: Actual usage time of the day
+      - {goal name}_goal: Daily goal usage time
+      - app_usage_app: Application used as a usage goal
+      - Relevant data is treated as NA on days when there is no goal
    - screen_on.csv: Number of times the user turned on the screen over 7 days (irrelevant to unlocking)
    - top_apps.csv: Top 5 most used apps by the user (for 7 days)
    - total_user_usage.csv: Average total usage / session duration of all users over 7 days (used for checking 2d - distribution for groups)
