@@ -57,6 +57,7 @@ gunicorn==20.1.0
    - In case of creating reusable components
 
 ## 3. data: Contains data used for data visualization (except for the file for all users, values of 'P3016' user are used)
+   - data_processing.ipynb: Notebook file for about data processing codes
    - access.csv: Top 5 apps in terms of user access count over 7 days
    - app_usage_weekly.csv: Total usage of the top 5 apps used by the user for a week
    - goal_states.csv: Goal time and practice time
