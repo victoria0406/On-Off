@@ -1,3 +1,49 @@
+# Project URL
+1. [Demo URL](https://peaceful-crag-15889.herokuapp.com/)
+2. [Process Book](https://docs.google.com/presentation/d/16AtV0y9rWk-fDFNBUmKehER1nrsT19TNYdMwWu50WJ4/edit#slide=id.g2498668c554_1_349)
+3. [Data processing](https://colab.research.google.com/drive/19UDCfamF_I6yBzntQ-LMky5Fkevur-H8#scrollTo=thMXKmUQK0Az)
+
+# Installation
+```console
+pip install -r requirements.txt
+```
+
+Required libraries <br/>
+```console
+colorama==0.4.6
+contourpy==1.0.7
+cycler==0.11.0
+dash==2.8.1
+dash-bootstrap-components==1.4.1
+dash-core-components==2.0.0
+dash-html-components==2.0.0
+dash-table==5.0.0
+Flask==2.3.1
+fonttools==4.39.3
+idna==3.4
+itsdangerous==2.1.2
+Jinja2==3.1.2
+kiwisolver==1.4.4
+MarkupSafe==2.1.2
+matplotlib==3.7.1
+numpy==1.24.3
+packaging==23.1
+pandas==1.5.3
+Pillow==9.5.0
+plotly==5.13.1
+pyparsing==3.0.9
+python-dateutil==2.8.2
+pytz==2023.3
+requests==2.30.0
+six==1.16.0
+tenacity==8.2.2
+tzdata==2023.3
+urllib3==2.0.2
+Werkzeug==2.3.0
+gunicorn==20.1.0
+```
+
+# Directory
 ## 1. pages: Each page will have a router applied
    - root.py: Initial page
    - goal.py: Initially, you can set a goal, and after setting a goal, it shows the daily goal achievement rate
