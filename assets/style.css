@@ -201,4 +201,14 @@ body {
   position: relative;
   margin-top: 5px;
   box-shadow: 4px 4px 4px rgba(46, 46, 46, 0.25);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* width: 80%; */
+}
+
+.container_img{
+  width : 75%;
+  height: 75%;
+  /* margin-left: -10%; */
 }

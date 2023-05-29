@@ -90,7 +90,7 @@ def layout():
     return html.Div(children=[
         html.Div([
                 html.Div((html.A(html.Button("Compare with Others!",style=BUTTON_STYLE), href="/report/group"))),
-                html.Div([html.Div(html.Img(src='assets/calendar.png', style={'width':'30px', 'height':'30px',}),style={"position":"absolute"}),
+                html.Div([
                           html.Div(dcc.DatePickerSingle(id="date-picker",clearable=False, with_portal=True, date=date(2019, 5, 6)),style={"position":"relative"}),
                           ],style={"margin-top":'-5rem','float': 'left','margin' : '-5rem 0rem 1.5rem 42rem'}),
                 html.Div([                
