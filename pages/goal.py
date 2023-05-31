@@ -20,7 +20,7 @@ layout = html.Div(children=[
 )
 
 def goal_higlight_callback(pathname, prev_clicks, next_clicks, search, key):
-    if pathname != '/goal': return [dash.no_update, dash.no_update]
+    if pathname != '/goal': return [dash.no_update, dash.no_update, dash.no_update]
     elif search == '?setting=True?unlock': return [unlock_weekly_calendar(), today_goal_setting('unlock'), dash.no_update]
     elif search == '?setting=True?usage': return [usage_weekly_calendar(), today_goal_setting('usage'), dash.no_update]
     elif search == '?setting=True?app': return [app_weekly_calendar(), today_goal_setting('app'), dash.no_update]
