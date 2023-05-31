@@ -29,7 +29,7 @@ def goal_higlight_callback(pathname, prev_clicks, next_clicks, search, key):
         goal_graph = dcc.Graph(figure = fig, config={'displayModeBar': False}, className='calendar-donut' )
         return [dash.no_update, today_goal_setting(), goal_graph]
     elif (prev_clicks and int(key) > 1):
-            return [get_calendar(int(key) -1), dash.no_update, dash.no_update]
+        return [get_calendar(int(key) -1), dash.no_update, dash.no_update]
     elif (next_clicks and int(key) < 12):
         return [get_calendar(int(key) + 1), dash.no_update, dash.no_update]
     else:
