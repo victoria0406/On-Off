@@ -140,6 +140,17 @@ else:
     else:
         user_group_index = 2  # SAFE
 
+x0 = [group_ust_median, xlb, xlb, group_ust_median]
+y0 = [group_sdt_median, group_sdt_median, ybb, ybb]
+x1 = [xrb, group_ust_median, group_ust_median, xrb]
+y1 = [ytb, ytb, group_sdt_median, group_sdt_median]
+
+# Add rectangular shape
+fig1.add_shape(type='rect', xref='x', yref='y',
+               x0=x0[user_group_index], y0=y0[user_group_index],
+               x1=x1[user_group_index], y1=y1[user_group_index],
+               fillcolor="#A7A8C1", opacity=0.2, line=dict(width=0))
+
 # Add the group names to the plot
 x = [(group_ust_median + xrb)/2, (group_ust_median + xlb)/2, (group_ust_median + xlb)/2, (group_ust_median + xrb)/2]
 y = [(group_sdt_median + ytb)/2, (group_sdt_median + ytb)/2, (group_sdt_median + ybb)/2, (group_sdt_median + ybb)/2]
@@ -154,17 +165,6 @@ fig1.add_trace(go.Scatter(x=x, y=y, mode='text', text=texts, textposition='middl
                             bgcolor="rgba(255, 255, 255,0.8)",
                             font_size=14,
                             ),))
-
-x0 = [group_ust_median, xlb, xlb, group_ust_median]
-y0 = [group_sdt_median, group_sdt_median, ybb, ybb]
-x1 = [xrb, group_ust_median, group_ust_median, xrb]
-y1 = [ytb, ytb, group_sdt_median, group_sdt_median]
-
-# Add rectangular shape
-fig1.add_shape(type='rect', xref='x', yref='y',
-               x0=x0[user_group_index], y0=y0[user_group_index],
-               x1=x1[user_group_index], y1=y1[user_group_index],
-               fillcolor="#A7A8C1", opacity=0.3, line=dict(width=0))
 
 # Add your marker and median lines
 fig1.add_trace(go.Scatter(x=[your_ust], y=[your_sdt], mode='markers+text', 
@@ -269,7 +269,7 @@ fig2.update_traces(
     hovertemplate="%{x}m<extra></extra>"
     )
 
-fig2.update_layout(plot_bgcolor = 'white', title="Weekly Average Session Time", 
+fig2.update_layout(plot_bgcolor = 'white', title="Weekly Average Session Time (min)", 
                    bargap=0.2, showlegend=False, width=616, height=336,
                   )
 fig2.update_yaxes(showline=True, showticklabels=False, linewidth=2, linecolor='black',)
@@ -336,7 +336,7 @@ fig3.update_traces(
 
 fig3.update_layout(
     plot_bgcolor='white',
-    title="Weekly Usage Time",
+    title="Weekly Usage Time (min)",
     showlegend=False,
     barmode='group',
     width=1136,

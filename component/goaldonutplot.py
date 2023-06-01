@@ -42,7 +42,7 @@ def goal_donut_plot(unlock_data, usage_data, app_usage_data, highlighted = None)
         domain=dict(x=[0.15, 0.85], y=[0.15, 0.85]),
         direction='clockwise',
         opacity=1 if ((highlighted == None) or (highlighted == 'usage')) else 0.3,
-        text=["Usage Time","Usage Time","Usage Time"]
+        text=["Total Usage Time","Total Usage Time","Total Usage Time"]
         ))
     else:
         fig.add_shape(
@@ -102,7 +102,7 @@ def week_donut_plot(data, index):
     if index == 2: colors = ['#B40000','#686986', '#68698650']
     elif index == 1: colors = ['#B40000','#A4BD85', '#A4BD8550']
     elif index == 0: colors = ['#B40000','#E4AE44', '#E4AE4450']
-    text=['Unlocks', 'Usage Time', 'App Usage Time']
+    text=['Unlocks', 'Total Usage Time', 'App Usage Time']
     
     if data == None:
         fig.add_shape(
@@ -123,6 +123,8 @@ def week_donut_plot(data, index):
                         }
                         )
     else:
+        for i in range(0, 3):
+            data[i]/=60;
         fig.add_trace(go.Pie(
             values=data,
             marker=dict(colors=colors),
@@ -136,7 +138,7 @@ def week_donut_plot(data, index):
             ))
         fig.update_traces(
             textinfo='none',
-            hovertemplate='%{text}<br>%{label}<extra></extra>',
+            hovertemplate='%{text}<br>%{label}:%{value:.1f}(h)<extra></extra>',
         )
         fig.update_layout(showlegend=False, 
                         plot_bgcolor='rgb(0,0,0,0)',
