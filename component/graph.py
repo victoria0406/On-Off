@@ -1,6 +1,6 @@
 import dash
 from dash import html, dcc, callback, Input, Output
-from inputdata.goalsettingdata import get_usage_time_info, get_unlock_info, get_app_usage_info
+from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_info
 import plotly.express as px
 import pandas as pd
 import plotly.graph_objects as go
@@ -17,7 +17,7 @@ weekly_usage['date']=weekly_usage['date'].dt.strftime('%m/%d')
 
 
 def usage_graph():
-    usage_time_info = get_usage_time_info()
+    global usage_time_info
     today_usage_warning = usage_time_info['hour']*60+usage_time_info['minute']
     
     
@@ -67,7 +67,7 @@ def usage_graph():
     return fig 
     
 def unlock_graph():
-    unlock_info = get_unlock_info()
+    global unlock_info
     today_unlock_warning = unlock_info['time']
     
     color = [
@@ -110,7 +110,7 @@ def unlock_graph():
     return fig 
 
 def app_usage_graph():
-    app_usage_info = get_app_usage_info()
+    global app_usage_info
     app_usage_warning = app_usage_info['hour']*60+app_usage_info['minute']
     
     target_app = app_usage_info['app']

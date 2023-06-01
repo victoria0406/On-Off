@@ -153,6 +153,9 @@ layout = html.Div([
 )
 
 def goal_setting(n1, n2, n_fault, unlock_time, usage_hour, usage_minute, app_usage_app, app_usage_hour, app_usage_minute):
+    global unlock_info
+    global usage_time_info
+    global app_usage_info
     if (n2 or n_fault):
         return [False, False, 0, 0, 0]
     if (n1):
@@ -200,6 +203,7 @@ minus_layout = html.Div([
     Input('goal-switch-input-usage-time', 'value')
 )
 def usage_time_switch(value):
+    global usage_time_info
     if 'on' in value:
         usage_time_info['checked'] = True
         return [[plus_layout], False, False, 'goal-setting-list-container active']
@@ -215,6 +219,7 @@ def usage_time_switch(value):
     Input('goal-switch-input-unlock', 'value')
 )
 def unlock_switch(value):
+    global unlock_info
     if 'on' in value:
         unlock_info['checked'] = True
         return [[plus_layout], False, 'goal-setting-list-container active']
@@ -232,9 +237,10 @@ def unlock_switch(value):
     Input('goal-switch-input-app-usage', 'value')
 )
 def app_usage_switch(value):
-        if 'on' in value:
-            app_usage_info['checked'] = True
-            return [[plus_layout], False, False, False, 'goal-setting-list-container active']
-        else:
-            app_usage_info['checked'] = False
-            return [[minus_layout], True, True, True, 'goal-setting-list-container']
+    global app_usage_info
+    if 'on' in value:
+        app_usage_info['checked'] = True
+        return [[plus_layout], False, False, False, 'goal-setting-list-container active']
+    else:
+        app_usage_info['checked'] = False
+        return [[minus_layout], True, True, True, 'goal-setting-list-container']

@@ -2,7 +2,7 @@ import dash
 import datetime as dt
 from dash.dependencies import Input, Output, State
 from dash import html, dcc
-from inputdata.goalsettingdata import get_usage_time_info, get_unlock_info, get_app_usage_info
+from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_info
 from component.goaldonutplot import goal_donut_plot, week_donut_plot
 from component.graph import usage_graph, unlock_graph, app_usage_graph
 import pandas as pd
@@ -33,7 +33,8 @@ today_df = app_usage_df.iloc[-1]
 # print(today_df['Total'])
 total_usage = today_df['Total']
 def app_usage():
-    return today_df[get_app_usage_info()['app']]
+    global app_usage_info
+    return today_df[app_usage_info['app']]
 unlock = unlock_df.iloc[-1]['unlock']
 
 color_info_component = html.Div([
@@ -46,7 +47,7 @@ color_info_component = html.Div([
 
 def unlock_component(highlighted=None):
     data = unlock;
-    unlock_info = get_unlock_info()
+    global unlock_info
     component = html.Div([
         html.P('Unlocks', className='goal-title'),
         html.A([
@@ -60,7 +61,7 @@ def unlock_component(highlighted=None):
     return component
 
 def usage_time_component(highlighted=None):
-    usage_time_info = get_usage_time_info()
+    global usage_time_info
     data = float(total_usage) / 60;
     usage_goal_minute = float(usage_time_info['hour']) + float(usage_time_info['minute']) / 60
     component = html.Div([
@@ -77,7 +78,7 @@ def usage_time_component(highlighted=None):
 
 def app_usage_component(highlighted=None):
     data = float(app_usage()) / 60;
-    app_usage_info = get_app_usage_info()
+    global app_usage_info
     usage_goal_minute = float(app_usage_info['hour']) + float(app_usage_info['minute']) / 60
     component = html.Div([
         html.P(f"App Usage Time for {app_usage_info['app']}",className='goal-title'),
@@ -93,9 +94,9 @@ def app_usage_component(highlighted=None):
 
 def get_goal_today():
     return_data = [None, None, None];
-    usage_time_info = get_usage_time_info()
-    unlock_info = get_unlock_info()
-    app_usage_info = get_app_usage_info()
+    global usage_time_info
+    global unlock_info
+    global app_usage_info
     if (unlock_info['checked']):
         exceed = max(unlock - unlock_info['time'], 0)
         real = max(min(unlock, 2 * unlock_info['time'] - unlock), 0)
@@ -120,9 +121,9 @@ def today_goal_donut_plot(highlighted = None):
     return fig
 
 def today_goal_setting(highlighted=None):
-    usage_time_info = get_usage_time_info()
-    unlock_info = get_unlock_info()
-    app_usage_info = get_app_usage_info()
+    global usage_time_info
+    global unlock_info
+    global app_usage_info
     return_children = [html.P('Today Goal', style={'font-weight': 'bold'})]
     fig = today_goal_donut_plot(highlighted)
     return_children.append(dcc.Graph(figure = fig, config={'displayModeBar': False}, className='today-goal-fig'))
@@ -155,9 +156,9 @@ def get_goal_state(date):
     return day_goal_array
 
 def raw_goal_today():
-    usage_time_info = get_usage_time_info()
-    app_usage_info = get_app_usage_info()
-    unlock_info = get_unlock_info()
+    global usage_time_info
+    global app_usage_info
+    global unlock_info
     return [
         [unlock, unlock_info['time']],
         [total_usage, usage_time_info['hour'] * 60 + usage_time_info['minute']],
