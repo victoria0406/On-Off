@@ -2,7 +2,6 @@ import plotly.graph_objects as go
 labels = ['exceed', 'used', 'rest']
 
 def goal_donut_plot(unlock_data, usage_data, app_usage_data, highlighted = None):
-    print(unlock_data, usage_data, app_usage_data)
     if unlock_data == [None, None, None]: unlock_data = None
     if usage_data == [None, None, None]: usage_data = None
     if app_usage_data == [None, None, None]: app_usage_data = None

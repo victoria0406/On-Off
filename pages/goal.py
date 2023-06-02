@@ -25,11 +25,11 @@ def goal_higlight_callback(pathname, prev_clicks, next_clicks, search, key, unlo
     elif search == '?setting=True?unlock': return [unlock_weekly_calendar(unlock_info), today_goal_setting(unlock_info, usage_time_info, app_usage_info, 'unlock')]
     elif search == '?setting=True?usage': return [usage_weekly_calendar(usage_time_info), today_goal_setting(unlock_info, usage_time_info, app_usage_info, 'usage')]
     elif search == '?setting=True?app': return [app_weekly_calendar(app_usage_info), today_goal_setting(unlock_info, usage_time_info, app_usage_info, 'app')]
-    elif search == '?setting=True':
-        return [get_calendar(unlock_info, usage_time_info, app_usage_info, int(key)), today_goal_setting(unlock_info, usage_time_info, app_usage_info)]
     elif (prev_clicks and int(key) > 1):
         return [get_calendar(unlock_info, usage_time_info, app_usage_info, int(key) -1), dash.no_update]
     elif (next_clicks and int(key) < 12):
         return [get_calendar(unlock_info, usage_time_info, app_usage_info, int(key) + 1), dash.no_update]
+    elif search == '?setting=True':
+        return [get_calendar(unlock_info, usage_time_info, app_usage_info, int(key)), today_goal_setting(unlock_info, usage_time_info, app_usage_info)]
     else:
         return [dash.no_update, dash.no_update]

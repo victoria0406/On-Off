@@ -276,7 +276,6 @@ fig2.update_yaxes(showline=True, showticklabels=False, linewidth=2, linecolor='b
 fig2.update_xaxes(showgrid=True, gridwidth=1, gridcolor='#e5e5e5')
 
 user = group_df.loc[your_id, 'User']
-print(user)
 df = pd.read_csv('data/total_user_usage_whole.csv')
 
 df['Date'] = pd.to_datetime(df['Date'])

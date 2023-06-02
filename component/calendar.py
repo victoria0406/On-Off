@@ -30,7 +30,6 @@ def get_calendar_donut_plot(date):
 
 # HTML 요소로 변환합니다.
 def get_calendar(unlock_info, usage_time_info, app_usage_info, month):
-    print(unlock_info, usage_time_info, app_usage_info)
     fig_today = None;
     if not (unlock_info == None and usage_time_info == None and app_usage_info == None):
         fig_today = goal_donut_plot(*(resample_goal(unlock_info, usage_time_info, app_usage_info)))

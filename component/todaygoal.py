@@ -87,7 +87,6 @@ def app_usage_component(app_usage_info, highlighted=None):
     return component
 
 def resample_goal(unlock_info, usage_time_info, app_usage_info):
-    print(unlock_info, usage_time_info, app_usage_info)
     return_data = [None, None, None];
     if (unlock_info['checked']):
         exceed = max(unlock - unlock_info['time'], 0)
@@ -106,9 +105,7 @@ def resample_goal(unlock_info, usage_time_info, app_usage_info):
         exceed = max(today_app_usage - app_usage_by_m, 0)
         real = max(0, min(today_app_usage, 2 * app_usage_by_m - today_app_usage))
         goal = max(0, app_usage_by_m-today_app_usage)
-        return_data[2] = [exceed, real, goal]
-    print(return_data)
-        
+        return_data[2] = [exceed, real, goal]    
     return return_data
 def resample_goal_index(data, index):
     if (data['checked'] and index == 0):
