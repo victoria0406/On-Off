@@ -1,9 +1,8 @@
 import calendar
-import dash
 import datetime as dt
 import pandas as pd
 from dash import html, dcc
-from component.todaygoal import today_goal_not_setting, get_goal_today, get_goal_state, today
+from component.todaygoal import get_goal_state, today, resample_goal
 from component.goaldonutplot import goal_donut_plot
 
 month_to_string = ['', 'JAN.', 'Feb.', 'MAR.', 'APR.', 'MAY', 'JUN.', 'JUL.', 'AUG.', 'SEP.', 'OCT.', 'NOV.', 'DEC.']
@@ -30,7 +29,11 @@ def get_calendar_donut_plot(date):
     return donut
 
 # HTML 요소로 변환합니다.
-def get_calendar(month):
+def get_calendar(unlock_info, usage_time_info, app_usage_info, month):
+    print(unlock_info, usage_time_info, app_usage_info)
+    fig_today = None;
+    if not (unlock_info == None and usage_time_info == None and app_usage_info == None):
+        fig_today = goal_donut_plot(*(resample_goal(unlock_info, usage_time_info, app_usage_info)))
     cal = calendar_sunday.monthdatescalendar(today.year, month)
     table = html.Table(className=f'goal-calendar', children=[
         html.Thead(children=[
@@ -44,7 +47,8 @@ def get_calendar(month):
             html.Tr(children=[
                 html.Td(children=[
                     html.P(str(date.day), style={'opacity': 0.6, 'font-weight': 'lighter'} if date.month != month else {}),
-                    get_calendar_donut_plot(date)
+                    get_calendar_donut_plot(date) if (date != today or (unlock_info == None and usage_time_info == None and app_usage_info == None)) 
+                    else dcc.Graph(figure = fig_today, config={'displayModeBar': False}, className='calendar-donut')
                 ], className='today' if (date == today) else ''
                 , id='today-goal-status' if (date == today) else '')
                 for date in week

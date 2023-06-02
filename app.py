@@ -1,11 +1,13 @@
 import dash
-from dash import html
+from dash import html, dcc
 import dash_bootstrap_components as dbc
+
 from flask import redirect
 
 from callback import get_callbacks
 
 from component.sidebar import sidebar
+from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_info
 # from themes.colors import main_color, sub_text_color, main_bg_color, sub_color
 
 app = dash.Dash(__name__, use_pages=True, external_stylesheets=[dbc.themes.BOOTSTRAP, "assets/style.css"])
@@ -16,6 +18,9 @@ HEAD_STYLE = {
 }
 
 app.layout = html.Div([
+    dcc.Store(id = "usage_time_info", data=usage_time_info),
+    dcc.Store(id = "unlock_info", data=unlock_info),
+    dcc.Store(id = "app_usage_info", data=app_usage_info),
     sidebar,
     html.Div([
         html.Header([

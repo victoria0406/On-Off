@@ -1,8 +1,6 @@
 import dash
 import datetime as dt
-from dash.dependencies import Input, Output, State
 from dash import html, dcc
-from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_info
 from component.goaldonutplot import goal_donut_plot, week_donut_plot
 from component.graph import usage_graph, unlock_graph, app_usage_graph
 import pandas as pd
@@ -32,9 +30,8 @@ unlock_df = pd.read_csv('./data/unlock.csv')
 today_df = app_usage_df.iloc[-1]
 # print(today_df['Total'])
 total_usage = today_df['Total']
-def app_usage():
-    global app_usage_info
-    return today_df[app_usage_info['app']]
+def app_usage(app):
+    return today_df[app]
 unlock = unlock_df.iloc[-1]['unlock']
 
 color_info_component = html.Div([
@@ -45,9 +42,8 @@ color_info_component = html.Div([
 ], className='today-goal-list goal-label')
 
 
-def unlock_component(highlighted=None):
+def unlock_component(unlock_info, highlighted=None):
     data = unlock;
-    global unlock_info
     component = html.Div([
         html.P('Unlocks', className='goal-title'),
         html.A([
@@ -60,8 +56,7 @@ def unlock_component(highlighted=None):
     ], className="unlock")
     return component
 
-def usage_time_component(highlighted=None):
-    global usage_time_info
+def usage_time_component(usage_time_info, highlighted=None):
     data = float(total_usage) / 60;
     usage_goal_minute = float(usage_time_info['hour']) + float(usage_time_info['minute']) / 60
     component = html.Div([
@@ -76,9 +71,8 @@ def usage_time_component(highlighted=None):
     ], className="usage")
     return component
 
-def app_usage_component(highlighted=None):
-    data = float(app_usage()) / 60;
-    global app_usage_info
+def app_usage_component(app_usage_info, highlighted=None):
+    data = float(app_usage(app_usage_info['app'])) / 60;
     usage_goal_minute = float(app_usage_info['hour']) + float(app_usage_info['minute']) / 60
     component = html.Div([
         html.P(f"App Usage Time for {app_usage_info['app']}",className='goal-title'),
@@ -92,11 +86,9 @@ def app_usage_component(highlighted=None):
     ], className="app")
     return component
 
-def get_goal_today():
+def resample_goal(unlock_info, usage_time_info, app_usage_info):
+    print(unlock_info, usage_time_info, app_usage_info)
     return_data = [None, None, None];
-    global usage_time_info
-    global unlock_info
-    global app_usage_info
     if (unlock_info['checked']):
         exceed = max(unlock - unlock_info['time'], 0)
         real = max(min(unlock, 2 * unlock_info['time'] - unlock), 0)
@@ -110,39 +102,54 @@ def get_goal_today():
         return_data[1] = [exceed, real, goal]
     if (app_usage_info['checked']):
         app_usage_by_m = app_usage_info['hour'] * 60 + app_usage_info['minute'];
-        exceed = max(app_usage() - app_usage_by_m, 0)
-        real = max(0, min(app_usage(), 2 * app_usage_by_m - app_usage()))
-        goal = max(0, app_usage_by_m-app_usage())
+        today_app_usage = app_usage(app_usage_info['app'])
+        exceed = max(today_app_usage - app_usage_by_m, 0)
+        real = max(0, min(today_app_usage, 2 * app_usage_by_m - today_app_usage))
+        goal = max(0, app_usage_by_m-today_app_usage)
         return_data[2] = [exceed, real, goal]
+    print(return_data)
         
     return return_data
-def today_goal_donut_plot(highlighted = None):
-    fig = goal_donut_plot(*get_goal_today(), highlighted)
-    return fig
+def resample_goal_index(data, index):
+    if (data['checked'] and index == 0):
+        exceed = max(unlock - data['time'], 0)
+        real = max(min(unlock, 2 * data['time'] - unlock), 0)
+        goal = max(0, data['time']-unlock)
+        return [exceed, real, goal]
+    if (data['checked'] and index == 1):
+        usage_by_m = data['hour'] * 60 + data['minute'];
+        exceed = max(total_usage - usage_by_m, 0)
+        real = max(0, min(total_usage, 2 * usage_by_m - total_usage))
+        goal = max(0, usage_by_m-total_usage)
+        return [exceed, real, goal]
+    if (data['checked'] and index == 2):
+        app_usage_by_m = data['hour'] * 60 + data['minute'];
+        today_app_usage = app_usage(data['app'])
+        exceed = max(today_app_usage - app_usage_by_m, 0)
+        real = max(0, min(today_app_usage, 2 * app_usage_by_m - today_app_usage))
+        goal = max(0, app_usage_by_m-today_app_usage)
+        return [exceed, real, goal]
+    return None
 
-def today_goal_setting(highlighted=None):
-    global usage_time_info
-    global unlock_info
-    global app_usage_info
+def today_goal_setting(unlock_info, usage_time_info, app_usage_info, highlighted=None):
     return_children = [html.P('Today Goal', style={'font-weight': 'bold'})]
-    fig = today_goal_donut_plot(highlighted)
+    fig = goal_donut_plot(*(resample_goal(unlock_info, usage_time_info, app_usage_info)), highlighted)
     return_children.append(dcc.Graph(figure = fig, config={'displayModeBar': False}, className='today-goal-fig'))
     return_children.append(color_info_component)
     goal_list = []
     if unlock_info['checked']:
-        goal_list.append(unlock_component(highlighted))
+        goal_list.append(unlock_component(unlock_info, highlighted))
     if usage_time_info['checked']:
-        goal_list.append(usage_time_component(highlighted))
+        goal_list.append(usage_time_component(usage_time_info, highlighted))
     if app_usage_info['checked']:
-        goal_list.append(app_usage_component(highlighted))
+        goal_list.append(app_usage_component(app_usage_info, highlighted))
     return_children.append(html.Div(goal_list, className="today-goal-list"))
     return return_children
 
 
-
+# 날짜는 오늘 이전만 사용 가능!
 def get_goal_state(date):
     # print(date)
-    if (date == today): return get_goal_today()
     day_goal_state = goal_states_df[goal_states_df['date'] == date.strftime("%Y-%m-%d")]
     if day_goal_state.size == 0 : return None
     day_goal_array = np.array(day_goal_state[[
@@ -155,19 +162,17 @@ def get_goal_state(date):
             day_goal_array[i] = None
     return day_goal_array
 
-def raw_goal_today():
-    global usage_time_info
-    global app_usage_info
-    global unlock_info
-    return [
-        [unlock, unlock_info['time']],
-        [total_usage, usage_time_info['hour'] * 60 + usage_time_info['minute']],
-        [app_usage(), app_usage_info['hour'] * 60 + app_usage_info['minute']],
-    ]
+def raw_goal_today(data, index):
+    if (index == 0):
+        return [unlock, data['time']]
+    elif (index == 1):
+        return [total_usage, data['hour'] * 60 + data['minute']]
+    elif (index == 2):
+        return [app_usage(data['app']), data['hour'] * 60 + data['minute']]
+    return [None, None]
 
 def raw_goal_state(date):
-    if (date == today):
-        return raw_goal_today()
+    if (date > today) : return None
     day_goal_state = goal_states_df[goal_states_df['date'] == date.strftime('%Y-%m-%d')]
     if day_goal_state.size == 0 : return None
     day_goal_array = np.array(day_goal_state[[
@@ -186,7 +191,37 @@ def convert_time(minute):
         else: return str(minute // 60)+"h"
     else: return str(minute % 60)+"m"
 
+# date는 오늘 이전만
+
+def get_calendar_donut_plot_today(today_data, index):
+    goal_state = resample_goal_index(today_data, index)
+    fig = week_donut_plot(goal_state, index)
+    if (goal_state):
+        [real_data, goal_data] = raw_goal_today(today_data, index)
+        if index == 2: colors = ['#B40000','#686986', '#68698650']
+        elif index == 1: colors = ['#B40000','#A4BD85', '#A4BD8550']
+        elif index == 0: colors = ['#B40000','#E4AE44', '#E4AE4450']
+        fig.add_annotation(
+            text="<b>"+convert_time(int(real_data))+"<b>"+"<br> " if index == 1 or index == 2 else "<b>"+str(int(real_data))+"<b>"+"<br> ",
+            showarrow=False,
+            font=dict(
+                size=14,
+                color=colors[1],
+            )
+        )
+        fig.add_annotation(
+            text=" "+"<br>/ "+convert_time(int(goal_data)) if index == 1 or index == 2 else " "+"<br>/ "+str(int(goal_data)),
+            showarrow=False, 
+            font=dict(
+                size=12,
+                color=colors[1]
+            )
+        )
+    donut = dcc.Graph(figure = fig, config={'displayModeBar': False}, className='calendar-donut')
+    return donut
+
 def get_calendar_donut_plot(date, index):
+    if (date > today): return None
     goal_state = get_goal_state(date)
     # print(goal_state)
     if goal_state == None : return None
@@ -216,7 +251,7 @@ def get_calendar_donut_plot(date, index):
     return donut
 
 
-def unlock_weekly_calendar(highlighted=None):
+def unlock_weekly_calendar(today_data, highlighted=None):
     date_list = [today - dt.timedelta(days=x) for x in range(7)]
     date_list.reverse()
     
@@ -231,7 +266,7 @@ def unlock_weekly_calendar(highlighted=None):
         html.Tbody(children=[
             html.Tr(children=[
                 html.Td(children=[
-                    get_calendar_donut_plot(day, 0)
+                    get_calendar_donut_plot(day, 0) if (day != today) else get_calendar_donut_plot_today(today_data, 0)
                 ], className='today' if (day == today) else '' )
                 for day in date_list
             ])
@@ -243,12 +278,12 @@ def unlock_weekly_calendar(highlighted=None):
                     className='weekly-calendar-container',),
         html.Div(children=[
             html.P('Unlock', style={'font-size': '20px'}),
-            html.Div(dcc.Graph(figure = unlock_graph(), config={'displayModeBar': False}),style={'margin-top':'-90px'})
+            html.Div(dcc.Graph(figure = unlock_graph(today_data), config={'displayModeBar': False}),style={'margin-top':'-90px'})
         ], className='weekly-graph-container')
     ]
     return return_children
 
-def usage_weekly_calendar(highlighted=None):
+def usage_weekly_calendar(today_data, highlighted=None):
     date_list = [today - dt.timedelta(days=x) for x in range(7)]
     date_list.reverse()
     
@@ -263,7 +298,7 @@ def usage_weekly_calendar(highlighted=None):
         html.Tbody(children=[
             html.Tr(children=[
                 html.Td(children=[
-                    get_calendar_donut_plot(day, 1)
+                    get_calendar_donut_plot(day, 1) if (day != today) else get_calendar_donut_plot_today(today_data, 1)
                 ], className='today' if (day == today) else '' )
                 for day in date_list
             ])
@@ -275,12 +310,12 @@ def usage_weekly_calendar(highlighted=None):
                     className='weekly-calendar-container',),
         html.Div(children=[
             html.P('Usage Time', style={'font-size': '20px'}),
-            html.Div(dcc.Graph(figure = usage_graph(), config={'displayModeBar': False},style={'margin-top':'-60px'})),
+            html.Div(dcc.Graph(figure = usage_graph(today_data), config={'displayModeBar': False},style={'margin-top':'-60px'})),
         ], className='weekly-graph-container')
     ]
     return return_children
 
-def app_weekly_calendar(highlighted=None):
+def app_weekly_calendar(today_data, highlighted=None):
     date_list = [today - dt.timedelta(days=x) for x in range(7)]
     date_list.reverse()
     
@@ -295,7 +330,7 @@ def app_weekly_calendar(highlighted=None):
         html.Tbody(children=[
             html.Tr(children=[
                 html.Td(children=[
-                    get_calendar_donut_plot(day, 2)
+                    get_calendar_donut_plot(day, 2) if (day != today) else get_calendar_donut_plot_today(today_data, 2)
                 ], className='today' if (day == today) else '' )
                 for day in date_list
             ])
@@ -307,7 +342,7 @@ def app_weekly_calendar(highlighted=None):
                     className='weekly-calendar-container',),
         html.Div(children=[
             html.P('App Usage', style={'font-size': '20px'}),
-            html.Div(dcc.Graph(figure = app_usage_graph(), config={'displayModeBar': False},style={'margin-top':'-60px'})),
+            html.Div(dcc.Graph(figure = app_usage_graph(today_data), config={'displayModeBar': False},style={'margin-top':'-60px'})),
         ], className='weekly-graph-container')
     ]
     return return_children
