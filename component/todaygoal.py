@@ -2,39 +2,22 @@ import dash
 import datetime as dt
 from dash.dependencies import Input, Output, State
 from dash import html, dcc
-from inputdata.goalsettingdata import get_usage_time_info, get_unlock_info, get_app_usage_info
+from inputdata.goalsettingdata import get_usage_time_info, get_unlock_info, get_app_usage_info, goal_states_df, goal_states_resample
 from component.goaldonutplot import goal_donut_plot, week_donut_plot
 from component.graph import usage_graph, unlock_graph, app_usage_graph
 import pandas as pd
 import numpy as np
+from inputdata.data import unlocks as unlock_df, usage_time as app_usage_df
 
-goal_states_df= pd.read_csv('./data/goal_states.csv')
-## goal_states_df = goal_states_df.fillna(-1, axis=1)
-goal_states_df['day'] = pd.to_datetime(goal_states_df['date'], format = "%Y-%m-%d").dt.day
-goal_states_df['exceed-unlock'] = (goal_states_df['unlock_real'] - goal_states_df['unlock_goal']).apply(lambda x: 0 if x <= 0 else x)
-goal_states_df['real-unlock'] = goal_states_df.apply(lambda row: min(row['unlock_real'], 2*row['unlock_goal']-row['unlock_real']) if (row['unlock_real'] and 2*row['unlock_goal']-row['unlock_real']) >= 0 else 0, axis=1)
-goal_states_df['goal-unlock'] = (goal_states_df['unlock_goal'] - goal_states_df['unlock_real']).apply(lambda x: 0 if x <= 0 else x)
-goal_states_df['exceed-total_usage'] = (goal_states_df['total_usage_real'] - goal_states_df['total_usage_goal']).apply(lambda x: 0 if x <= 0 else x)
-goal_states_df['real-total_usage'] = goal_states_df.apply(lambda row: min(row['total_usage_real'], 2*row['total_usage_goal']-row['total_usage_real']) if (row['total_usage_real'] and 2*row['total_usage_goal']-row['total_usage_real']) >= 0 else 0, axis=1)
-goal_states_df['goal-total_usage'] = (goal_states_df['total_usage_goal'] - goal_states_df['total_usage_real']).apply(lambda x: 0 if x <= 0 else x)
-goal_states_df['exceed-app_usage'] = (goal_states_df['app_usage_real'] - goal_states_df['app_usage_goal']).apply(lambda x: 0 if x <= 0 else x)
-goal_states_df['real-app_usage'] = goal_states_df.apply(lambda row: min(row['app_usage_real'], 2*row['app_usage_goal']-row['app_usage_real']) if (row['app_usage_real'] and 2*row['app_usage_goal']-row['app_usage_real']) >= 0 else 0, axis=1)
-goal_states_df['goal-app_usage'] = (goal_states_df['app_usage_goal'] - goal_states_df['app_usage_real']).apply(lambda x: 0 if x <= 0 else x)
-goal_states_df = goal_states_df.fillna(-1, axis=1)
-
-today = pd.to_datetime(goal_states_df.iloc[-1, :]['date']).date()
+today = pd.to_datetime(goal_states_resample.iloc[-1, :]['date']).date()
 today_str = today.strftime("%Y-%m-%d")
-
-app_usage_df = pd.read_csv('./data/usage_time.csv')
-app_usage_df['day'] = pd.to_datetime(app_usage_df['date']).dt.day
-unlock_df = pd.read_csv('./data/unlock.csv')
 
 today_df = app_usage_df.iloc[-1]
 # print(today_df['Total'])
 total_usage = today_df['Total']
 def app_usage():
     return today_df[get_app_usage_info()['app']]
-unlock = unlock_df.iloc[-1]['unlock']
+unlock = unlock_df.iloc[-1].values[0]
 
 color_info_component = html.Div([
     html.Div([html.Div("", className="square"),"Unlocks"], className="unlock"),
@@ -142,7 +125,7 @@ def today_goal_setting(highlighted=None):
 def get_goal_state(date):
     # print(date)
     if (date == today): return get_goal_today()
-    day_goal_state = goal_states_df[goal_states_df['date'] == date.strftime("%Y-%m-%d")]
+    day_goal_state = goal_states_resample[goal_states_resample['date'] == date.strftime("%Y-%m-%d")]
     if day_goal_state.size == 0 : return None
     day_goal_array = np.array(day_goal_state[[
         'exceed-unlock', 'real-unlock', 'goal-unlock',

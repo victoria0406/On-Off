@@ -3,14 +3,14 @@ import dash_bootstrap_components as dbc
 import pandas as pd 
 from dash import html, dcc, callback, Input, Output, State
 from component.goalsettingcomponent import goalsettingcomponent
-from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_info
+from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_info, update_goal_df
+from inputdata.data import top_apps, unlocks as unlock_df, usage_time as app_usage_df
 
 dash.register_page(__name__, path='/goal/setting')
 
-app_usage_df = pd.read_csv('./data/usage_time.csv')
-unlock_df = pd.read_csv('./data/unlock.csv')
-app_list = app_usage_df.iloc[-2, 2:].drop(['Total', 'Others']).dropna().sort_values(ascending=False).index.tolist()
-avg_unlock = unlock_df['unlock'].mean()
+app_list = tops = top_apps.iloc[:,-1].values.tolist()  
+print(app_list)
+avg_unlock = unlock_df['0'].mean()
 avg_total_usage = app_usage_df['Total'].mean()
 def avg_app_usage(app):
     return app_usage_df[app].mean()
@@ -166,6 +166,7 @@ def goal_setting(n1, n2, n_fault, unlock_time, usage_hour, usage_minute, app_usa
             return [False, True, 0, 0, 0]
         if (app_usage_info['checked'] and ((app_usage_hour == 0 and app_usage_minute == 0) or app_usage_hour == None or app_usage_minute == None)):
             return [False, True, 0, 0, 0]
+        update_goal_df()
         unlock_info['time'] = unlock_time
         usage_time_info['hour'] = usage_hour
         usage_time_info['minute'] = usage_minute
@@ -176,4 +177,65 @@ def goal_setting(n1, n2, n_fault, unlock_time, usage_hour, usage_minute, app_usa
     else:
         return [False, False, 0, 0, 0]
     
-    
+@callback(
+    [Output('selected-app', 'children'), Output('avg-app-usage', 'children')],
+    Input('app-dropdown', 'value'),
+)
+def selected_app(value):
+    usage = app_usage_df[value].mean()
+    return [value, f'{usage // 60:.0f}h {usage % 60:.0f}m']
+
+plus_layout = html.Div([
+'+'
+], className="custom-checkbox plus")
+minus_layout = html.Div([
+    '-'
+], className="custom-checkbox minus")
+@callback(
+    [
+        Output('goal-switch-output-usage-time', 'children'),
+        Output('goal-switch-disable-usage-time-1', 'disabled'),
+        Output('goal-switch-disable-usage-time-2', 'disabled'),
+        Output('goal-setting-list-container-usage-time', 'className'),
+    ],
+    Input('goal-switch-input-usage-time', 'value')
+)
+def usage_time_switch(value):
+    if 'on' in value:
+        usage_time_info['checked'] = True
+        return [[plus_layout], False, False, 'goal-setting-list-container active']
+    else:
+        usage_time_info['checked'] = False
+        return [[minus_layout], True, True, 'goal-setting-list-container']
+@callback(
+    [
+        Output('goal-switch-output-unlock', 'children'),
+        Output('goal-switch-disable-unlock-1', 'disabled'),
+        Output('goal-setting-list-container-unlock', 'className'),
+    ],
+    Input('goal-switch-input-unlock', 'value')
+)
+def unlock_switch(value):
+    if 'on' in value:
+        unlock_info['checked'] = True
+        return [[plus_layout], False, 'goal-setting-list-container active']
+    else:
+        unlock_info['checked'] = False
+        return [[minus_layout], True, 'goal-setting-list-container']
+@callback(
+    [
+        Output('goal-switch-output-app-usage', 'children'),
+        Output('app-dropdown', 'disabled'),
+        Output('goal-switch-disable-app-usage-2', 'disabled'),
+        Output('goal-switch-disable-app-usage-3', 'disabled'),
+        Output('goal-setting-list-container-app-usage', 'className'),
+    ],
+    Input('goal-switch-input-app-usage', 'value')
+)
+def app_usage_switch(value):
+        if 'on' in value:
+            app_usage_info['checked'] = True
+            return [[plus_layout], False, False, False, 'goal-setting-list-container active']
+        else:
+            app_usage_info['checked'] = False
+            return [[minus_layout], True, True, True, 'goal-setting-list-container']

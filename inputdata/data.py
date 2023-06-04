@@ -33,6 +33,8 @@ today_hour = pd.read_csv('./data/usage_hour/app_usage_hour_2019_05_06.csv')
 
 unlocks = pd.read_csv('./data/unlocks.csv')
 
+usage_time =  pd.read_csv('./data/usage_time.csv')
+
 date = list(keys.values())
     
 for i in range(len(date)):
