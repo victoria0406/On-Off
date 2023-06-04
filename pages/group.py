@@ -269,7 +269,7 @@ fig2.update_traces(
     hovertemplate="%{x}m<extra></extra>"
     )
 
-fig2.update_layout(plot_bgcolor = 'white', title="Weekly Average Session Time (min)", 
+fig2.update_layout(plot_bgcolor = 'white', title="Weekly Average Session Time (m)", 
                    bargap=0.2, showlegend=False, width=616, height=336,
                   )
 fig2.update_yaxes(showline=True, showticklabels=False, linewidth=2, linecolor='black',)
@@ -336,7 +336,7 @@ fig3.update_traces(
 
 fig3.update_layout(
     plot_bgcolor='white',
-    title="Weekly Usage Time (min)",
+    title="Weekly Usage Time (m)",
     showlegend=False,
     barmode='group',
     width=1136,
