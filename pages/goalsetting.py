@@ -9,7 +9,6 @@ from inputdata.data import top_apps, unlocks as unlock_df, usage_time as app_usa
 dash.register_page(__name__, path='/goal/setting')
 
 app_list = tops = top_apps.iloc[:,-1].values.tolist()  
-print(app_list)
 avg_unlock = unlock_df['0'].mean()
 avg_total_usage = app_usage_df['Total'].mean()
 def avg_app_usage(app):
@@ -140,7 +139,10 @@ layout = html.Div([
 )
 
 @callback(
-    [Output("modal", "is_open"), Output('modal-fault', 'is_open'), Output("goal-confirm", "n_clicks"), Output("close", "n_clicks"), Output("close-fault", "n_clicks")],
+    [Output("modal", "is_open"), Output('modal-fault', 'is_open'), Output("goal-confirm", "n_clicks"), Output("close", "n_clicks"), Output("close-fault", "n_clicks"),
+     Output('unlock_info', 'data'), Output('usage_time_info', 'data'), Output('app_usage_info', 'data'),
+     Output('goal_link', 'data'),
+    ],
     [Input("goal-confirm", "n_clicks"), Input("close", "n_clicks"), Input("close-fault", "n_clicks")],
     [
         State('goal-switch-disable-unlock-1', 'value'),
@@ -153,29 +155,31 @@ layout = html.Div([
 )
 
 def goal_setting(n1, n2, n_fault, unlock_time, usage_hour, usage_minute, app_usage_app, app_usage_hour, app_usage_minute):
+    global unlock_info
+    global usage_time_info
+    global app_usage_info
     if (n2 or n_fault):
-        return [False, False, 0, 0, 0]
+        return [False, False, 0, 0, 0, dash.no_update, dash.no_update, dash.no_update, dash.no_update]
     if (n1):
         if not (unlock_info['checked'] or usage_time_info['checked'] or app_usage_info['checked']):
-            return [False, True, 0, 0, 0]
+            return [False, True, 0, 0, 0, dash.no_update, dash.no_update, dash.no_update, dash.no_update]
         if (unlock_info['checked'] and unlock_time == 0):
-            return [False, True, 0, 0, 0]
+            return [False, True, 0, 0, 0, dash.no_update, dash.no_update, dash.no_update, dash.no_update]
         if (usage_time_info['checked'] and ((usage_hour == 0 and usage_minute == 0) or usage_hour == None or usage_minute == None)):
-            return [False, True, 0, 0, 0]
+            return [False, True, 0, 0, 0, dash.no_update, dash.no_update, dash.no_update, dash.no_update]
         if (app_usage_info['checked'] and app_usage_app == None):
-            return [False, True, 0, 0, 0]
+            return [False, True, 0, 0, 0, dash.no_update, dash.no_update, dash.no_update, dash.no_update]
         if (app_usage_info['checked'] and ((app_usage_hour == 0 and app_usage_minute == 0) or app_usage_hour == None or app_usage_minute == None)):
-            return [False, True, 0, 0, 0]
-        update_goal_df()
+            return [False, True, 0, 0, 0, dash.no_update, dash.no_update, dash.no_update, dash.no_update]
         unlock_info['time'] = unlock_time
         usage_time_info['hour'] = usage_hour
         usage_time_info['minute'] = usage_minute
         app_usage_info['app'] = app_usage_app
         app_usage_info['hour'] = app_usage_hour
         app_usage_info['minute'] = app_usage_minute
-        return [True, False, 0, 0, 0]
+        return [True, False, 0, 0, 0, unlock_info, usage_time_info, app_usage_info, '/goal?setting=True']
     else:
-        return [False, False, 0, 0, 0]
+        return [False, False, 0, 0, 0, dash.no_update, dash.no_update, dash.no_update, dash.no_update]
     
 @callback(
     [Output('selected-app', 'children'), Output('avg-app-usage', 'children')],
@@ -201,6 +205,7 @@ minus_layout = html.Div([
     Input('goal-switch-input-usage-time', 'value')
 )
 def usage_time_switch(value):
+    global usage_time_info
     if 'on' in value:
         usage_time_info['checked'] = True
         return [[plus_layout], False, False, 'goal-setting-list-container active']
@@ -216,6 +221,7 @@ def usage_time_switch(value):
     Input('goal-switch-input-unlock', 'value')
 )
 def unlock_switch(value):
+    global unlock_info
     if 'on' in value:
         unlock_info['checked'] = True
         return [[plus_layout], False, 'goal-setting-list-container active']
@@ -233,9 +239,10 @@ def unlock_switch(value):
     Input('goal-switch-input-app-usage', 'value')
 )
 def app_usage_switch(value):
-        if 'on' in value:
-            app_usage_info['checked'] = True
-            return [[plus_layout], False, False, False, 'goal-setting-list-container active']
-        else:
-            app_usage_info['checked'] = False
-            return [[minus_layout], True, True, True, 'goal-setting-list-container']
+    global app_usage_info
+    if 'on' in value:
+        app_usage_info['checked'] = True
+        return [[plus_layout], False, False, False, 'goal-setting-list-container active']
+    else:
+        app_usage_info['checked'] = False
+        return [[minus_layout], True, True, True, 'goal-setting-list-container']

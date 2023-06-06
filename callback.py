@@ -3,18 +3,13 @@ from dash.dependencies import Input, Output, State
     
 def goal_update_sidebar_callback_factory():
     output=Output('goal-link', 'href')
-    input=Input('url', 'pathname')
-    state=State('url', 'search')
-    def update_output(pathname, search):
-        if pathname == '/goal' and search == '?setting=True':
-            # print(pathname, search)
-            return '/goal?setting=True'
-        else:  return dash.no_update
+    input=Input('goal_link', 'data')
+    def update_output(goal_link):
+        return goal_link;
     return [
         update_output,
         output,
         input,
-        state,
     ]
     
 def update_mention_header_callback_factory():
