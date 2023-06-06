@@ -3,14 +3,14 @@ import dash_bootstrap_components as dbc
 import pandas as pd 
 from dash import html, dcc, callback, Input, Output, State
 from component.goalsettingcomponent import goalsettingcomponent
-from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_info
+from inputdata.goalsettingdata import usage_time_info, unlock_info, app_usage_info, update_goal_df
+from inputdata.data import top_apps, unlocks as unlock_df, usage_time as app_usage_df
 
 dash.register_page(__name__, path='/goal/setting')
 
-app_usage_df = pd.read_csv('./data/usage_time.csv')
-unlock_df = pd.read_csv('./data/unlock.csv')
-app_list = app_usage_df.iloc[-2, 2:].drop(['Total', 'Others']).dropna().sort_values(ascending=False).index.tolist()
-avg_unlock = unlock_df['unlock'].mean()
+app_list = tops = top_apps.iloc[:,-1].values.tolist()  
+print(app_list)
+avg_unlock = unlock_df['0'].mean()
 avg_total_usage = app_usage_df['Total'].mean()
 def avg_app_usage(app):
     return app_usage_df[app].mean()
