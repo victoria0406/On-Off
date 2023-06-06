@@ -20,14 +20,12 @@ def update_goal_states_resample():
 goal_states_resample = update_goal_states_resample()
 
 def update_goal_df():
-    print('update')
     goal_states_df.iloc[-2]['total_usage_goal'] = 10000000
     return goal_states_df
     
 
 last_goal = goal_states_df.iloc[-1]
 last_goal = last_goal.fillna(-1)
-print(last_goal['unlock_real'])
 unlock = last_goal['unlock_goal']
 usage = last_goal['total_usage_goal']
 goal_app = last_goal['app_usage_app']

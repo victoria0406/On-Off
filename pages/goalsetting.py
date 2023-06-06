@@ -9,7 +9,6 @@ from inputdata.data import top_apps, unlocks as unlock_df, usage_time as app_usa
 dash.register_page(__name__, path='/goal/setting')
 
 app_list = tops = top_apps.iloc[:,-1].values.tolist()  
-print(app_list)
 avg_unlock = unlock_df['0'].mean()
 avg_total_usage = app_usage_df['Total'].mean()
 def avg_app_usage(app):
