@@ -410,11 +410,11 @@ def update_graph(date,btn1, btn2, btn3, btn4, btn5, btn6):
     children7 = html.P(today_access['number_of_access'].sum(),style={'font-weight':"bold",'font-size':'18px','margin':'-12px 0 0 20px',"float":"left"})
     children8 = html.Div([html.P(access_differ,style={"float":"left","margin-right":"10px",'font-size':'15px','color':access_color}),html.P(" yesterday",style={"float":"right",'font-size':'14px'})],style={"float":"right",'margin':'-12px 15px 0 0'})
     
-    today_unlock = unlocks["unlock"][k[0]]
+    today_unlock = unlocks["0"][k[0]]
     if (k[0]==0):
         differ_unlock=0
     else:
-        differ_unlock = today_unlock - unlocks["unlock"][k[0]-1]
+        differ_unlock = today_unlock - unlocks["0"][k[0]-1]
     
     if(differ_unlock>0):
         differ_unlock = "+" + str(differ_unlock)
