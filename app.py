@@ -18,10 +18,10 @@ HEAD_STYLE = {
 }
 
 app.layout = html.Div([
-    dcc.Store(id = "usage_time_info", data=usage_time_info, storage_type='local'),
-    dcc.Store(id = "unlock_info", data=unlock_info, storage_type='local'),
-    dcc.Store(id = "app_usage_info", data=app_usage_info, storage_type='local'),
-    dcc.Store(id = 'goal_link', data = '/goal', storage_type='local'),
+    dcc.Store(id = "usage_time_info", data=usage_time_info, storage_type='session'),
+    dcc.Store(id = "unlock_info", data=unlock_info, storage_type='session'),
+    dcc.Store(id = "app_usage_info", data=app_usage_info, storage_type='session'),
+    dcc.Store(id = 'goal_link', data = '/goal', storage_type='session'),
     sidebar,
     html.Div([
         html.Header([
